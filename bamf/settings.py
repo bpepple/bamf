@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'comics',
+    'solo.apps.SoloAppConfig',
 ]
 
 MIDDLEWARE = [
