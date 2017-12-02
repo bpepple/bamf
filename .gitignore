@@ -100,6 +100,10 @@ ENV/
 # mypy
 .mypy_cache/
 
+# Django files
+db.sqlite3
+
 # Eclipse files
 .project
 .pydevproject
+.externalToolBuilders/
