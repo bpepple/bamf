@@ -1,0 +1,52 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Bamf{% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
+  </head>
+  <body>
+  <header>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="">
+                <img src="{% static 'site/logo.png' %}" alt="Bamf">
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="">
+                    Publisher
+                </a>
+                <a class="navbar-item" href="">
+                    Series
+                </a>
+                <a class="navbar-item" href="">
+                    Issues
+                </a>
+                <a class="navbar-item" href="">
+                    Creators
+                </a>
+                <a class="navbar-item" href="">
+                    Story Arcs
+                </a>
+            </div>
+            <div class="navbar-end">
+                <a class="navbar-item" href="">
+                    <i class="settings-button fa fa-cog"></i>
+                </a>
+            </div>                
+        </div>
+    </nav>
+  </header>
+    <div class="container">
+        {% block content %}
+          This is default content!
+        {% endblock %}
+    </div>    
+  </body>
+</html>

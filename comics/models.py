@@ -1,8 +1,6 @@
-from django.core.validators import RegexValidator
 from django.db import models
 from django.urls import reverse
 from multiselectfield import MultiSelectField
-from solo.models import SingletonModel
 import datetime
 
 """
@@ -32,34 +30,6 @@ ROLE_CHOICES = (
     ('production', 'Production'),
     ('writer', 'Writer'),
 )
-
-
-class Settings(SingletonModel):
-    help_txt = ("A 40-character key provided by ComicVine. "
-                "This is used to retrieve metadata about your comics. "
-                "You can create a ComicVine API Key at "
-                '<a target=\"_blank\" href=\"http://comicvine.gamespot.com/api/\">'
-                "ComicVine's API Page</a> "
-                "(ComicVine account is required).")
-
-    api_key = models.CharField(
-        'ComicVine API Key',
-        help_text=help_txt,
-        validators=[RegexValidator(
-            regex='^.{40}$',
-            message='Length must be 40 characters.',
-            code='nomatch'
-        )],
-        max_length=40,
-        blank=True
-    )
-    comics_directory = models.CharField('Comics Directory',
-                                        help_text='Directory where comic archives are located.',
-                                        max_length=350,
-                                        blank=True)
-
-    def __str__(self):
-        return "Settings"
 
 
 class Arc(models.Model):

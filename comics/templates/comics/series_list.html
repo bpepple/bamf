@@ -1,0 +1,21 @@
+{% extends parent_template|default:"base.html" %}
+
+{% block title %}
+{{ block.super }} - Series
+{% endblock %}
+
+{% block content %}
+  {% if series_list %}
+  <ul>
+    {% for series in series_list %}
+        {% if series.issue_set.all %}
+        <li>
+            <a href="">{{ series.name }}</a>
+        </li>
+        {% endif %}
+    {% empty %}
+      <li><em>No Series Available</em></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% endblock %}

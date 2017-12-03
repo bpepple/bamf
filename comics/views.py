@@ -11,7 +11,6 @@ from comics.models import (Series, Issue, Character,
 
 class SeriesList(ListView):
     model = Series
-    paginate_by = 32
 
 
 class SearchSeriesList(SeriesList):
