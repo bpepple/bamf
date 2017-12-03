@@ -1,3 +1,8 @@
 Django>=2.0.0
 django-multiselectfield
 django-solo
+requests
+requests-cache
+Pillow
+natsort
+PyPDF2
