@@ -32,7 +32,7 @@ class SeriesDetail(DetailView):
     model = Series
 
 
-class IssueDetail(DetailView()):
+class IssueDetail(DetailView):
     model = Issue
 
     def get_context_data(self, **kwargs):
