@@ -1,10 +1,11 @@
-from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from . import views
+from django.urls import path
+
+from ..views import SeriesList
 
 
 app_name = 'comics'
 urlpatterns = [
-    path('series/', views.SeriesList.as_view(), name='comics_series_list')
+    path('series/', SeriesList.as_view(), name='serieslist')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
