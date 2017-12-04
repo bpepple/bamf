@@ -40,7 +40,7 @@ class ComicImporter(object):
         requests_cache.core.remove_expired_responses()
         # temporary values until settings view is created.
         self.api_key = 'b9e1066bf2119ce5fb025d5ddbcacbeba52e437b'
-        self.directory_path = '/home/bpepple/Downloads/Staging/Wildstorm'
+        self.directory_path = '/home/bpepple/Downloads/Staging/Image'
         # API Strings
         self.baseurl = 'https://comicvine.gamespot.com/api/'
         self.imageurl = 'https://comicvine.gamespot.com/api/image/'
