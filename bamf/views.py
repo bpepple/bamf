@@ -1,4 +1,4 @@
 from django.shortcuts import redirect
 
 def redirect_root(request):
-    return redirect('comics:serieslist')
+    return redirect('series:list')

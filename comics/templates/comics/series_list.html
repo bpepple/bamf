@@ -8,7 +8,7 @@
 
 {% block content %}
 <div class="searchbox-wrapper">
-    <form id="searchform" action="" method="get" accept-charset="utf-8">
+    <form id="searchform" action="{% url 'series:search' %}" method="get" accept-charset="utf-8">
         <i class="fa fa-search"></i>
         <input id="searchbox" name="q" type="text" placeholder="Search">
     </form>
