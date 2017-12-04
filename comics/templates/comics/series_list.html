@@ -1,21 +1,46 @@
 {% extends parent_template|default:"base.html" %}
 
+{% load simple_crop %}
+
 {% block title %}
 {{ block.super }} - Series
 {% endblock %}
 
 {% block content %}
+<div class="searchbox-wrapper">
+    <form id="searchform" action="" method="get" accept-charset="utf-8">
+        <i class="fa fa-search"></i>
+        <input id="searchbox" name="q" type="text" placeholder="Search">
+    </form>
+</div>
+
+<div class="all-series">
   {% if series_list %}
-  <ul>
+    <ul>
     {% for series in series_list %}
         {% if series.issue_set.all %}
         <li>
-            <a href="">{{ series.name }}</a>
+            <a href="">
+                <img src="{{ series.issue_numerical_order_set.first.cover|smartcrop:"1280x1950"|urlencode }}"
+                    class="rounded" alt = "{{ series.name }}" >
+                {% if series.unread_issue_count > 0 %}
+                    <div class="unread-count">
+                        <p>{{ series.unread_issue_count }}</p>
+                    </div>
+                {% endif %}
+            </a>
+            <a href=""><p>{{ series.name }}</p></a>
         </li>
         {% endif %}
     {% empty %}
-      <li><em>No Series Available</em></li>
+        <div class="no-series">
+            <p>No Series Available</p>
+        </div>
     {% endfor %}
-  </ul>
+    </ul>
   {% endif %}
+    <div class="no-results">
+        <p>No series match your search.</p>
+    </div>
+</div>
 {% endblock %}
