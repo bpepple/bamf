@@ -1,0 +1,24 @@
+{% load simple_crop %}
+{% load staticfiles %}
+
+<div class="related related-series">
+	<h2>Series</h2>
+	<div class="flexslider related-slider">
+		<ul class="slides">
+			{% for series in allseries %}
+			<li>
+				<a href="{% url 'series:detail' series.slug %}">
+					<div class="image">
+						{% if series.issue_numerical_order_set.first.cover %}
+							<img src="{{ series.issue_numerical_order_set.first.cover|smartcrop:"200x305"|urlencode }}" alt="{{ seriesname }}" >
+						{% else %}
+							<img src="{% static 'site/image-not-found.png' %}" alt="{{ seriesname }}" >
+						{% endif %}
+					</div>
+				</a>
+				<a href="{% url 'series:detail' series.slug %}"><p>{{ series.name }}</p></a>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>

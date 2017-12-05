@@ -1,0 +1,26 @@
+{% load simple_crop %}
+{% load staticfiles %}
+
+{% if team_list %}
+<div class="related related-teams">
+	<h2>Teams</h2>
+	<div class="flexslider related-slider">
+		<ul class="slides">
+			{% for team in team_list %}
+			<li>
+				<a href="{% url 'team:detail' team.slug %}">
+					<div class="image">
+						{% if team.image %}
+							<img src="{{ team.image|smartcrop:"200x305"|urlencode }}" alt="{{ team.name }}" >
+						{% else %}
+							<img src="{% static 'site/image-not-found.png' %}" alt="{{ team.name }}" >
+						{% endif %}
+					</div>
+				</a>
+				<a href="{% url 'team:detail' team.slug %}"><p>{{ team.name }}</p></a>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+{% endif %}

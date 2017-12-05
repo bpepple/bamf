@@ -1,37 +1,69 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Bamf{% endblock %}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'site/style.css' %}" />
-    <script src="https://use.fontawesome.com/d3455c4c52.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-  </head>
-  <body class="{% block page-type %}{% endblock %}">
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="{% url 'series:list' %}">Bamf</a>
-                </div>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><i class="settings-button fa fa-cog"></i></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+<html lang="en">
+    <head>
+        <title>Bamf</title>
+        <link rel="stylesheet" href="{% static 'site/flexslider/flexslider.css' %}" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{% static 'site/style.css' %}" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://malsup.github.io/jquery.form.js"></script>
+        <script src="https://use.fontawesome.com/d3455c4c52.js"></script>
+        <script src="{% static 'site/bootstrap/bootstrap.min.js' %}"></script>
+        <script src="{% static 'site/flexslider/jquery.flexslider-min.js' %}"></script>
+        <script src="{% static 'site/script.js' %}"></script>
+    </head>
 
-    <div id="content">
-        {% block content %}
-          This is default content!
-        {% endblock %}
-    </div>
+    <body class="{% block page-type %}{% endblock %}">
+        <header>
+            <div id="navbar">
+                <a href="{% url 'series:list' %}">Bamf</a>
+                {% block menu %}
+                    <i class="settings-button fa fa-cog"></i>
+                {% endblock %}
+            </div>
+        </header>
+
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+    
+    {% if is_paginated %}
+    <div class="center">
+        <div class="pagination">
+            <span class="page-link">
+                {% if page_obj.number > 1 %}
+                    <a href="{{ request.path }}?page=1">&lArr;</a>
+                {% else %}
+                    <span>&lArr;</span>
+                {% endif %}
+                
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">&larr;</a>
+                {% else %}
+                    <span>&larr;<span>
+                {% endif %}
+                
+                <span class="page-item">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">&rarr;</a>
+                {% else %}
+                    <span>&rarr;<span>
+                {% endif %}
+ 
+                {% if page_obj.number < paginator.num_pages %}
+                    <a href="{{ request.path }}?page={{ paginator.num_pages }}">&rArr;</a>
+                {% else %}
+                    <span>&rArr;</span>
+                {% endif %}
+              </span>
+        </div>
+     </div>
+     {% endif %}
 
     <footer>
         <div class="metadata-disclaimer">
@@ -43,5 +75,4 @@
             </div>
         </div>
     </footer>
-  </body>
 </html>

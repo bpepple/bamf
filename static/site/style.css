@@ -161,7 +161,7 @@ footer .metadata-disclaimer img {
 }
 
 #modal .modal-header {
-	background-color: #151515;
+	background-color: #022e4e;
     height: 50px;
     border-radius: 10px 10px 0 0;
 }
@@ -230,7 +230,7 @@ a.button.reprocess-issue {
  */
 
 .flexslider.related-slider {
-	background: #151515;
+	background: #022e4e;
     border: none;
     border-radius: 0;
     padding: 20px 30px;
@@ -378,7 +378,7 @@ a.button.reprocess-issue {
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	background-color: #40C899;
+	background-color: #21a0fa;
 	box-shadow: 0px 0px 6px #000000;
 	border-radius: 16px;
 }
@@ -672,7 +672,7 @@ a.button.reprocess-issue {
 	position: absolute;
 	top: 5px;
 	right: 5px;
-	color: #40C899;
+	color: #21a0fa;
 	text-shadow: 0px 0px 6px #000000;
 }
 

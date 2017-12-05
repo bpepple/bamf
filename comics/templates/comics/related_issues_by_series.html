@@ -1,0 +1,36 @@
+{% load simple_crop %}
+{% load staticfiles %}
+
+{% if issue_list %}
+<div class="related related-issues">
+	<h2>Issues</h2>
+	<div>
+	{% for issue in issue_list %}
+
+		{% ifchanged issue.series.id %}
+		{% if not forloop.first %}
+			</ul>
+		</div>
+		{% endif %}
+		<a href="{% url 'series:detail' issue.series.id %}"><h3>{{ issue.series.name }}</h3></a>
+		<div class="flexslider related-slider">
+			<ul class="slides">
+		{% endifchanged %}
+
+				<li>
+					<a href="{% url 'issue:detail' issue.slug %}">
+						<div class="image">
+							{% if issue.cover %}
+								<img src="{{ issue.cover|smartcrop:"200x305"|urlencode }}" alt="{{ series.name }}" >
+							{% else %}
+								<img src="{% static 'site/image-not-found.png' %}" alt="{{ series.name }}" >
+							{% endif %}
+						</div>
+					</a>
+					<a href="{% url 'issue:detail' issue.slug %}"><p>Issue #{{ issue.number }}</p></a>
+				</li>
+		
+	{% endfor %}
+	</div>
+</div>
+{% endif %}
