@@ -1,0 +1,45 @@
+{% extends parent_template|default:"base.html" %}
+
+{% load simple_crop %}
+{% load staticfiles %}
+
+{% block page-title %}{{ character.name }}{% endblock page-title %}
+
+{% block content %}
+
+<div class="searchbox-wrapper">
+    <form id="searchform" action="{% url 'character:search' %}" method="get" accept-charset="utf-8">
+        <i class="fa fa-search"></i>
+        <input id="searchbox" name="q" type="text" placeholder="Character Search">
+    </form>
+</div>
+
+<div class="all-series">
+{% if character_list %}
+    <ul>
+        {% for character in character_list %}
+            <li>
+                <a href="{% url 'character:detail' character.slug %}">
+                    <div class="image">
+                    {% if character.image %}
+                        <img src="{{ character.image|smartcrop:"1280x1950"|urlencode }}" >
+                    {% else %}
+                        <img src="{% static 'site/image-not-found.png' %}" alt="{{ roles.character.name }}" >
+                    {% endif %}
+                    </div>
+                </a>
+                <a href="{% url 'character:detail' character.slug %}"><p>{{ character.name }}</p></a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div class="no-series">
+        <p>No characters currently available.</p>
+    </div>
+{% endif %}
+    <div class="no-results">
+        <p>No characters match your search.</p>
+    </div>
+</div>
+
+{% endblock content %}

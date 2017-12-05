@@ -1,0 +1,45 @@
+{% extends parent_template|default:"base.html" %}
+
+{% load simple_crop %}
+{% load staticfiles %}
+
+{% block page-title %}{{ creator.name }}{% endblock page-title %}
+
+{% block content %}
+
+<div class="searchbox-wrapper">
+    <form id="searchform" action="{% url 'creator:search' %}" method="get" accept-charset="utf-8">
+        <i class="fa fa-search"></i>
+        <input id="searchbox" name="q" type="text" placeholder="Creator Search">
+    </form>
+</div>
+
+<div class="all-series">
+{% if creator_list %}
+    <ul>
+        {% for creator in creator_list %}
+            <li>
+                <a href="{% url 'creator:detail' creator.slug %}">
+                    <div class="image">
+                    {% if creator.image %}
+                        <img src="{{ creator.image|smartcrop:"1280x1950"|urlencode }}" >
+                    {% else %}
+                        <img src="{% static 'site/image-not-found.png' %}" alt="{{ roles.creator.name }}" >
+                    {% endif %}
+                    </div>
+                </a>
+                <a href="{% url 'creator:detail' creator.slug %}"><p>{{ creator.name }}</p></a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div class="no-series">
+        <p>No Creators currently available.</p>
+    </div>
+{% endif %}
+    <div class="no-results">
+        <p>No Creators match your search.</p>
+    </div>
+</div>
+
+{% endblock content %}

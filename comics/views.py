@@ -8,9 +8,12 @@ from comics.models import (Series, Issue, Character,
                            Arc, Team, Publisher,
                            Creator, Roles)
 
+PAGINATE = 28
+
 
 class SeriesList(ListView):
     model = Series
+    paginate_by = PAGINATE
 
 
 class SearchSeriesList(SeriesList):
@@ -31,6 +34,11 @@ class SeriesDetail(DetailView):
     model = Series
 
 
+class IssueList(ListView):
+    model = Issue
+    paginate_by = PAGINATE
+
+
 class IssueDetail(DetailView):
     model = Issue
 
@@ -39,6 +47,25 @@ class IssueDetail(DetailView):
         issue = self.get_object()
         context['roles_list'] = Roles.objects.filter(issue=issue)
         return context
+
+
+class CharacterList(ListView):
+    model = Character
+    paginate_by = PAGINATE
+
+
+class SearchCharacterList(CharacterList):
+
+    def get_queryset(self):
+        result = super(SearchCharacterList, self).get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(name__icontains=q) for q in query_list)))
+
+        return result
 
 
 class CharacterDetail(DetailView):
@@ -74,8 +101,46 @@ class TeamDetail(DetailView):
         return context
 
 
+class PublisherList(ListView):
+    model = Publisher
+    paginate_by = PAGINATE
+
+
+class SearchPublisherList(PublisherList):
+
+    def get_queryset(self):
+        result = super(SearchPublisherList, self).get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(name__icontains=q) for q in query_list)))
+
+        return result
+
+
 class PublisherDetail(DetailView):
     model = Publisher
+
+
+class CreatorList(ListView):
+    model = Creator
+    paginate_by = PAGINATE
+
+
+class SearchCreatorList(CreatorList):
+
+    def get_queryset(self):
+        result = super(SearchCreatorList, self).get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(name__icontains=q) for q in query_list)))
+
+        return result
 
 
 class CreatorDetail(DetailView):

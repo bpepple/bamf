@@ -71,6 +71,10 @@ class Character(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "Characters"
+        ordering = ["name"]
+
 
 class Creator(models.Model):
     cvid = models.PositiveIntegerField(unique=True)
@@ -83,6 +87,10 @@ class Creator(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = "Creators"
+        ordering = ["name"]
 
 
 class Publisher(models.Model):

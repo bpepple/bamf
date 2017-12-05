@@ -1,0 +1,38 @@
+{% extends parent_template|default:"base.html" %}
+
+{% load simple_crop %}
+
+{% block page-title %}{{ publisher.name }}{% endblock page-title %}
+
+{% block content %}
+
+<div class="searchbox-wrapper">
+    <form id="searchform" action="{% url 'publisher:search' %}" method="get" accept-charset="utf-8">
+        <i class="fa fa-search"></i>
+        <input id="searchbox" name="q" type="text" placeholder="Publisher Search">
+    </form>
+</div>
+
+<div class="all-series">
+{% if publisher_list %}
+    <ul>
+        {% for publisher in publisher_list %}
+            <li>
+                <a href="{% url 'publisher:detail' publisher.slug %}">
+                    <img src="{{ publisher.logo|smartcrop:"1280x1950"|urlencode }}" >
+                </a>
+                <a href="{% url 'publisher:detail' publisher.slug %}"><p>{{ publisher.name }}</p></a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div class="no-series">
+        <p>No Publishers currently available.</p>
+    </div>
+{% endif %}
+    <div class="no-results">
+        <p>No publishers match your search.</p>
+    </div>
+</div>
+
+{% endblock content %}

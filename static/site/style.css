@@ -86,20 +86,27 @@ header {
     background: #022e4e;
 }
 
-#navbar {
-	height: 100%;
-	padding: 0 30px;
+header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
-header .logo {
-	width: ;
-	margin: 8px 20px 0 0;
-	float: left;
+header li {
+    float: left;
 }
 
-header .logo img {
-	max-width: 125px;
-    width: 100%;
+header li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+header li a:hover {
+    background-color: #111;
 }
 
 /*
@@ -125,105 +132,6 @@ footer .metadata-disclaimer {
 footer .metadata-disclaimer img {
 	max-width: 80px;
 }
-
-/*
- *	Server Settings Modal
- */
-
-#navbar .settings-button {
-	cursor: pointer;
-	float: right;
-    font-size: 25px;
-    margin: 12px 0
-}
-
-#modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background: rgba(0,0,0,0.7);
-    display: none;
-}
-
-#modal.open {
-    display: block;
-}
-
-#modal .modal-dialog {
-	position: fixed;
-    background-color: #034f84;
-    border-radius: 10px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-#modal .modal-header {
-	background-color: #022e4e;
-    height: 50px;
-    border-radius: 10px 10px 0 0;
-}
-
-#modal .modal-header h3 {
-	margin: 0;
-	padding: 10px 20px;
-	float: left;
-}
-
-#modal .modal-header .close {
-	float: right;
-	cursor: pointer;
-    padding: 11px 20px;
-    font-size: 24px;
-    border: none;
-    background-color: transparent;
-}
-
-#modal .modal-body {
-	padding: 20px 20px 5px 20px;
-}
-
-#modal .modal-footer {
-	padding: 5px 20px 20px 20px;
-}
-
-a.button.import-comics {
-    width: 110px;
-    margin-bottom: 17px;
-}
-
-#modal form label {
-	margin-right: 5px;
-}
-
-#modal form input[type=text] {
-	width: 330px;
-}
-
-#modal form .helptext {
-	display: block;
-	font-style: italic;
-	font-size: 12px;
-}
-
-#modal form .helptext a {
-	text-decoration: underline;
-}
-
-#modal .modal-body .errorlist {
-	margin-top: 0;
-}
-
-/*
- *	Issue Update Modal
- */
-
-a.button.reprocess-issue {
-    width: 70px;
-}
-
 
 /*
  *	Flexslider - Related Sliders

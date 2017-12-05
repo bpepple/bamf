@@ -16,12 +16,12 @@
 
     <body class="{% block page-type %}{% endblock %}">
         <header>
-            <div id="navbar">
-                <a href="{% url 'series:list' %}">Bamf</a>
-                {% block menu %}
-                    <i class="settings-button fa fa-cog"></i>
-                {% endblock %}
-            </div>
+            <ul>
+                <li><a class="active" href="{% url 'series:list' %}">Series</a></li>
+                <li><a href="{% url 'publisher:list' %}">Publishers</a></li>
+                <li><a href="{% url 'creator:list' %}">Creators</a></li>
+                <li><a href="{% url 'character:list' %}">Characters</a></li>
+            </ul>
         </header>
 
         <div id="content">
