@@ -215,3 +215,267 @@ footer .metadata-disclaimer img {
         margin: 0 0 20px;
     }
 }
+
+*
+ *  Arcs
+ */
+
+.arc-image {
+    display: inline-block;
+    width: 29%;
+    margin-right: 1%;
+    position: relative;
+}
+
+.arc-image img {
+    width: 100%;
+}
+
+.arc-info {
+    display: inline-block;
+    vertical-align: top;
+    width: 69%;
+}
+
+.arc-info-wrapper {
+    padding: 0 30px;
+}
+
+/*
+ *  Characters
+ */
+
+.character-image {
+    display: inline-block;
+    width: 29%;
+    margin-right: 1%;
+    position: relative;
+}
+
+.character-image img {
+    width: 100%;
+}
+
+.character-info {
+    display: inline-block;
+    vertical-align: top;
+    width: 69%;
+}
+
+.character-info-wrapper {
+    padding: 0 30px;
+}
+
+/*
+ *  Creators
+ */
+
+.creator-image {
+    display: inline-block;
+    width: 29%;
+    margin-right: 1%;
+    position: relative;
+}
+
+.creator-image img {
+    width: 100%;
+}
+
+.creator-info {
+    display: inline-block;
+    vertical-align: top;
+    width: 69%;
+}
+
+.creator-info-wrapper {
+    padding: 0 30px;
+}
+
+/*
+ *  Series
+ */
+
+.series-cover-image {
+    display: inline-block;
+    width: 29%;
+    margin-right: 1%;
+    position: relative;
+}
+
+.series-cover-image img {
+    width: 100%;
+}
+
+.series-info {
+    display: inline-block;
+    vertical-align: top;
+    width: 69%;
+}
+
+.series-info-wrapper {
+    padding: 0 30px;
+}
+
+/*
+ *  Teams
+ */
+
+.team-image {
+    display: inline-block;
+    width: 29%;
+    margin-right: 1%;
+    position: relative;
+}
+
+.team-image img {
+    width: 100%;
+}
+
+.team-info {
+    display: inline-block;
+    vertical-align: top;
+    width: 69%;
+}
+
+.team-info-wrapper {
+    padding: 0 30px;
+}
+
+/*
+ *  Publishers
+ */
+
+.publisher-logo {
+    display: inline-block;
+    width: 29%;
+    margin-right: 1%;
+    position: relative;
+}
+
+.publisher-logo img {
+    width: 100%;
+}
+
+.publisher-info {
+    display: inline-block;
+    vertical-align: top;
+    width: 69%;
+}
+
+.publisher-info-wrapper {
+    padding: 0 30px;
+}
+
+/*
+ *  Issues
+ */
+
+.issue-cover {
+    display: inline-block;
+    width: 29%;
+    margin-right: 1%;
+    position: relative;
+    line-height: 0;
+}
+
+.issue-cover-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0);
+    transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -ms-transition: all 0.5s linear;
+}
+
+.issue-cover i {
+    visibility: hidden;
+    opacity: 0;
+    display: inline-block;
+    position: absolute;
+    z-index: 10;
+    transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -ms-transition: all 0.5s linear;
+}
+
+.issue-cover i:hover {
+    color: #bfbfbf;
+}
+
+.issue-cover i.read-button {
+    text-align: center;
+    font-size: 8rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.issue-cover i.issue-update-button {
+    font-size: 2.5rem;
+    bottom: 10px;
+    right: 10px;
+}
+
+.issue-cover .issue-cover-image:hover .issue-cover-overlay{
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.issue-cover-overlay:hover i {
+    visibility: visible;
+    opacity: 1;
+}
+
+.issue-cover img {
+    width: 100%;
+}
+
+.issue-info {
+    display: inline-block;
+    vertical-align: top;
+    width: 69%;
+}
+
+.issue-info-wrapper {
+    padding: 0 30px;
+}
+
+/*
+ *  Related Publisher
+ */
+
+.related-publisher {
+    position: absolute;
+    right: 30px;
+    top: 60px;
+}
+
+.related-publisher img {
+    max-width: 100px;
+}
+
+/*
+ *  Related blocks
+ */
+
+.related {
+    position: relative;
+}
+
+.related h2,
+.related h3 {
+    margin-left: 30px;
+}
+
+.related li i.fa-circle,
+.related li i.fa-adjust {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #40C899;
+    text-shadow: 0px 0px 6px #000000;
+}

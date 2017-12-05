@@ -1,0 +1,12 @@
+{% load staticfiles %}
+
+{% if cvurl %}
+<div class="comicvine-link">
+    <div class="text">
+        <p>Learn more at</p>
+    </div>
+    <div class="logo">
+        <a target:"_blank" href="{{ cvurl }}"><img src="{% static 'site/comicvine_logo.png' %}"></a>
+    </div>
+</div>
+{% endif %}
