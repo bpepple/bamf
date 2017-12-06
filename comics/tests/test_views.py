@@ -1,24 +1,28 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from comics.models import Publisher
+from comics.models import Publisher, Series
 
 
 HTML_OK_CODE = 200
+PAGINATE_VALUE = 28
+PAGINATE_TEST = 35
+PAGINATE_REMAINDER = 7
 
 
 class PublisherListViewTest(TestCase):
+
     @classmethod
     def setUpTestData(cls):
         # Create 35 test publishers for pagination tests
-        number_of_publishers = 35
+        number_of_publishers = PAGINATE_TEST
         for pub_num in range(number_of_publishers):
             Publisher.objects.create(
                 name='Publisher %s' % pub_num,
                 slug='publisher-%s' % pub_num,)
 
-    def test_view_url_exists_at_desired_location(self): 
-        resp = self.client.get('/publisher/') 
+    def test_view_url_exists_at_desired_location(self):
+        resp = self.client.get('/publisher/')
         self.assertEqual(resp.status_code, HTML_OK_CODE)
 
     def test_view_url_accessible_by_name(self):
@@ -35,7 +39,7 @@ class PublisherListViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
         self.assertTrue(resp.context['is_paginated'] == True)
-        self.assertTrue(len(resp.context['publisher_list']) == 28)
+        self.assertTrue(len(resp.context['publisher_list']) == PAGINATE_VALUE)
 
     def test_lists_all_publishers(self):
         # Get second page and confirm it has (exactly) remaining 7 items
@@ -43,4 +47,48 @@ class PublisherListViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
         self.assertTrue(resp.context['is_paginated'] == True)
-        self.assertTrue(len(resp.context['publisher_list']) == 7)
+        self.assertTrue(
+            len(resp.context['publisher_list']) == PAGINATE_REMAINDER)
+
+
+class SeriesListViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        pub, p_create = Publisher.objects.get_or_create(
+            name='Marvel',
+            slug='marvel')
+        number_of_series = PAGINATE_TEST
+        for ser_num in range(number_of_series):
+            Series.objects.create(
+                name='Series %s' % ser_num,
+                slug='series-%s' % ser_num,
+                publisher=pub,
+                cvid=ser_num)
+
+    def test_view_url_exists_at_desired_location(self):
+        resp = self.client.get('/series/')
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_url_accessible_by_name(self):
+        resp = self.client.get(reverse('series:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_uses_correct_template(self):
+        resp = self.client.get(reverse('series:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTemplateUsed(resp, 'comics/series_list.html')
+
+    def test_pagination_is_ten(self):
+        resp = self.client.get(reverse('series:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTrue('is_paginated' in resp.context)
+        self.assertTrue(resp.context['is_paginated'] == True)
+        self.assertTrue(len(resp.context['series_list']) == PAGINATE_VALUE)
+
+    def test_lists_all_series(self):
+        resp = self.client.get(reverse('series:list') + '?page=2')
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTrue('is_paginated' in resp.context)
+        self.assertTrue(resp.context['is_paginated'] == True)
+        self.assertTrue(len(resp.context['series_list']) == PAGINATE_REMAINDER)
