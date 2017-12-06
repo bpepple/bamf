@@ -90,6 +90,25 @@ class ArcDetail(DetailView):
         return context
 
 
+class TeamList(ListView):
+    model = Team
+    paginate_by = PAGINATE
+
+
+class SearchTeamList(TeamList):
+
+    def get_queryset(self):
+        result = super(SearchTeamList, self).get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(name__icontains=q) for q in query_list)))
+
+        return result
+
+
 class TeamDetail(DetailView):
     model = Team
 

@@ -24,7 +24,7 @@
                     {% if character.image %}
                         <img src="{{ character.image|smartcrop:"1280x1950"|urlencode }}" >
                     {% else %}
-                        <img src="{% static 'site/image-not-found.png' %}" alt="{{ roles.character.name }}" >
+                        <img src="{% static 'site/image-not-found.png' %}" >
                     {% endif %}
                     </div>
                 </a>

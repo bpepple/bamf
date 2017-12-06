@@ -1,0 +1,45 @@
+{% extends parent_template|default:"base.html" %}
+
+{% load simple_crop %}
+{% load staticfiles %}
+
+{% block page-title %}{{ team.name }}{% endblock page-title %}
+
+{% block content %}
+
+<div class="searchbox-wrapper">
+    <form id="searchform" action="{% url 'team:search' %}" method="get" accept-charset="utf-8">
+        <i class="fa fa-search"></i>
+        <input id="searchbox" name="q" type="text" placeholder="Team Search">
+    </form>
+</div>
+
+<div class="all-series">
+{% if team_list %}
+    <ul>
+        {% for team in team_list %}
+            <li>
+                <a href="{% url 'team:detail' team.slug %}">
+                    <div class="image">
+                    {% if team.image %}
+                        <img src="{{ team.image|smartcrop:"1280x1950"|urlencode }}">
+                    {% else %}
+                        <img src="{% static 'site/image-not-found.png' %}">
+                    {% endif %}
+                    </div>
+                </a>
+                <a href="{% url 'team:detail' team.slug %}"><p>{{ team.name }}</p></a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div class="no-series">
+        <p>No Teams currently available.</p>
+    </div>
+{% endif %}
+    <div class="no-results">
+        <p>No Teams match your search.</p>
+    </div>
+</div>
+
+{% endblock content %}

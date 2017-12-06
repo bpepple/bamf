@@ -44,6 +44,10 @@ class Arc(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "Arcs"
+        ordering = ["name"]
+
 
 class Team(models.Model):
     cvid = models.PositiveIntegerField(unique=True)
@@ -56,6 +60,10 @@ class Team(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = "Teams"
+        ordering = ["name"]
 
 
 class Character(models.Model):
@@ -104,6 +112,10 @@ class Publisher(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = "Publishers"
+        ordering = ["name"]
 
 
 class Series(models.Model):
