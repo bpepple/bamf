@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from comics.models import (Publisher, Series, Creator, Character)
+from comics.models import (Publisher, Series, Creator, Character, Team)
 
 
 HTML_OK_CODE = 200
@@ -172,3 +172,43 @@ class CharacterListViewTest(TestCase):
         self.assertTrue(resp.context['is_paginated'] == True)
         self.assertTrue(
             len(resp.context['character_list']) == PAGINATE_REMAINDER)
+
+
+class TeamListViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        number_of_teams = PAGINATE_TEST
+        for team in range(number_of_teams):
+            Team.objects.create(
+                name='Team %s' % team,
+                slug='team-%s' % team,
+                cvid=team)
+
+    def test_view_url_exists_at_desired_location(self):
+        resp = self.client.get('/team/')
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_url_accessible_by_name(self):
+        resp = self.client.get(reverse('team:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_uses_correct_template(self):
+        resp = self.client.get(reverse('team:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTemplateUsed(resp, 'comics/team_list.html')
+
+    def test_pagination_is_twenty_eight(self):
+        resp = self.client.get(reverse('team:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTrue('is_paginated' in resp.context)
+        self.assertTrue(resp.context['is_paginated'] == True)
+        self.assertTrue(len(resp.context['team_list']) == PAGINATE_VALUE)
+
+    def test_lists_all_teams(self):
+        resp = self.client.get(reverse('team:list') + '?page=2')
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTrue('is_paginated' in resp.context)
+        self.assertTrue(resp.context['is_paginated'] == True)
+        self.assertTrue(
+            len(resp.context['team_list']) == PAGINATE_REMAINDER)
