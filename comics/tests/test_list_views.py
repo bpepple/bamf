@@ -6,8 +6,8 @@ from comics.models import (Publisher, Series, Creator,
 
 
 HTML_OK_CODE = 200
-PAGINATE_DEFAULT_VAL = 28
 PAGINATE_TEST_VAL = 35
+PAGINATE_DEFAULT_VAL = 28
 PAGINATE_DIFF_VAL = (PAGINATE_TEST_VAL - PAGINATE_DEFAULT_VAL)
 
 
@@ -15,9 +15,7 @@ class PublisherListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # Create 35 test publishers for pagination tests
-        number_of_publishers = PAGINATE_TEST_VAL
-        for pub_num in range(number_of_publishers):
+        for pub_num in range(PAGINATE_TEST_VAL):
             Publisher.objects.create(
                 name='Publisher %s' % pub_num,
                 slug='publisher-%s' % pub_num,)
@@ -60,8 +58,8 @@ class SeriesListViewTest(TestCase):
         pub, p_create = Publisher.objects.get_or_create(
             name='Marvel',
             slug='marvel')
-        number_of_series = PAGINATE_TEST_VAL
-        for ser_num in range(number_of_series):
+
+        for ser_num in range(PAGINATE_TEST_VAL):
             Series.objects.create(
                 name='Series %s' % ser_num,
                 slug='series-%s' % ser_num,
@@ -101,8 +99,7 @@ class CreatorListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        number_of_creators = PAGINATE_TEST_VAL
-        for creator in range(number_of_creators):
+        for creator in range(PAGINATE_TEST_VAL):
             Creator.objects.create(
                 name='Creator %s' % creator,
                 slug='creator-%s' % creator,
@@ -142,8 +139,7 @@ class CharacterListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        number_of_characters = PAGINATE_TEST_VAL
-        for character in range(number_of_characters):
+        for character in range(PAGINATE_TEST_VAL):
             Character.objects.create(
                 name='Character %s' % character,
                 slug='character-%s' % character,
@@ -183,8 +179,7 @@ class TeamListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        number_of_teams = PAGINATE_TEST_VAL
-        for team in range(number_of_teams):
+        for team in range(PAGINATE_TEST_VAL):
             Team.objects.create(
                 name='Team %s' % team,
                 slug='team-%s' % team,
