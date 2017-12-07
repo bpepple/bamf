@@ -70,3 +70,23 @@ class CreatorDetailViewTest(TestCase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/creator_detail.html')
+
+
+class CharacterDetailViewTest(TestCase):
+
+    def setUp(self):
+        self.character = Character.objects.create(
+            name='Captain America',
+            slug='captain-america',
+            cvid=1234)
+
+    def test_view_url_accessible_by_name(self):
+        url = reverse('character:detail', args=(self.character.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_uses_correct_template(self):
+        url = reverse('character:detail', args=(self.character.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTemplateUsed(resp, 'comics/character_detail.html')
