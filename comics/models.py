@@ -45,7 +45,6 @@ class Arc(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Arcs"
         ordering = ["name"]
 
 
@@ -62,7 +61,6 @@ class Team(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Teams"
         ordering = ["name"]
 
 
@@ -80,7 +78,6 @@ class Character(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Characters"
         ordering = ["name"]
 
 
@@ -97,7 +94,6 @@ class Creator(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Creators"
         ordering = ["name"]
 
 
@@ -114,7 +110,6 @@ class Publisher(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Publishers"
         ordering = ["name"]
 
 
