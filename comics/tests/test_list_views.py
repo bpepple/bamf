@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from comics.models import (Publisher, Series, Creator, Character, Team)
+from comics.models import (Publisher, Series, Creator,
+                           Character, Team, Arc)
 
 
 HTML_OK_CODE = 200
@@ -216,3 +217,42 @@ class TeamListViewTest(TestCase):
         self.assertTrue(resp.context['is_paginated'] == True)
         self.assertTrue(
             len(resp.context['team_list']) == PAGINATE_DIFF_VAL)
+
+
+class ArcListViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        for arc in range(PAGINATE_TEST_VAL):
+            Arc.objects.create(
+                name='Arc %s' % arc,
+                slug='arc-%s' % arc,
+                cvid=arc)
+
+    def test_view_url_exists_at_desired_location(self):
+        resp = self.client.get('/arc/')
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_url_accessible_by_name(self):
+        resp = self.client.get(reverse('arc:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_uses_correct_template(self):
+        resp = self.client.get(reverse('arc:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTemplateUsed(resp, 'comics/arc_list.html')
+
+    def test_pagination_is_twenty_eight(self):
+        resp = self.client.get(reverse('arc:list'))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTrue('is_paginated' in resp.context)
+        self.assertTrue(resp.context['is_paginated'] == True)
+        self.assertTrue(len(resp.context['arc_list']) == PAGINATE_DEFAULT_VAL)
+
+    def test_lists_all_teams(self):
+        resp = self.client.get(reverse('arc:list') + '?page=2')
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTrue('is_paginated' in resp.context)
+        self.assertTrue(resp.context['is_paginated'] == True)
+        self.assertTrue(
+            len(resp.context['arc_list']) == PAGINATE_DIFF_VAL)
