@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils.text import slugify
 
-from comics.models import Publisher, Arc, Team
+from comics.models import Publisher, Arc, Team, Character
 
 
 class PublisherTest(TestCase):
@@ -70,3 +70,25 @@ class TeamTest(TestCase):
         team = Team.objects.get(id=1)
         self.assertEqual(
             str(team._meta.verbose_name_plural), "teams")
+
+
+class CharacterTest(TestCase):
+
+    @classmethod
+    def setUpTestData(self):
+        self.name = 'Superman'
+        self.slug = slugify(self.name)
+        self.cvid = 1234
+
+        Character.objects.create(name=self.name,
+                                 slug=self.slug,
+                                 cvid=self.cvid)
+
+    def test_string_representation(self):
+        character = Character.objects.get(id=1)
+        self.assertEqual(str(character), self.name)
+
+    def test_verbose_name_plural(self):
+        character = Character.objects.get(id=1)
+        self.assertEqual(
+            str(character._meta.verbose_name_plural), "characters")
