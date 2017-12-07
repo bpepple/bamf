@@ -75,7 +75,7 @@ class CharacterDetail(DetailView):
         context = super(CharacterDetail, self).get_context_data(**kwargs)
         character = self.get_object()
         context['issue_list'] = character.issue_set.all(
-        ).order_by('series__name', 'number')
+        ).order_by('series__name', 'date')
         return context
 
 
@@ -105,7 +105,7 @@ class ArcDetail(DetailView):
         context = super(ArcDetail, self).get_context_data(**kwargs)
         arc = self.get_object()
         context['issue_list'] = arc.issue_set.all(
-        ).order_by('series__name', 'number')
+        ).order_by('series__name', 'date')
         return context
 
 
@@ -135,7 +135,7 @@ class TeamDetail(DetailView):
         context = super(TeamDetail, self).get_context_data(**kwargs)
         team = self.get_object()
         context['issue_list'] = team.issue_set.all(
-        ).order_by('series__name', 'number')
+        ).order_by('series__name', 'date')
         return context
 
 
