@@ -79,6 +79,25 @@ class CharacterDetail(DetailView):
         return context
 
 
+class ArcList(ListView):
+    model = Arc
+    paginate_by = PAGINATE
+
+
+class SearchArcList(ArcList):
+
+    def get_queryset(self):
+        result = super(SearchArcList, self).get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(name__icontains=q) for q in query_list)))
+
+        return result
+
+
 class ArcDetail(DetailView):
     model = Arc
 
