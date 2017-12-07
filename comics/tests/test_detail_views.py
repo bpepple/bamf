@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from comics.models import (Publisher, Series, Creator, Character, Team)
+from comics.models import (Publisher, Series, Creator,
+                           Character, Team, Arc)
 
 
 HTML_OK_CODE = 200
@@ -109,3 +110,23 @@ class TeamDetailViewTest(TestCase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/team_detail.html')
+
+
+class ArcDetailViewTest(TestCase):
+
+    def setUp(self):
+        self.arc = Arc.objects.create(
+            name='Death of Superman',
+            slug='death-of-superman',
+            cvid=4444)
+
+    def test_view_url_accessible_by_name(self):
+        url = reverse('arc:detail', args=(self.arc.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_uses_correct_template(self):
+        url = reverse('arc:detail', args=(self.arc.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTemplateUsed(resp, 'comics/arc_detail.html')
