@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.text import slugify
 
 from comics.models import (Publisher, Series, Creator, Character, Team)
 
