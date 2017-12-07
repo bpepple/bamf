@@ -90,3 +90,23 @@ class CharacterDetailViewTest(TestCase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/character_detail.html')
+
+
+class TeamDetailViewTest(TestCase):
+
+    def setUp(self):
+        self.team = Team.objects.create(
+            name='The Fantastic Four',
+            slug='the-fantastic-four',
+            cvid=4444)
+
+    def test_view_url_accessible_by_name(self):
+        url = reverse('team:detail', args=(self.team.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_uses_correct_template(self):
+        url = reverse('team:detail', args=(self.team.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTemplateUsed(resp, 'comics/team_detail.html')
