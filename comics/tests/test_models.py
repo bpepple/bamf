@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils.text import slugify
 
-from comics.models import (Publisher, Arc, Team, Character, Creator)
+from comics.models import (Publisher, Arc, Team, Character, Creator, Series)
 
 
 class PublisherTest(TestCase):
@@ -114,3 +114,34 @@ class CreatorTest(TestCase):
         creator = Creator.objects.get(id=1)
         self.assertEqual(
             str(creator._meta.verbose_name_plural), "creators")
+
+
+class SeriesTest(TestCase):
+
+    @classmethod
+    def setUpTestData(self):
+        self.name = 'The Avengers'
+        self.sort = 'Avengers, The'
+        self.slug = slugify(self.name)
+        self.cvid = 1234
+
+        pub, p_create = Publisher.objects.get_or_create(
+            name='DC Comics',
+            slug='dc-comics')
+
+        Series.objects.create(name=self.name,
+                              slug=self.slug,
+                              cvid=self.cvid,
+                              sort_title=self.sort,
+                              publisher=pub,)
+
+    def test_string_representation(self):
+        series = Series.objects.get(id=1)
+        self.assertEqual(str(series), self.name)
+
+    def test_verbose_name_plural(self):
+        series = Series.objects.get(id=1)
+        self.assertEqual(
+            str(series._meta.verbose_name_plural), "Series")
+
+#     TODO: Add test for issue count & unread count.
