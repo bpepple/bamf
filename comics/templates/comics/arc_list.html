@@ -22,7 +22,7 @@
                 <a href="{% url 'arc:detail' arc.slug %}">
                     <div class="image">
                     {% if arc.image %}
-                        <img src="{{ arc.image|smartcrop:"1280x1950"|urlencode }}" >
+                        <img src="{{ arc.image|smartcrop:"320x487"|urlencode }}" >
                     {% else %}
                         <img src="{% static 'site/image-not-found.png' %}" >
                     {% endif %}
