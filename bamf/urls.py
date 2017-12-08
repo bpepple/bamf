@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 from comics.urls import (
     arc as arc_urls,
@@ -11,12 +12,11 @@ from comics.urls import (
     team as team_urls,
 )
 
-from .views import redirect_root
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', redirect_root),
+    path('', RedirectView.as_view(pattern_name='series:list',
+                                  permanent=False)),
     path('', include(arc_urls)),
     path('', include(character_urls)),
     path('', include(creator_urls)),
