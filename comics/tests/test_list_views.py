@@ -6,6 +6,7 @@ from comics.models import (Publisher, Series, Creator,
 
 
 HTML_OK_CODE = 200
+HTML_REDIRECT_FOUND_CODE = 302
 PAGINATE_TEST_VAL = 35
 PAGINATE_DEFAULT_VAL = 28
 PAGINATE_DIFF_VAL = (PAGINATE_TEST_VAL - PAGINATE_DEFAULT_VAL)
@@ -65,6 +66,10 @@ class SeriesListViewTest(TestCase):
                 slug='series-%s' % ser_num,
                 publisher=pub,
                 cvid=ser_num)
+
+    def test_view_redirect(self):
+        resp = self.client.get('/')
+        self.assertEqual(resp.status_code, HTML_REDIRECT_FOUND_CODE)
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/series/')
