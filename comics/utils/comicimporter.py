@@ -11,7 +11,7 @@ import requests
 import requests_cache
 
 from comics.models import (Arc, Character, Creator, Issue,
-                           Publisher, Roles, Series, Team)
+                           Publisher, Roles, Series, Team, Settings)
 
 from . import utils
 from .comicapi.comicarchive import MetaDataStyle, ComicArchive
@@ -39,8 +39,8 @@ class ComicImporter(object):
                                      expire_after=1800)
         requests_cache.core.remove_expired_responses()
         # temporary values until settings view is created.
-        self.api_key = 'b9e1066bf2119ce5fb025d5ddbcacbeba52e437b'
-        self.directory_path = '/home/bpepple/Downloads/Staging/DC Comics'
+        self.api_key = Settings.get_solo().api_key
+        self.directory_path = Settings.get_solo().comics_directory
         # API Strings
         self.baseurl = 'https://comicvine.gamespot.com/api/'
         self.imageurl = 'https://comicvine.gamespot.com/api/image/'
