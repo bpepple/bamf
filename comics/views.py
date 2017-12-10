@@ -2,11 +2,14 @@ from functools import reduce
 import operator
 
 from django.db.models import Q
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from django.views.generic.edit import UpdateView
 
 from comics.models import (Series, Issue, Character,
                            Arc, Team, Publisher,
-                           Creator, Roles)
+                           Creator, Roles, Settings)
+
 
 PAGINATE = 28
 
@@ -191,3 +194,16 @@ class CreatorDetail(DetailView):
         context['issue_list'] = Issue.objects.filter(
             id__in=roles.values('issue_id'))
         return context
+
+
+class ServerSettingsView(UpdateView):
+    model = Settings
+    fields = '__all__'
+    template_name = 'comics/server_settings.html'
+
+    def get_object(self, *args, **kwargs):
+        return Settings.get_solo()
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return render(self.request, 'comics/server-settings-success.html', {'server-settings': self.object})

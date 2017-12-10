@@ -9,6 +9,7 @@ from comics.urls import (
     issue as issue_urls,
     publisher as publisher_urls,
     series as series_urls,
+    server_settings as settings_urls,
     team as team_urls,
 )
 
@@ -23,5 +24,6 @@ urlpatterns = [
     path('', include(issue_urls)),
     path('', include(publisher_urls)),
     path('', include(series_urls)),
+    path('', include(settings_urls)),
     path('', include(team_urls)),
 ]

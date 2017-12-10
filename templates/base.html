@@ -23,7 +23,11 @@
                 <li><a href="{% url 'character:list' %}">Characters</a></li>
                 <li><a href="{% url 'team:list' %}">Teams</a></li>
                 <li><a href="{% url 'arc:list' %}">Story Arcs</a></li>
-                <li style="float:right"><a href="">Settings</a></li>
+                <li style="float:right">
+                    <a data-toggle="modal" data-target="#modal">
+                        <i class="settings-button fa fa-cog"></i>
+                    </a>
+                </li>
             </ul>
         </header>
 
@@ -78,4 +82,18 @@
             </div>
         </div>
     </footer>
+
+    <div class="modal" id="modal"></div>
+
+    <script>
+        $('.settings-button').on('click', function (event) {
+            var modal = $('#modal')
+            $.ajax({
+                url: "{% url 'comics:server-settings' %}",
+                context: document.body
+            }).done(function(response) {
+                modal.html(response);
+            });
+        })
+    </script>
 </html>

@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'solo.apps.SoloAppConfig',
     'comics',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
