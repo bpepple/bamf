@@ -2,6 +2,7 @@ from functools import reduce
 import operator
 
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView
@@ -9,6 +10,8 @@ from django.views.generic.edit import UpdateView
 from comics.models import (Series, Issue, Character,
                            Arc, Team, Publisher,
                            Creator, Roles, Settings)
+
+from .tasks import import_comic_files_task
 
 
 PAGINATE = 28
@@ -207,3 +210,8 @@ class ServerSettingsView(UpdateView):
     def form_valid(self, form):
         self.object = form.save()
         return render(self.request, 'comics/server-settings-success.html', {'server-settings': self.object})
+
+
+def importer(request):
+    import_comic_files_task()
+    return HttpResponseRedirect('/')

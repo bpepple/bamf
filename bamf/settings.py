@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'solo.apps.SoloAppConfig',
     'comics',
     'widget_tweaks',
+    'huey.contrib.djhuey',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}
+
+HUEY = {
+    'name': 'bamf',
+    'consumer': {'workers': 4, 'worker_type': 'thread'},
+    'always_eager': False,
 }
 
 

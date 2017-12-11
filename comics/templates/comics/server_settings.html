@@ -9,7 +9,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<a class="import-comics button" href="">Import Comics</a>
+				<a class="import-comics button" href="{% url 'importer:index' %}">Import Comics</a>
 				{{ form.media }}
 				{% for field in form.visible_fields %}
 					{{ field.errors }}
