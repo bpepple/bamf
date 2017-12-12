@@ -14,7 +14,7 @@ from comics.models import (Series, Issue, Character,
 from .tasks import import_comic_files_task
 
 
-PAGINATE = 28
+PAGINATE = 30
 
 
 class SeriesList(ListView):
