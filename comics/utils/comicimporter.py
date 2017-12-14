@@ -645,3 +645,5 @@ class ComicImporter(object):
 
         if len(md_list) > 0:
             self.commitMetadataList(md_list)
+
+        self.logger.info('Finished importing..')
