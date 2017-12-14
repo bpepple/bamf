@@ -29,6 +29,7 @@ def get_recursive_filelist(pathlist):
 
 
 class ComicImporter(object):
+
     def __init__(self):
         # Configure logging
         logging.getLogger("requests").setLevel(logging.WARNING)
@@ -471,7 +472,8 @@ class ComicImporter(object):
                 issue_obj.characters.add(character_obj)
 
                 if ch_create:
-                    # Check to see if the slug or name exists already in the db.
+                    # Check to see if the slug or name exists already in the
+                    # db.
                     test_slug = slugify(ch['name'])
 
                     slug_count = Character.objects.filter(
@@ -485,7 +487,7 @@ class ComicImporter(object):
                     else:
                         slugy = ch['name']
 
-                    character_obj.name= ch['name']
+                    character_obj.name = ch['name']
                     character_obj.slug = slugify(slugy)
                     character_obj.save()
                     # Alright get the detail information now.
@@ -513,7 +515,7 @@ class ComicImporter(object):
                     else:
                         slugy = story_arc['name']
 
-                    story_obj.name= story_arc['name']
+                    story_obj.name = story_arc['name']
                     story_obj.slug = slugify(slugy)
                     story_obj.save()
 
@@ -549,7 +551,7 @@ class ComicImporter(object):
                     else:
                         slugy = team['name']
 
-                    team_obj.name= team['name']
+                    team_obj.name = team['name']
                     team_obj.slug = slugify(slugy)
                     team_obj.save()
 
@@ -565,15 +567,25 @@ class ComicImporter(object):
             # Add the creators
             for p in issue_response['results']['person_credits']:
                 creator_obj, c_create = Creator.objects.get_or_create(
-                    cvid=p['id'],
-                    name=p['name'],
-                    slug=slugify(p['name']),)
+                    cvid=p['id'],)
 
                 Roles.objects.create(creator=creator_obj,
                                      issue=issue_obj,
                                      roles=re.sub(' ', '', p['role']))
 
                 if c_create:
+                    test_slug = slugify(p['name'])
+                    slug_count = Creator.objects.filter(
+                        slug__iexact=test_slug).count()
+                    if slug_count > 0:
+                        slugy = p['name'] + ' ' + str(slug_count)
+                    else:
+                        slugy = p['name']
+
+                    creator_obj.name = p['name']
+                    creator_obj.slug = slugify(slugy)
+                    creator_obj.save()
+
                     res = self.getCVData(creator_obj,
                                          self.creator_fields,
                                          p['api_detail_url'])
