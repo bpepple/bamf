@@ -1,4 +1,5 @@
 from datetime import datetime
+from json.decoder import JSONDecodeError
 import logging
 import os
 import re
@@ -158,13 +159,17 @@ class ComicImporter(object):
         issue_params = self.base_params
         issue_params['field_list'] = self.issue_fields
 
-        response_issue = requests.get(
-            self.baseurl + 'issue/4000-' + str(issue_cvid),
-            params=issue_params,
-            headers=self.headers,
-        ).json()
+        try:
+            response = requests.get(
+                self.baseurl + 'issue/4000-' + str(issue_cvid),
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except JSONDecodeError:
+            response = None
+            self.logger.info('No value returned from getCVIssue().')
 
-        return response_issue
+        return response
 
     def getIssueCV(self, issue_cvid, response_issue):
         issue_params = self.base_params
@@ -235,7 +240,7 @@ class ComicImporter(object):
                 params=params,
                 headers=self.headers,
             ).json()
-        except ValueError:
+        except JSONDecodeError:
             return False
 
         data = self.get_cv_object_data(response['results'])
@@ -362,14 +367,16 @@ class ComicImporter(object):
                     'No Comic Vine ID for: %s... skipping.' % issue_name)
                 return False
 
+            # let's get the issue info from CV.
+            issue_response = self.getCVIssue(cvID)
+            if issue_response is None:
+                return False
+
             # Add the Publisher to the database.
             if md.publisher is not None:
                 publisher_obj, p_create = Publisher.objects.get_or_create(
                     name=md.publisher,
                     slug=slugify(md.publisher),)
-
-            # let's get the issue info from CV.
-            issue_response = self.getCVIssue(cvID)
 
             # Get the series info from CV.
             series_url = issue_response['results']['volume']['api_detail_url']
