@@ -18,6 +18,9 @@ from . import utils
 from .comicapi.comicarchive import MetaDataStyle, ComicArchive
 from .comicapi.issuestring import IssueString
 
+IMG_NORMAL_SIZE = "320x487"
+IMG_SMALL_SIZE = "200x305"
+
 
 def get_recursive_filelist(pathlist):
     # Get a recursive list of all files under all path items in the list.
@@ -501,6 +504,9 @@ class ComicImporter(object):
                     res = self.getCVData(character_obj,
                                          self.character_fields,
                                          ch['api_detail_url'])
+                    utils.resize_images(character_obj.image,
+                                        IMG_NORMAL_SIZE, False)
+
                     if res:
                         self.logger.info('Added character: %s' % character_obj)
                     else:
@@ -529,6 +535,8 @@ class ComicImporter(object):
                     res = self.getCVData(story_obj,
                                          self.arc_fields,
                                          story_arc['api_detail_url'])
+                    utils.resize_images(
+                        story_obj.image, IMG_NORMAL_SIZE, False)
                     if res:
                         self.logger.info('Added storyarc: %s' % story_obj)
                     else:
@@ -565,6 +573,7 @@ class ComicImporter(object):
                     res = self.getCVData(team_obj,
                                          self.team_fields,
                                          team['api_detail_url'])
+                    utils.resize_images(team_obj.image, IMG_NORMAL_SIZE, False)
                     if res:
                         self.logger.info('Added team: %s' % team_obj)
                     else:
@@ -596,11 +605,14 @@ class ComicImporter(object):
                     res = self.getCVData(creator_obj,
                                          self.creator_fields,
                                          p['api_detail_url'])
+                    utils.resize_images(creator_obj.image,
+                                        IMG_NORMAL_SIZE, False)
                     if res:
                         self.logger.info('Added creator: %s' % creator_obj)
                     else:
                         self.logger.info('No Creator detail info available for: %s'
                                          % creator_obj)
+
             return True
 
     def commitMetadataList(self, md_list):

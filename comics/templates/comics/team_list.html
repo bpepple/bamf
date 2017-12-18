@@ -1,6 +1,5 @@
 {% extends parent_template|default:"base.html" %}
 
-{% load simple_crop %}
 {% load staticfiles %}
 
 {% block page-title %}{{ team.name }}{% endblock page-title %}
@@ -22,7 +21,7 @@
                 <a href="{% url 'team:detail' team.slug %}">
                     <div class="image">
                     {% if team.image %}
-                        <img src="{{ team.image|smartcrop:"320x487"|urlencode }}">
+                        <img src="/{{ team.image|urlencode }}">
                     {% else %}
                         <img src="{% static 'site/image-not-found.png' %}">
                     {% endif %}

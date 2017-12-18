@@ -1,6 +1,5 @@
 {% extends parent_template|default:"base.html" %}
 
-{% load simple_crop %}
 {% load staticfiles %}
 
 {% block page-title %}{{ creator.name }}{% endblock page-title %}
@@ -22,7 +21,7 @@
                 <a href="{% url 'creator:detail' creator.slug %}">
                     <div class="image">
                     {% if creator.image %}
-                        <img src="{{ creator.image|smartcrop:"320x487"|urlencode }}" >
+                        <img src="/{{ creator.image|urlencode }}" >
                     {% else %}
                         <img src="{% static 'site/image-not-found.png' %}" alt="{{ roles.creator.name }}" >
                     {% endif %}

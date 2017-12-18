@@ -1,6 +1,5 @@
 {% extends parent_template|default:"base.html" %}
 
-{% load simple_crop %}
 {% load staticfiles %}
 
 {% block page-title %}{{ character.name }}{% endblock page-title %}
@@ -22,7 +21,7 @@
                 <a href="{% url 'character:detail' character.slug %}">
                     <div class="image">
                     {% if character.image %}
-                        <img src="{{ character.image|smartcrop:"320x487"|urlencode }}" >
+                        <img src="/{{ character.image|urlencode }}" >
                     {% else %}
                         <img src="{% static 'site/image-not-found.png' %}" >
                     {% endif %}

@@ -1,5 +1,59 @@
+import os
 import re
+
 from PIL import Image
+from django.conf import settings
+
+
+def resize_images(path, arg, thumbnail):
+    if path:
+        # Split width and height
+        crop_size = arg.split('x')
+        crop_width = int(crop_size[0])
+        crop_height = int(crop_size[1])
+
+        filename = os.path.basename(str(path))
+        if thumbnail:
+            (shortname, ext) = os.path.splitext(filename)
+            new_path = settings.MEDIA_ROOT + '/images/' + shortname + \
+                '-' + str(crop_width) + 'x' + str(crop_height) + ext
+        else:
+            new_path = settings.MEDIA_ROOT + '/images/' + filename
+
+        try:
+            img = Image.open(settings.MEDIA_ROOT + '/images/' + filename)
+            # Check Aspect ratio and resize acordingly
+            if crop_width * img.height < crop_height * img.width:
+                height_percent = (float(crop_height) / float(img.size[1]))
+                width_size = int(float(img.size[0]) * float(height_percent))
+                img = img.resize((width_size, crop_height), Image.BICUBIC)
+            else:
+                width_percent = (float(crop_width) / float(img.size[0]))
+                height_size = int(float(img.size[1]) * float(width_percent))
+                img = img.resize((crop_width, height_size), Image.BICUBIC)
+
+            cropped = crop_from_center(img, crop_width, crop_height)
+            cropped.save(new_path)
+        except Exception:
+            return False
+
+    return True
+
+
+def crop_from_center(image, width, height):
+    img = image
+    center_width = img.size[0] / 2
+    center_height = img.size[1] / 2
+    cropped = img.crop(
+        (
+            center_width - width / 2,
+            center_height - height / 2,
+            center_width + width / 2,
+            center_height + height / 2
+        )
+    )
+
+    return cropped
 
 
 def test_image(image_path):
@@ -15,6 +69,7 @@ def test_image(image_path):
         pass
 
     return path
+
 
 def parse_CV_HTML(string):
     '''
