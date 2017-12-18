@@ -10,4 +10,8 @@ urlpatterns = [
     path('creator/', CreatorList.as_view(), name='list'),
     path('creator/<slug:slug>/', CreatorDetail.as_view(), name='detail'),
     re_path(r'^creator/search/?$', SearchCreatorList.as_view(), name='search'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

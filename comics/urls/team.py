@@ -10,4 +10,8 @@ urlpatterns = [
     path('team/', TeamList.as_view(), name='list'),
     path('team/<slug:slug>/', TeamDetail.as_view(), name='detail'),
     re_path(r'^team/search/?$', SearchTeamList.as_view(), name='search'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
