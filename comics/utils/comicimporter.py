@@ -325,15 +325,6 @@ class ComicImporter(object):
 
         return cvID
 
-    def create_series_sortname(self, title):
-        sort_name = title
-        contains_the = sort_name.startswith('The ')
-        if contains_the:
-            sort_name = sort_name.replace('The ', '')
-            sort_name = sort_name + ', The'
-
-        return sort_name
-
     def getComicMetadata(self, path):
         # TODO: Need to fix the default image path
         ca = ComicArchive(path, default_image_path=None)
@@ -392,7 +383,7 @@ class ComicImporter(object):
             else:
                 slugy = data['name']
             # Create the series sort name to deal with titles with 'The' in it.
-            sort_name = self.create_series_sortname(data['name'])
+            sort_name = utils.create_series_sortname(data['name'])
 
             # Alright let's create the series object.
             series_obj, s_create = Series.objects.get_or_create(

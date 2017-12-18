@@ -55,6 +55,16 @@ def crop_from_center(image, width, height):
     return cropped
 
 
+def create_series_sortname(self, title):
+    sort_name = title
+    contains_the = sort_name.startswith('The ')
+    if contains_the:
+        sort_name = sort_name.replace('The ', '')
+        sort_name = sort_name + ', The'
+
+    return sort_name
+
+
 def test_image(image_path):
     ''' returns a filepath string if the file is valid and not broken '''
 
