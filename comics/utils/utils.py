@@ -55,7 +55,7 @@ def crop_from_center(image, width, height):
     return cropped
 
 
-def create_series_sortname(self, title):
+def create_series_sortname(title):
     sort_name = title
     contains_the = sort_name.startswith('The ')
     if contains_the:
