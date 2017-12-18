@@ -7,6 +7,7 @@ from urllib.parse import unquote_plus
 from urllib.request import urlretrieve
 
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django.utils.text import slugify
 import requests
 import requests_cache
@@ -17,6 +18,7 @@ from comics.models import (Arc, Character, Creator, Issue,
 from . import utils
 from .comicapi.comicarchive import MetaDataStyle, ComicArchive
 from .comicapi.issuestring import IssueString
+
 
 IMG_NORMAL_SIZE = "320x487"
 IMG_SMALL_SIZE = "200x305"
@@ -131,7 +133,7 @@ class ComicImporter(object):
             if desc == '':
                 if 'description' in response:
                     if response['description']:
-                        desc = utils.parse_CV_HTML(response['description'])
+                        desc = strip_tags(response['description'])
 
         # Get Image
         image = ''
