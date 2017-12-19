@@ -21,7 +21,7 @@
                 <a href="{% url 'arc:detail' arc.slug %}">
                     <div class="image">
                     {% if arc.image %}
-                        <img src="/{{ arc.image|urlencode }}" >
+                        <img src="{{ arc.image|urlencode }}" >
                     {% else %}
                         <img src="{% static 'site/image-not-found.png' %}" >
                     {% endif %}
