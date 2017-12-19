@@ -33,7 +33,8 @@ def resize_images(path, arg):
             cropped = crop_from_center(img, crop_width, crop_height)
             cropped.save(new_path)
         except Exception:
-            new_url = None
+            # Save as blank instead of None for bad images.
+            new_url = ''
 
     return new_url
 
