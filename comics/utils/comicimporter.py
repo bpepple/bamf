@@ -500,6 +500,8 @@ class ComicImporter(object):
 
                     if character_obj.image:
                         old_image_path = character_obj.image
+                        character_obj.thumb = utils.resize_images(character_obj.image,
+                                                                  IMG_SMALL_SIZE)
                         character_obj.image = utils.resize_images(character_obj.image,
                                                                   IMG_NORMAL_SIZE)
                         character_obj.save()
@@ -580,6 +582,8 @@ class ComicImporter(object):
 
                     if team_obj.image:
                         old_image_path = team_obj.image
+                        team_obj.thumb = utils.resize_images(team_obj.image,
+                                                             IMG_SMALL_SIZE)
                         team_obj.image = utils.resize_images(team_obj.image,
                                                              IMG_NORMAL_SIZE)
                         team_obj.save()
@@ -619,6 +623,8 @@ class ComicImporter(object):
 
                     if creator_obj.image:
                         old_image_path = creator_obj.image
+                        creator_obj.thumb = utils.resize_images(creator_obj.image,
+                                                                IMG_SMALL_SIZE)
                         creator_obj.image = utils.resize_images(creator_obj.image,
                                                                 IMG_NORMAL_SIZE)
                         creator_obj.save()

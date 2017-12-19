@@ -66,8 +66,8 @@ class Arc(models.Model):
     name = models.CharField('Arc name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FilePathField(
-        'Image file path', path="media/images", blank=True)
+    image = models.FilePathField('Image file path',
+                                 path='media/images', blank=True)
 
     def __str__(self):
         return self.name
@@ -82,8 +82,10 @@ class Team(models.Model):
     name = models.CharField('Team name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FilePathField(
-        'Image file path', path="media/images", blank=True)
+    image = models.FilePathField('Image file path',
+                                 path='media/images', blank=True)
+    thumb = models.FilePathField('Thumbnail file path',
+                                 path='media/images', blank=True)
 
     def __str__(self):
         return self.name
@@ -99,8 +101,10 @@ class Character(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
-    image = models.FilePathField(
-        'Image file path', path="media/images", blank=True)
+    image = models.FilePathField('Image file path',
+                                 path='media/images', blank=True)
+    thumb = models.FilePathField('Thumbnail file path',
+                                 path='media/images', blank=True)
 
     def __str__(self):
         return self.name
@@ -115,8 +119,10 @@ class Creator(models.Model):
     name = models.CharField('Creator name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FilePathField(
-        'Image file path', path="media/images", blank=True)
+    image = models.FilePathField('Image file path',
+                                 path='media/images', blank=True)
+    thumb = models.FilePathField('Thumbnail file path',
+                                 path='media/images', blank=True)
 
     def __str__(self):
         return self.name
@@ -131,8 +137,8 @@ class Publisher(models.Model):
     name = models.CharField('Series name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    logo = models.FilePathField(
-        'Logo file path', path="media/images", blank=True)
+    logo = models.FilePathField('Logo file path',
+                                path='media/images', blank=True)
 
     def __str__(self):
         return self.name
@@ -183,8 +189,8 @@ class Issue(models.Model):
     characters = models.ManyToManyField(Character, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
     file = models.CharField('File path', max_length=300)
-    cover = models.FilePathField(
-        'Cover file path', path="media/images", blank=True)
+    cover = models.FilePathField('Cover file path',
+                                 path='media/images', blank=True)
     status = models.PositiveSmallIntegerField(
         'Status', choices=STATUS_CHOICES, default=0, blank=True)
     leaf = models.PositiveSmallIntegerField(

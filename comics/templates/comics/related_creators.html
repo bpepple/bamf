@@ -1,4 +1,3 @@
-{% load simple_crop %}
 {% load staticfiles %}
 
 {% if roles_list %}
@@ -11,7 +10,7 @@
 				<a href="{% url 'creator:detail' roles.creator.slug %}">
 					<div class="image">
 					{% if roles.creator.image %}
-						<img src="{{ roles.creator.image|smartcrop:"200x305"|urlencode }}" alt="{{ roles.creator.name }}" >
+						<img src="{{ roles.creator.thumb|urlencode }}" alt="{{ roles.creator.name }}" >
 					{% else %}
 						<img src="{% static 'site/image-not-found.png' %}" alt="{{ roles.creator.name }}" >
 					{% endif %}

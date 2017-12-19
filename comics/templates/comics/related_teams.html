@@ -1,4 +1,3 @@
-{% load simple_crop %}
 {% load staticfiles %}
 
 {% if team_list %}
@@ -11,7 +10,7 @@
 				<a href="{% url 'team:detail' team.slug %}">
 					<div class="image">
 						{% if team.image %}
-							<img src="{{ team.image|smartcrop:"200x305"|urlencode }}" alt="{{ team.name }}" >
+							<img src="{{ team.thumb|urlencode }}" alt="{{ team.name }}" >
 						{% else %}
 							<img src="{% static 'site/image-not-found.png' %}" alt="{{ team.name }}" >
 						{% endif %}
