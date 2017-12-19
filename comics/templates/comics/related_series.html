@@ -1,4 +1,3 @@
-{% load simple_crop %}
 {% load staticfiles %}
 
 <div class="related related-series">
@@ -10,7 +9,7 @@
 				<a href="{% url 'series:detail' series.slug %}">
 					<div class="image">
 						{% if series.issue_numerical_order_set.first.cover %}
-							<img src="{{ series.issue_numerical_order_set.first.cover|smartcrop:"200x305"|urlencode }}" alt="{{ seriesname }}" >
+							<img src="{{ series.issue_numerical_order_set.first.cover|urlencode }}" alt="{{ seriesname }}" >
 						{% else %}
 							<img src="{% static 'site/image-not-found.png' %}" alt="{{ seriesname }}" >
 						{% endif %}

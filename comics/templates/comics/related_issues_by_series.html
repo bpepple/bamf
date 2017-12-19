@@ -1,4 +1,3 @@
-{% load simple_crop %}
 {% load staticfiles %}
 
 {% if issue_list %}
@@ -21,7 +20,7 @@
 					<a href="{% url 'issue:detail' issue.slug %}">
 						<div class="image">
 							{% if issue.cover %}
-								<img src="{{ issue.cover|smartcrop:"200x305"|urlencode }}" alt="{{ series.name }}" >
+								<img src="{{ issue.thumb|urlencode }}" alt="{{ series.name }}" >
 							{% else %}
 								<img src="{% static 'site/image-not-found.png' %}" alt="{{ series.name }}" >
 							{% endif %}

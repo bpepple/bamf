@@ -2,7 +2,7 @@
 <div class="related-publisher">
 	<a href="{% url 'publisher:detail' publisher.slug %}">
 		{% if publisher.logo|length %}
-			<img src="/{{ publisher.logo|urlencode }}" alt = "{{ publisher.name }}" >
+			<img src="{{ publisher.logo|urlencode }}" alt = "{{ publisher.name }}" >
 		{% else %}
 			<i>Published by: <u>{{ publisher.name }}</u></i>
 		{% endif %}

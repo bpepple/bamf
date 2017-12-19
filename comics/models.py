@@ -191,6 +191,8 @@ class Issue(models.Model):
     file = models.CharField('File path', max_length=300)
     cover = models.FilePathField('Cover file path',
                                  path='media/images', blank=True)
+    thumb = models.FilePathField('Thumbnail file path',
+                                 path='media/images', blank=True)
     status = models.PositiveSmallIntegerField(
         'Status', choices=STATUS_CHOICES, default=0, blank=True)
     leaf = models.PositiveSmallIntegerField(

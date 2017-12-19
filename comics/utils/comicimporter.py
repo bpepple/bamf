@@ -190,11 +190,14 @@ class ComicImporter(object):
 
         data = self.get_cv_object_data(response['results'])
 
-        # Update Issue
-        Issue.objects.filter(cvid=issue_cvid).update(
-            cover=data['image'],
-            desc=data['desc'],
-        )
+        issue = Issue.objects.get(cvid=issue_cvid)
+        issue.thumb = utils.resize_images(data['image'],
+                                          IMG_SMALL_SIZE)
+        issue.cover = utils.resize_images(data['image'],
+                                          IMG_NORMAL_SIZE)
+        issue.desc = data['desc']
+        issue.save()
+        os.remove(data['image'])
 
     def getSeriesCV(self, api_url):
         params = self.base_params
@@ -460,11 +463,14 @@ class ComicImporter(object):
             # some additional data from Comic Vine.
             if p_create:
                 p = self.getPubisherCV(issue_response)
+                publisher_obj.logo = utils.resize_images(p['image'],
+                                                         IMG_NORMAL_SIZE)
                 publisher_obj.cvid = int(p['cvid'])
                 publisher_obj.cvurl = p['cvurl']
                 publisher_obj.desc = p['desc']
-                publisher_obj.logo = p['image']
                 publisher_obj.save()
+                # Delete the original image
+                os.remove(p['image'])
 
                 self.logger.info('Added publisher: %s' % publisher_obj)
 

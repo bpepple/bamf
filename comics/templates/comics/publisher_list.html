@@ -1,7 +1,5 @@
 {% extends parent_template|default:"base.html" %}
 
-{% load simple_crop %}
-
 {% block page-title %}{{ publisher.name }}{% endblock page-title %}
 
 {% block content %}
@@ -19,7 +17,7 @@
         {% for publisher in publisher_list %}
             <li>
                 <a href="{% url 'publisher:detail' publisher.slug %}">
-                    <img src="{{ publisher.logo|smartcrop:"320x487"|urlencode }}" >
+                    <img src="{{ publisher.logo|urlencode }}" >
                 </a>
                 <a href="{% url 'publisher:detail' publisher.slug %}"><p>{{ publisher.name }}</p></a>
             </li>
