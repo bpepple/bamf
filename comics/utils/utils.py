@@ -4,7 +4,7 @@ from PIL import Image
 from django.conf import settings
 
 
-def resize_images(path, arg, thumbnail):
+def resize_images(path, arg):
     if path:
         # Split width and height
         crop_size = arg.split('x')
@@ -12,16 +12,15 @@ def resize_images(path, arg, thumbnail):
         crop_height = int(crop_size[1])
 
         filename = os.path.basename(str(path))
-        if thumbnail:
-            (shortname, ext) = os.path.splitext(filename)
-            new_path = settings.MEDIA_ROOT + '/images/' + shortname + \
-                '-' + str(crop_width) + 'x' + str(crop_height) + ext
-        else:
-            new_path = settings.MEDIA_ROOT + '/images/' + filename
+        (shortname, ext) = os.path.splitext(filename)
+        cache_path = 'images/' + shortname + '-' + \
+            str(crop_width) + 'x' + str(crop_height) + ext
+        new_path = settings.MEDIA_ROOT + '/' + cache_path
+        new_url = settings.MEDIA_URL + cache_path
 
         try:
             img = Image.open(settings.MEDIA_ROOT + '/images/' + filename)
-            # Check Aspect ratio and resize acordingly
+            # Check Aspect ratio and resize accordingly
             if crop_width * img.height < crop_height * img.width:
                 height_percent = (float(crop_height) / float(img.size[1]))
                 width_size = int(float(img.size[0]) * float(height_percent))
@@ -34,9 +33,9 @@ def resize_images(path, arg, thumbnail):
             cropped = crop_from_center(img, crop_width, crop_height)
             cropped.save(new_path)
         except Exception:
-            return False
+            new_url = None
 
-    return True
+    return new_url
 
 
 def crop_from_center(image, width, height):

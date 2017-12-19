@@ -497,8 +497,13 @@ class ComicImporter(object):
                     res = self.getCVData(character_obj,
                                          self.character_fields,
                                          ch['api_detail_url'])
-                    utils.resize_images(character_obj.image,
-                                        IMG_NORMAL_SIZE, False)
+
+                    if character_obj.image:
+                        old_image_path = character_obj.image
+                        character_obj.image = utils.resize_images(character_obj.image,
+                                                                  IMG_NORMAL_SIZE)
+                        character_obj.save()
+                        os.remove(old_image_path)
 
                     if res:
                         self.logger.info('Added character: %s' % character_obj)
@@ -528,8 +533,14 @@ class ComicImporter(object):
                     res = self.getCVData(story_obj,
                                          self.arc_fields,
                                          story_arc['api_detail_url'])
-                    utils.resize_images(
-                        story_obj.image, IMG_NORMAL_SIZE, False)
+
+                    if story_obj.image:
+                        old_image_path = story_obj.image
+                        story_obj.image = utils.resize_images(story_obj.image,
+                                                              IMG_NORMAL_SIZE)
+                        story_obj.save()
+                        os.remove(old_image_path)
+
                     if res:
                         self.logger.info('Added storyarc: %s' % story_obj)
                     else:
@@ -566,7 +577,14 @@ class ComicImporter(object):
                     res = self.getCVData(team_obj,
                                          self.team_fields,
                                          team['api_detail_url'])
-                    utils.resize_images(team_obj.image, IMG_NORMAL_SIZE, False)
+
+                    if team_obj.image:
+                        old_image_path = team_obj.image
+                        team_obj.image = utils.resize_images(team_obj.image,
+                                                             IMG_NORMAL_SIZE)
+                        team_obj.save()
+                        os.remove(old_image_path)
+
                     if res:
                         self.logger.info('Added team: %s' % team_obj)
                     else:
@@ -598,8 +616,14 @@ class ComicImporter(object):
                     res = self.getCVData(creator_obj,
                                          self.creator_fields,
                                          p['api_detail_url'])
-                    utils.resize_images(creator_obj.image,
-                                        IMG_NORMAL_SIZE, False)
+
+                    if creator_obj.image:
+                        old_image_path = creator_obj.image
+                        creator_obj.image = utils.resize_images(creator_obj.image,
+                                                                IMG_NORMAL_SIZE)
+                        creator_obj.save()
+                        os.remove(old_image_path)
+
                     if res:
                         self.logger.info('Added creator: %s' % creator_obj)
                     else:
