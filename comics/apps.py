@@ -2,7 +2,8 @@ from django.apps import AppConfig
 from django.db.models.signals import pre_delete
 
 from comics.signals import (pre_delete_image, pre_delete_character,
-                            pre_delete_issue, pre_delete_publisher)
+                            pre_delete_issue, pre_delete_publisher,
+                            pre_delete_arc)
 
 
 class ComicsConfig(AppConfig):
@@ -10,7 +11,7 @@ class ComicsConfig(AppConfig):
 
     def ready(self):
         arc = self.get_model('Arc')
-        pre_delete.connect(pre_delete_image, sender=arc,
+        pre_delete.connect(pre_delete_arc, sender=arc,
                            dispatch_uid='pre_delete_arc')
 
         creator = self.get_model('Creator')

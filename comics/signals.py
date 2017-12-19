@@ -2,36 +2,40 @@ import os.path
 
 from django.conf import settings
 
-
-LARGE_THUMB = '-320x487'
-SMALL_THUMB = '-200x305'
+from os import remove
 
 
-def remove_images(img):
-    if os.path.isfile(img):
-        os.remove(img)
-
-        original_img = os.path.basename(img)
-        (shortname, ext) = os.path.splitext(original_img)
-
-        thumb_cache = settings.MEDIA_ROOT + '/CACHE/'
-        small_thumb = thumb_cache + shortname + SMALL_THUMB + ext
-        large_thumb = thumb_cache + shortname + LARGE_THUMB + ext
-
-        if os.path.isfile(small_thumb):
-            os.remove(small_thumb)
-        if os.path.isfile(large_thumb):
-            os.remove(large_thumb)
+def get_file(img):
+    base_img = os.path.basename(img)
+    new_path = settings.MEDIA_ROOT + '/images/' + base_img
+    return new_path
 
 
 def pre_delete_image(sender, **kwargs):
-    remove_images(kwargs['instance'].image)
+    instance = kwargs['instance']
+    img = get_file(instance.image)
+    if os.path.isfile(img):
+        remove(img)
+    thumb = get_file(instance.thumb)
+    if os.path.isfile(thumb):
+        remove(thumb)
+
+
+def pre_delete_arc(sender, **kwargs):
+    instance = kwargs['instance']
+    img = get_file(instance.image)
+    if os.path.isfile(img):
+        remove(img)
 
 
 def pre_delete_character(sender, **kwargs):
     instance = kwargs['instance']
-
-    remove_images(instance.image)
+    img = get_file(instance.image)
+    if os.path.isfile(img):
+        remove(img)
+    thumb = get_file(instance.thumb)
+    if os.path.isfile(thumb):
+        remove(thumb)
 
     # Delete related team if this is the only
     # character related to that team.
@@ -41,13 +45,20 @@ def pre_delete_character(sender, **kwargs):
 
 
 def pre_delete_publisher(sender, **kwargs):
-    remove_images(kwargs['instance'].logo)
+    instance = kwargs['instance']
+    logo = get_file(instance.logo)
+    if os.path.isfile(logo):
+        remove(logo)
 
 
 def pre_delete_issue(sender, **kwargs):
     instance = kwargs['instance']
-
-    remove_images(instance.cover)
+    cover = get_file(instance.cover)
+    if os.path.isfile(cover):
+        remove(cover)
+    thumb = get_file(instance.thumb)
+    if os.path.isfile(thumb):
+        remove(thumb)
 
     # Delete related arc if this is the only
     # issue related to that arc.
