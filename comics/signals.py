@@ -2,8 +2,6 @@ import os.path
 
 from django.conf import settings
 
-from os import remove
-
 
 def get_file(img):
     base_img = os.path.basename(img)
@@ -11,31 +9,36 @@ def get_file(img):
     return new_path
 
 
+def remove_image(img):
+    if os.path.isfile(img):
+        os.remove(img)
+
+
 def pre_delete_image(sender, **kwargs):
     instance = kwargs['instance']
+
     img = get_file(instance.image)
-    if os.path.isfile(img):
-        remove(img)
+    remove_image(img)
+
     thumb = get_file(instance.thumb)
-    if os.path.isfile(thumb):
-        remove(thumb)
+    remove_image(thumb)
 
 
 def pre_delete_arc(sender, **kwargs):
     instance = kwargs['instance']
+
     img = get_file(instance.image)
-    if os.path.isfile(img):
-        remove(img)
+    remove_image(img)
 
 
 def pre_delete_character(sender, **kwargs):
     instance = kwargs['instance']
+
     img = get_file(instance.image)
-    if os.path.isfile(img):
-        remove(img)
+    remove_image(img)
+
     thumb = get_file(instance.thumb)
-    if os.path.isfile(thumb):
-        remove(thumb)
+    remove_image(thumb)
 
     # Delete related team if this is the only
     # character related to that team.
@@ -46,19 +49,19 @@ def pre_delete_character(sender, **kwargs):
 
 def pre_delete_publisher(sender, **kwargs):
     instance = kwargs['instance']
+
     logo = get_file(instance.logo)
-    if os.path.isfile(logo):
-        remove(logo)
+    remove_image(logo)
 
 
 def pre_delete_issue(sender, **kwargs):
     instance = kwargs['instance']
+
     cover = get_file(instance.cover)
-    if os.path.isfile(cover):
-        remove(cover)
+    remove_image(cover)
+
     thumb = get_file(instance.thumb)
-    if os.path.isfile(thumb):
-        remove(thumb)
+    remove_image(thumb)
 
     # Delete related arc if this is the only
     # issue related to that arc.
