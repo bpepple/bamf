@@ -218,6 +218,6 @@ def importer(request):
     return HttpResponseRedirect('/')
 
 
-class IssueListViewSet(viewsets.ModelViewSet):
+class IssueListViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Issue.objects.all()
     serializer_class = IssueListSerializer
