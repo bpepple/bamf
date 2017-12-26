@@ -204,9 +204,6 @@ class Issue(models.Model):
     def __str__(self):
         return self.series.name + ' #' + str(self.number)
 
-    def get_absolute_url(self):
-        return reverse('author-detail', kwargs={'pk': self.pk})
-
 
 class Roles(models.Model):
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE)
