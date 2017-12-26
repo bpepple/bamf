@@ -11,7 +11,7 @@ from rest_framework import viewsets
 from comics.models import (Series, Issue, Character,
                            Arc, Team, Publisher,
                            Creator, Roles, Settings)
-from comics.serializers import IssueListSerializer
+from comics.serializers import IssueSerializer
 from comics.tasks import import_comic_files_task
 
 
@@ -218,6 +218,7 @@ def importer(request):
     return HttpResponseRedirect('/')
 
 
-class IssueListViewSet(viewsets.ReadOnlyModelViewSet):
+class ComicViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Issue.objects.all()
-    serializer_class = IssueListSerializer
+    serializer_class = IssueSerializer
+    lookup_field = 'slug'
