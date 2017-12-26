@@ -5,9 +5,9 @@ from comics.views import IssueListViewSet
 
 
 router = routers.DefaultRouter()
-router.register('', IssueListViewSet)
+router.register('comiclist', IssueListViewSet)
 
-app_name = 'router'
+app_name = 'api'
 urlpatterns = [
-    path('comiclist/', include(router.urls)),
+    path('api/', include(router.urls)),
 ]
