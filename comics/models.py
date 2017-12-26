@@ -2,7 +2,6 @@ import datetime
 
 from django.core.validators import RegexValidator
 from django.db import models
-from django.urls import reverse
 from multiselectfield import MultiSelectField
 from solo.models import SingletonModel
 
