@@ -6,12 +6,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView
+from rest_framework import viewsets
 
 from comics.models import (Series, Issue, Character,
                            Arc, Team, Publisher,
                            Creator, Roles, Settings)
-
-from .tasks import import_comic_files_task
+from comics.serializers import IssueListSerializer
+from comics.tasks import import_comic_files_task
 
 
 PAGINATE = 30
@@ -215,3 +216,8 @@ class ServerSettingsView(UpdateView):
 def importer(request):
     import_comic_files_task()
     return HttpResponseRedirect('/')
+
+
+class IssueListViewSet(viewsets.ModelViewSet):
+    queryset = Issue.objects.all()
+    serializer_class = IssueListSerializer

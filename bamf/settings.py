@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'comics',
     'widget_tweaks',
     'huey.contrib.djhuey',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
