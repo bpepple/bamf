@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, re_path
 
-from comics.views import TeamDetail, TeamList, SearchTeamList
+from comics.views.team import TeamDetail, TeamList, SearchTeamList
 
 
 app_name = 'team'

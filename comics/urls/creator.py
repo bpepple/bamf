@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, re_path
 
-from comics.views import CreatorDetail, CreatorList, SearchCreatorList
+from comics.views.creator import CreatorDetail, CreatorList, SearchCreatorList
 
 
 app_name = 'creator'

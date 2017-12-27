@@ -1,6 +1,6 @@
 from django.urls import path
 
-from comics.views import ServerSettingsView
+from comics.views.settings import ServerSettingsView
 
 
 app_name = 'comics'

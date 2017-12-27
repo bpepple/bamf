@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from comics.views import IssueDetail
+from comics.views.issue import IssueDetail
 
 
 app_name = 'issue'

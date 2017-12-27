@@ -1,10 +1,10 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from comics.views import (ArcViewSet, CharacterViewSet,
-                          CreatorViewSet, IssueViewSet,
-                          PublisherViewSet, SeriesViewSet,
-                          TeamViewSet)
+from comics.views.viewsets import (ArcViewSet, CharacterViewSet,
+                                   CreatorViewSet, IssueViewSet,
+                                   PublisherViewSet, SeriesViewSet,
+                                   TeamViewSet)
 
 
 router = routers.DefaultRouter()
