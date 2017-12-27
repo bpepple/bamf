@@ -11,8 +11,9 @@ from rest_framework import viewsets
 from comics.models import (Series, Issue, Character,
                            Arc, Team, Publisher,
                            Creator, Roles, Settings)
-from comics.serializers import IssueSerializer
+from comics.serializers import IssueSerializer, PublisherSerializer
 from comics.tasks import import_comic_files_task
+from django.contrib.admin.utils import lookup_field
 
 
 PAGINATE = 30
@@ -221,11 +222,24 @@ def importer(request):
 class ComicViewSet(viewsets.ReadOnlyModelViewSet):
     """
     list:
-    Return a list of all comics issues.
+    Returns a list of all comics issues.
 
     read:
     Returns the information of an individual issue.
     """
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
+    lookup_field = 'slug'
+
+
+class PublisherViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    list:
+    Returns a list of all publishers.
+
+    read:
+    Returns the information of an individual publisher.
+    """
+    queryset = Publisher.objects.all()
+    serializer_class = PublisherSerializer
     lookup_field = 'slug'
