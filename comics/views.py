@@ -219,6 +219,13 @@ def importer(request):
 
 
 class ComicViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    list:
+    Return a list of all comics issues.
+
+    read:
+    Returns the information of an individual issue.
+    """
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     lookup_field = 'slug'
