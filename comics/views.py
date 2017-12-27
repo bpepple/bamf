@@ -8,11 +8,12 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView
 from rest_framework import viewsets
 
-from comics.models import (Series, Issue, Character,
-                           Arc, Team, Publisher,
-                           Creator, Roles, Settings)
-from comics.serializers import IssueSerializer, PublisherSerializer,\
-    SeriesSerializer, CreatorSerializer, CharacterSerializer, TeamSerializer
+from comics.models import (Arc, Character, Creator, Issue,
+                           Publisher, Roles, Series, Settings, Team)
+from comics.serializers import (ArcSerializer, CharacterSerializer,
+                                CreatorSerializer, IssueSerializer,
+                                PublisherSerializer, SeriesSerializer,
+                                TeamSerializer)
 from comics.tasks import import_comic_files_task
 
 
@@ -294,4 +295,17 @@ class TeamViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    lookup_field = 'slug'
+
+
+class ArcViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    list:
+    Returns a list of all the story arcs in the database.
+
+    read:
+    Returns the information of an individual story arc.
+    """
+    queryset = Arc.objects.all()
+    serializer_class = ArcSerializer
     lookup_field = 'slug'

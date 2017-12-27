@@ -1,11 +1,14 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from comics.views import IssueViewSet, PublisherViewSet, SeriesViewSet,\
-    CreatorViewSet, CharacterViewSet, TeamViewSet
+from comics.views import (ArcViewSet, CharacterViewSet,
+                          CreatorViewSet, IssueViewSet,
+                          PublisherViewSet, SeriesViewSet,
+                          TeamViewSet)
 
 
 router = routers.DefaultRouter()
+router.register('arc', ArcViewSet)
 router.register('character', CharacterViewSet)
 router.register('creator', CreatorViewSet)
 router.register('issue', IssueViewSet)

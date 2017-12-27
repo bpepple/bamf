@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from comics.models import Creator, Issue, Publisher, Series, Character, Team
+from comics.models import (Arc, Character, Creator,
+                           Issue, Publisher, Series, Team)
 
 
 class IssueSerializer(serializers.HyperlinkedModelSerializer):
@@ -55,5 +56,13 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Team
+        fields = ('slug', 'cvurl', 'name', 'desc')
+        lookup_field = 'slug'
+
+
+class ArcSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Arc
         fields = ('slug', 'cvurl', 'name', 'desc')
         lookup_field = 'slug'
