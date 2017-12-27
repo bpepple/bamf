@@ -6,9 +6,9 @@ from comics.views import IssueViewSet, PublisherViewSet, SeriesViewSet,\
 
 
 router = routers.DefaultRouter()
-router.register('issue', IssueViewSet)
 router.register('character', CharacterViewSet)
 router.register('creator', CreatorViewSet)
+router.register('issue', IssueViewSet)
 router.register('publisher', PublisherViewSet)
 router.register('series', SeriesViewSet)
 
