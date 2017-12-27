@@ -12,7 +12,7 @@ from comics.models import (Series, Issue, Character,
                            Arc, Team, Publisher,
                            Creator, Roles, Settings)
 from comics.serializers import IssueSerializer, PublisherSerializer,\
-    SeriesSerializer
+    SeriesSerializer, CreatorSerializer
 from comics.tasks import import_comic_files_task
 
 
@@ -255,4 +255,17 @@ class SeriesViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Series.objects.all()
     serializer_class = SeriesSerializer
+    lookup_field = 'slug'
+
+
+class CreatorViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    list:
+    Returns a list of all creators in the database.
+
+    read:
+    Returns the information of an individual creator.
+    """
+    queryset = Creator.objects.all()
+    serializer_class = CreatorSerializer
     lookup_field = 'slug'
