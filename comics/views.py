@@ -219,10 +219,10 @@ def importer(request):
     return HttpResponseRedirect('/')
 
 
-class ComicViewSet(viewsets.ReadOnlyModelViewSet):
+class IssueViewSet(viewsets.ReadOnlyModelViewSet):
     """
     list:
-    Returns a list of all comics issues.
+    Returns a list of all issues in the database.
 
     read:
     Returns the information of an individual issue.
