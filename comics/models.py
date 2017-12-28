@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from django.core.validators import RegexValidator
 from django.db import models
@@ -65,8 +66,10 @@ class Arc(models.Model):
     name = models.CharField('Arc name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FilePathField('Image file path',
-                                 path='media/images', blank=True)
+    image = models.FileField(upload_to='images/', blank=True)
+
+    def filename(self):
+        return os.path.basename(self.image.name)
 
     def __str__(self):
         return self.name
@@ -81,10 +84,11 @@ class Team(models.Model):
     name = models.CharField('Team name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FilePathField('Image file path',
-                                 path='media/images', blank=True)
-    thumb = models.FilePathField('Thumbnail file path',
-                                 path='media/images', blank=True)
+    image = models.FileField(upload_to='images/', blank=True)
+    thumb = models.FileField(upload_to='images/', blank=True)
+
+    def filename(self):
+        return os.path.basename(self.image.name)
 
     def __str__(self):
         return self.name
@@ -100,10 +104,11 @@ class Character(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
-    image = models.FilePathField('Image file path',
-                                 path='media/images', blank=True)
-    thumb = models.FilePathField('Thumbnail file path',
-                                 path='media/images', blank=True)
+    image = models.FileField(upload_to='images/', blank=True)
+    thumb = models.FileField(upload_to='images/', blank=True)
+
+    def filename(self):
+        return os.path.basename(self.image.name)
 
     def __str__(self):
         return self.name
@@ -118,10 +123,11 @@ class Creator(models.Model):
     name = models.CharField('Creator name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FilePathField('Image file path',
-                                 path='media/images', blank=True)
-    thumb = models.FilePathField('Thumbnail file path',
-                                 path='media/images', blank=True)
+    image = models.FileField(upload_to='images/', blank=True)
+    thumb = models.FileField(upload_to='images/', blank=True)
+
+    def filename(self):
+        return os.path.basename(self.image.name)
 
     def __str__(self):
         return self.name
@@ -136,8 +142,10 @@ class Publisher(models.Model):
     name = models.CharField('Series name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    logo = models.FilePathField('Logo file path',
-                                path='media/images', blank=True)
+    logo = models.FileField(upload_to='images/', blank=True)
+
+    def filename(self):
+        return os.path.basename(self.logo.name)
 
     def __str__(self):
         return self.name
@@ -188,10 +196,8 @@ class Issue(models.Model):
     characters = models.ManyToManyField(Character, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
     file = models.CharField('File path', max_length=300)
-    cover = models.FilePathField('Cover file path',
-                                 path='media/images', blank=True)
-    thumb = models.FilePathField('Thumbnail file path',
-                                 path='media/images', blank=True)
+    cover = models.FileField(upload_to='images/', blank=True)
+    thumb = models.FileField(upload_to='images/', blank=True)
     status = models.PositiveSmallIntegerField(
         'Status', choices=STATUS_CHOICES, default=0, blank=True)
     leaf = models.PositiveSmallIntegerField(
@@ -199,6 +205,9 @@ class Issue(models.Model):
     page_count = models.PositiveSmallIntegerField(
         editable=False, default=1, blank=True)
     mod_ts = models.DateTimeField()
+
+    def filename(self):
+        return os.path.basename(self.cover.name)
 
     def __str__(self):
         return self.series.name + ' #' + str(self.number)

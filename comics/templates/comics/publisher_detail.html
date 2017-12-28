@@ -5,7 +5,7 @@
 <div class="publisher-info-wrapper">
 	{% if publisher.logo|length %}
 	<div class="publisher-logo">
-		<img src="{{ publisher.logo|urlencode }}" >
+		<img src="{{ publisher.logo.url }}" >
 	</div>
 	{% endif %}
 	<div class="publisher-info">

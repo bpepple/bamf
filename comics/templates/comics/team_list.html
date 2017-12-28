@@ -21,7 +21,7 @@
                 <a href="{% url 'team:detail' team.slug %}">
                     <div class="image">
                     {% if team.image %}
-                        <img src="{{ team.image|urlencode }}">
+                        <img src="{{ team.image.url }}">
                     {% else %}
                         <img src="{% static 'site/image-not-found.png' %}">
                     {% endif %}

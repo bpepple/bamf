@@ -6,6 +6,7 @@ import re
 from urllib.parse import unquote_plus
 from urllib.request import urlretrieve
 
+from django.conf import settings
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.text import slugify
@@ -22,6 +23,7 @@ from .comicapi.issuestring import IssueString
 
 IMG_NORMAL_SIZE = "320x487"
 IMG_SMALL_SIZE = "200x305"
+IMG_DIRECTORY = settings.MEDIA_ROOT + '/images/'
 
 
 def get_recursive_filelist(pathlist):
@@ -505,7 +507,8 @@ class ComicImporter(object):
                                          ch['api_detail_url'])
 
                     if character_obj.image:
-                        old_image_path = character_obj.image
+                        base_name = character_obj.filename()
+                        old_image_path = IMG_DIRECTORY + base_name
                         character_obj.thumb = utils.resize_images(character_obj.image,
                                                                   IMG_SMALL_SIZE)
                         character_obj.image = utils.resize_images(character_obj.image,
@@ -543,7 +546,8 @@ class ComicImporter(object):
                                          story_arc['api_detail_url'])
 
                     if story_obj.image:
-                        old_image_path = story_obj.image
+                        base_name = story_obj.filename()
+                        old_image_path = IMG_DIRECTORY + base_name
                         story_obj.image = utils.resize_images(story_obj.image,
                                                               IMG_NORMAL_SIZE)
                         story_obj.save()
@@ -587,7 +591,8 @@ class ComicImporter(object):
                                          team['api_detail_url'])
 
                     if team_obj.image:
-                        old_image_path = team_obj.image
+                        base_name = team_obj.filename()
+                        old_image_path = IMG_DIRECTORY + base_name
                         team_obj.thumb = utils.resize_images(team_obj.image,
                                                              IMG_SMALL_SIZE)
                         team_obj.image = utils.resize_images(team_obj.image,
@@ -628,7 +633,8 @@ class ComicImporter(object):
                                          p['api_detail_url'])
 
                     if creator_obj.image:
-                        old_image_path = creator_obj.image
+                        base_name = creator_obj.filename()
+                        old_image_path = IMG_DIRECTORY + base_name
                         creator_obj.thumb = utils.resize_images(creator_obj.image,
                                                                 IMG_SMALL_SIZE)
                         creator_obj.image = utils.resize_images(creator_obj.image,

@@ -21,7 +21,7 @@
                 <a href="{% url 'character:detail' character.slug %}">
                     <div class="image">
                     {% if character.image %}
-                        <img src="{{ character.image|urlencode }}" >
+                        <img src="{{ character.image.url }}" >
                     {% else %}
                         <img src="{% static 'site/image-not-found.png' %}" >
                     {% endif %}

@@ -10,7 +10,7 @@
 				<a href="{% url 'character:detail' character.slug %}">
 					<div class="image">
 						{% if character.image %}
-							<img src="{{ character.thumb|urlencode }}" alt="{{ character.name }}" >
+							<img src="{{ character.thumb.url }}" alt="{{ character.name }}" >
 						{% else %}
 							<img src="{% static 'site/image-not-found.png' %}" alt="{{ character.name }}" >
 						{% endif %}

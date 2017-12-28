@@ -16,7 +16,7 @@ def resize_images(path, arg):
         cache_path = 'images/' + shortname + '-' + \
             str(crop_width) + 'x' + str(crop_height) + ext
         new_path = settings.MEDIA_ROOT + '/' + cache_path
-        new_url = settings.MEDIA_URL + cache_path
+        new_url = cache_path
 
         try:
             img = Image.open(settings.MEDIA_ROOT + '/images/' + filename)

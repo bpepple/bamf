@@ -7,8 +7,12 @@
 <div class="character-info-wrapper">
 	{% if character.image|length %}
 	<div class="character-image">
-		<img src="{{ character.image|urlencode }}" >
+        <img src="{{ character.image.url }}" >
 	</div>
+	{% else %}
+	<div class="character-image">
+	   <img src="{% static 'site/image-not-found.png' %}" >
+    </div>
 	{% endif %}
 	<div class="character-info">
 		<div class="character-name">

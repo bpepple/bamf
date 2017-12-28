@@ -7,7 +7,7 @@
 	<div class="issue-cover">
 		<div class="issue-cover-image">
 			{% autoescape off %}
-			<img src="{{ issue.cover|urlencode }}" >
+			<img src="{{ issue.cover.url }}" >
 			{% endautoescape %}
 		</div>
 	</div>

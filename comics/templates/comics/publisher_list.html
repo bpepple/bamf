@@ -17,7 +17,7 @@
         {% for publisher in publisher_list %}
             <li>
                 <a href="{% url 'publisher:detail' publisher.slug %}">
-                    <img src="{{ publisher.logo|urlencode }}" >
+                    <img src="{{ publisher.logo.url }}" >
                 </a>
                 <a href="{% url 'publisher:detail' publisher.slug %}"><p>{{ publisher.name }}</p></a>
             </li>

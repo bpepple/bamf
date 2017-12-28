@@ -18,7 +18,7 @@
 			{% if series.issue_set.all %}
 			<li>
 				<a href="{% url 'series:detail' series.slug %}">
-					<img src="{{ series.issue_numerical_order_set.first.cover|urlencode }}" alt = "{{ series.name }}" >
+					<img src="{{ series.issue_numerical_order_set.first.cover.url }}" alt = "{{ series.name }}" >
 					{% if series.unread_issue_count > 0 %}
 						<div class="unread-count">
 							<p>{{ series.unread_issue_count }}</p>

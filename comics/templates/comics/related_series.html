@@ -9,7 +9,7 @@
 				<a href="{% url 'series:detail' series.slug %}">
 					<div class="image">
 						{% if series.issue_numerical_order_set.first.cover %}
-							<img src="{{ series.issue_numerical_order_set.first.cover|urlencode }}" alt="{{ seriesname }}" >
+							<img src="{{ series.issue_numerical_order_set.first.cover.url }}" alt="{{ seriesname }}" >
 						{% else %}
 							<img src="{% static 'site/image-not-found.png' %}" alt="{{ seriesname }}" >
 						{% endif %}
