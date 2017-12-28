@@ -144,9 +144,6 @@ class Publisher(models.Model):
     desc = models.TextField('Description', max_length=500, blank=True)
     logo = models.FileField(upload_to='images/', blank=True)
 
-    def filename(self):
-        return os.path.basename(self.logo.name)
-
     def __str__(self):
         return self.name
 

@@ -19,7 +19,8 @@ class PublisherListViewTest(TestCase):
         for pub_num in range(PAGINATE_TEST_VAL):
             Publisher.objects.create(
                 name='Publisher %s' % pub_num,
-                slug='publisher-%s' % pub_num,)
+                slug='publisher-%s' % pub_num,
+                logo='images/1.jpg')
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/publisher/')
