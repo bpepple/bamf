@@ -50,7 +50,7 @@ $(window).load(function(){
 			var complete = $('.flex-active-slide').next('li').length ? '0' : '1'
 			$.ajax({
 		        type: "GET",
-		        url: '/issue/' + issueId + '/update-status?leaf=' + leaf + '&complete=' + complete
+		        url: '/issue/' + issueId + '/update-status/?leaf=' + leaf + '&complete=' + complete
 		    });
 			lazyLoadImages(lazyImages, parseInt(pageNumber, 10));
 		}
