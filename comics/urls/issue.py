@@ -2,12 +2,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from comics.views.issue import IssueDetail
+from comics.views.issue import IssueDetail, reader, update_issue_status
 
 
 app_name = 'issue'
 urlpatterns = [
     path('issue/<slug:slug>/', IssueDetail.as_view(), name='detail'),
+    path('issue/<slug:slug>/reader/', reader, name='reader'),
+    path('issue/<slug:slug>/update-status/',
+         update_issue_status, name='update_issue_status')
 ]
 
 if settings.DEBUG:

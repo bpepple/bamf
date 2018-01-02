@@ -9,6 +9,11 @@
 			{% autoescape off %}
 			<img src="{{ issue.cover.url }}" >
 			{% endautoescape %}
+			<div class="issue-cover-overlay">
+                <a href="{% url 'issue:reader' issue.slug %}">
+                    <i class="read-button fa fa-eye"></i>
+                </a>
+            </div>
 		</div>
 	</div>
 	{% endif %}
