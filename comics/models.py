@@ -68,7 +68,7 @@ class Arc(models.Model):
     desc = models.TextField('Description', max_length=500, blank=True)
     image = models.FileField(upload_to='images/', blank=True)
 
-    def filename(self):
+    def image_name(self):
         return os.path.basename(self.image.name)
 
     def __str__(self):
@@ -87,8 +87,11 @@ class Team(models.Model):
     image = models.FileField(upload_to='images/', blank=True)
     thumb = models.FileField(upload_to='images/', blank=True)
 
-    def filename(self):
+    def image_name(self):
         return os.path.basename(self.image.name)
+
+    def thumb_name(self):
+        return os.path.basename(self.thumb.name)
 
     def __str__(self):
         return self.name
@@ -107,8 +110,11 @@ class Character(models.Model):
     image = models.FileField(upload_to='images/', blank=True)
     thumb = models.FileField(upload_to='images/', blank=True)
 
-    def filename(self):
+    def image_name(self):
         return os.path.basename(self.image.name)
+
+    def thumb_name(self):
+        return os.path.basename(self.thumb.name)
 
     def __str__(self):
         return self.name
@@ -126,8 +132,11 @@ class Creator(models.Model):
     image = models.FileField(upload_to='images/', blank=True)
     thumb = models.FileField(upload_to='images/', blank=True)
 
-    def filename(self):
+    def image_name(self):
         return os.path.basename(self.image.name)
+
+    def thumb_name(self):
+        return os.path.basename(self.thumb.name)
 
     def __str__(self):
         return self.name
@@ -143,6 +152,9 @@ class Publisher(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     logo = models.FileField(upload_to='images/', blank=True)
+
+    def logo_name(self):
+        return os.path.basename(self.logo.name)
 
     def __str__(self):
         return self.name
@@ -203,8 +215,11 @@ class Issue(models.Model):
         editable=False, default=1, blank=True)
     mod_ts = models.DateTimeField()
 
-    def filename(self):
+    def cover_name(self):
         return os.path.basename(self.cover.name)
+
+    def thumb_name(self):
+        return os.path.basename(self.thumb.name)
 
     def __str__(self):
         return self.series.name + ' #' + str(self.number)

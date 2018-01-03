@@ -507,7 +507,7 @@ class ComicImporter(object):
                                          ch['api_detail_url'])
 
                     if character_obj.image:
-                        base_name = character_obj.filename()
+                        base_name = character_obj.image_name()
                         old_image_path = IMG_DIRECTORY + base_name
                         character_obj.thumb = utils.resize_images(character_obj.image,
                                                                   IMG_SMALL_SIZE)
@@ -546,7 +546,7 @@ class ComicImporter(object):
                                          story_arc['api_detail_url'])
 
                     if story_obj.image:
-                        base_name = story_obj.filename()
+                        base_name = story_obj.image_name()
                         old_image_path = IMG_DIRECTORY + base_name
                         story_obj.image = utils.resize_images(story_obj.image,
                                                               IMG_NORMAL_SIZE)
@@ -591,7 +591,7 @@ class ComicImporter(object):
                                          team['api_detail_url'])
 
                     if team_obj.image:
-                        base_name = team_obj.filename()
+                        base_name = team_obj.image_name()
                         old_image_path = IMG_DIRECTORY + base_name
                         team_obj.thumb = utils.resize_images(team_obj.image,
                                                              IMG_SMALL_SIZE)
@@ -633,7 +633,7 @@ class ComicImporter(object):
                                          p['api_detail_url'])
 
                     if creator_obj.image:
-                        base_name = creator_obj.filename()
+                        base_name = creator_obj.image_name()
                         old_image_path = IMG_DIRECTORY + base_name
                         creator_obj.thumb = utils.resize_images(creator_obj.image,
                                                                 IMG_SMALL_SIZE)

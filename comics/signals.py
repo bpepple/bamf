@@ -4,8 +4,7 @@ from django.conf import settings
 
 
 def get_file(img):
-    base_img = os.path.basename(img)
-    new_path = settings.MEDIA_ROOT + '/images/' + base_img
+    new_path = settings.MEDIA_ROOT + '/images/' + str(img)
     return new_path
 
 
@@ -17,27 +16,27 @@ def remove_image(img):
 def pre_delete_image(sender, **kwargs):
     instance = kwargs['instance']
 
-    img = get_file(instance.image)
+    img = get_file(instance.image_name())
     remove_image(img)
 
-    thumb = get_file(instance.thumb)
+    thumb = get_file(instance.thumb_name())
     remove_image(thumb)
 
 
 def pre_delete_arc(sender, **kwargs):
     instance = kwargs['instance']
 
-    img = get_file(instance.image)
+    img = get_file(instance.image_name())
     remove_image(img)
 
 
 def pre_delete_character(sender, **kwargs):
     instance = kwargs['instance']
 
-    img = get_file(instance.image)
+    img = get_file(instance.image_name())
     remove_image(img)
 
-    thumb = get_file(instance.thumb)
+    thumb = get_file(instance.thumb_name())
     remove_image(thumb)
 
     # Delete related team if this is the only
@@ -50,17 +49,17 @@ def pre_delete_character(sender, **kwargs):
 def pre_delete_publisher(sender, **kwargs):
     instance = kwargs['instance']
 
-    logo = get_file(instance.logo)
+    logo = get_file(instance.logo_name())
     remove_image(logo)
 
 
 def pre_delete_issue(sender, **kwargs):
     instance = kwargs['instance']
 
-    cover = get_file(instance.cover)
+    cover = get_file(instance.cover_name())
     remove_image(cover)
 
-    thumb = get_file(instance.thumb)
+    thumb = get_file(instance.thumb_name())
     remove_image(thumb)
 
     # Delete related arc if this is the only
