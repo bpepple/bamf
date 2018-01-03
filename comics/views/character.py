@@ -22,7 +22,7 @@ class CharacterDetail(DetailView):
         context = super(CharacterDetail, self).get_context_data(**kwargs)
         character = self.get_object()
         context['issue_list'] = character.issue_set.all(
-        ).order_by('series__sort_title', 'date')
+        ).order_by('series__sort_title', 'date', 'number')
         return context
 
 

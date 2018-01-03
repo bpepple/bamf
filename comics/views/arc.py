@@ -21,7 +21,7 @@ class ArcDetail(DetailView):
         context = super(ArcDetail, self).get_context_data(**kwargs)
         arc = self.get_object()
         context['issue_list'] = arc.issue_set.all(
-        ).order_by('series__sort_title', 'date')
+        ).order_by('series__sort_title', 'date', 'number')
         return context
 
 

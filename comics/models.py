@@ -179,7 +179,7 @@ class Series(models.Model):
         return self.name
 
     def issue_numerical_order_set(self):
-        return self.issue_set.all().order_by('date')
+        return self.issue_set.all().order_by('date', 'number')
 
     def issue_count(self):
         return self.issue_set.all().count()

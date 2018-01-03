@@ -22,7 +22,7 @@ class TeamDetail(DetailView):
         context = super(TeamDetail, self).get_context_data(**kwargs)
         team = self.get_object()
         context['issue_list'] = team.issue_set.all(
-        ).order_by('series__sort_title', 'date')
+        ).order_by('series__sort_title', 'date', 'number')
         return context
 
 
