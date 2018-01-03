@@ -10,7 +10,7 @@ $(window).load(function(){
 		animationLoop: false,
 		slideshow: false,
 		controlNav: false,
-		itemWidth: 200,
+		itemWidth: 195,
 		itemMargin: 15
 	});
 
