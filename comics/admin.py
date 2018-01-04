@@ -7,11 +7,13 @@ from .models import (Arc, Character, Creator,
 
 @admin.register(Arc)
 class ArcAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
 
 
 @admin.register(Character)
 class CharacterAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
     # form view
     fieldsets = (
@@ -24,6 +26,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
 @admin.register(Creator)
 class CreatorAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -48,6 +51,7 @@ class PublisherAdmin(admin.ModelAdmin):
 
 @admin.register(Series)
 class SeriesAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
     list_display = ('name', 'issue_count')
     list_filter = ('publisher',)
     prepopulated_fields = {'slug': ('name',)}
@@ -55,4 +59,5 @@ class SeriesAdmin(admin.ModelAdmin):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
