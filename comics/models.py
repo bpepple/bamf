@@ -12,8 +12,8 @@ YEAR_CHOICES = [(r, r) for r in range(1837, datetime.date.today().year + 1)]
 # Comic read status
 STATUS_CHOICES = (
     (0, 'Unread'),
-    (1, 'Partially read'),
-    (2, 'Completed'),
+    (1, 'Partially Read'),
+    (2, 'Read'),
 )
 
 # Creator roles for an issue
@@ -61,9 +61,9 @@ class Settings(SingletonModel):
 
 
 class Arc(models.Model):
-    cvid = models.PositiveIntegerField(unique=True)
-    cvurl = models.URLField(max_length=200)
-    name = models.CharField('Arc name', max_length=200)
+    cvid = models.PositiveIntegerField('Comic Vine ID', unique=True)
+    cvurl = models.URLField('Comic Vine URL', max_length=200)
+    name = models.CharField('Arc Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     image = models.FileField(upload_to='images/', blank=True)
@@ -79,9 +79,9 @@ class Arc(models.Model):
 
 
 class Team(models.Model):
-    cvid = models.PositiveIntegerField(unique=True)
-    cvurl = models.URLField(max_length=200)
-    name = models.CharField('Team name', max_length=200)
+    cvid = models.PositiveIntegerField('Comic Vine ID', unique=True)
+    cvurl = models.URLField('Comic Vine URL', max_length=200)
+    name = models.CharField('Team Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     image = models.FileField(upload_to='images/', blank=True)
@@ -101,9 +101,9 @@ class Team(models.Model):
 
 
 class Character(models.Model):
-    cvid = models.PositiveIntegerField(unique=True)
-    cvurl = models.URLField(max_length=200)
-    name = models.CharField('Character name', max_length=200)
+    cvid = models.PositiveIntegerField('Comic Vine ID', unique=True)
+    cvurl = models.URLField('Comic Vine URL', max_length=200)
+    name = models.CharField('Character Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
@@ -124,9 +124,9 @@ class Character(models.Model):
 
 
 class Creator(models.Model):
-    cvid = models.PositiveIntegerField(unique=True)
-    cvurl = models.URLField(max_length=200)
-    name = models.CharField('Creator name', max_length=200)
+    cvid = models.PositiveIntegerField('Comic Vine ID', unique=True)
+    cvurl = models.URLField('Comic Vine URL', max_length=200)
+    name = models.CharField('Creator Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     image = models.FileField(upload_to='images/', blank=True)
@@ -146,9 +146,9 @@ class Creator(models.Model):
 
 
 class Publisher(models.Model):
-    cvid = models.PositiveIntegerField(null=True)
-    cvurl = models.URLField(max_length=200)
-    name = models.CharField('Series name', max_length=200)
+    cvid = models.PositiveIntegerField('Comic Vine ID', null=True)
+    cvurl = models.URLField('Comic Vine URL', max_length=200)
+    name = models.CharField('Series Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     logo = models.FileField(upload_to='images/', blank=True)
@@ -164,9 +164,9 @@ class Publisher(models.Model):
 
 
 class Series(models.Model):
-    cvid = models.PositiveIntegerField(unique=True)
-    cvurl = models.URLField(max_length=200, blank=True)
-    name = models.CharField('Series name', max_length=200)
+    cvid = models.PositiveIntegerField('Comic Vine ID', unique=True)
+    cvurl = models.URLField('Comic Vine URL', max_length=200, blank=True)
+    name = models.CharField('Series Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     sort_title = models.CharField('Sort Name', max_length=200)
     publisher = models.ForeignKey(
@@ -181,6 +181,7 @@ class Series(models.Model):
     def issue_numerical_order_set(self):
         return self.issue_set.all().order_by('date', 'number')
 
+    @property
     def issue_count(self):
         return self.issue_set.all().count()
 
@@ -194,19 +195,20 @@ class Series(models.Model):
 
 class Issue(models.Model):
     cvid = models.PositiveIntegerField('ComicVine ID', unique=True)
-    cvurl = models.URLField(max_length=200, blank=True)
+    cvurl = models.URLField('ComicVine URL', max_length=200, blank=True)
     series = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True)
-    name = models.CharField('Issue name', max_length=200, blank=True)
+    name = models.CharField('Issue Name', max_length=200, blank=True)
     slug = models.SlugField(max_length=200, unique=True)
-    number = models.CharField('Issue number', max_length=25)
-    date = models.DateField('Cover date', blank=True)
+    number = models.CharField('Issue Number', max_length=25)
+    date = models.DateField('Cover Date', blank=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     arcs = models.ManyToManyField(Arc, blank=True)
     characters = models.ManyToManyField(Character, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
-    file = models.CharField('File path', max_length=300)
-    cover = models.FileField(upload_to='images/', blank=True)
-    thumb = models.FileField(upload_to='images/', blank=True)
+    file = models.CharField('File Path', max_length=300)
+    cover = models.FileField('Cover Image', upload_to='images/', blank=True)
+    thumb = models.FileField(
+        'Thumbnail Image', upload_to='images/', blank=True)
     status = models.PositiveSmallIntegerField(
         'Status', choices=STATUS_CHOICES, default=0, blank=True)
     leaf = models.PositiveSmallIntegerField(
@@ -214,6 +216,8 @@ class Issue(models.Model):
     page_count = models.PositiveSmallIntegerField(
         editable=False, default=1, blank=True)
     mod_ts = models.DateTimeField()
+    import_date = models.DateField('Date Imported',
+                                   auto_now_add=True)
 
     def cover_name(self):
         return os.path.basename(self.cover.name)
