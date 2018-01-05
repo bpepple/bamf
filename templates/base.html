@@ -47,7 +47,7 @@
                 {% if page_obj.has_previous %}
                     <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">&larr;</a>
                 {% else %}
-                    <span>&larr;<span>
+                    <span>&larr;</span>
                 {% endif %}
                 
                 <span class="page-item">
@@ -57,7 +57,7 @@
                 {% if page_obj.has_next %}
                     <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">&rarr;</a>
                 {% else %}
-                    <span>&rarr;<span>
+                    <span>&rarr;</span>
                 {% endif %}
  
                 {% if page_obj.number < paginator.num_pages %}
