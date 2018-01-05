@@ -9,14 +9,13 @@ UNREAD = 0
 READ = 2
 
 
-def mark_as_read(modeladmin, request, queryset):
-    queryset.update(status=READ)
-mark_as_read.short_description = 'Mark as read'
+def create_issue_msg(rows_updated):
+    if rows_updated == 1:
+        message_bit = "1 issue was"
+    else:
+        message_bit = "%s issues were" % rows_updated
 
-
-def mark_as_unread(modeladmin, request, queryset):
-    queryset.update(status=UNREAD)
-mark_as_unread.short_description = 'Mark as unread'
+    return message_bit
 
 
 @admin.register(Arc)
@@ -50,7 +49,7 @@ class IssueAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'status')
     list_filter = ('import_date', 'date', 'status')
     date_hierarchy = 'date'
-    actions = [mark_as_read, mark_as_unread]
+    actions = ['mark_as_read', 'mark_as_unread']
     # form view
     fieldsets = (
         (None, {'fields': ('cvid', 'cvurl', 'series', 'name',
@@ -59,6 +58,20 @@ class IssueAdmin(admin.ModelAdmin):
         ('Related', {'fields': ('arcs', 'characters', 'teams')}),
     )
     filter_horizontal = ('arcs', 'characters', 'teams')
+
+    def mark_as_read(self, request, queryset):
+        rows_updated = queryset.update(status=READ)
+        message_bit = create_issue_msg(rows_updated)
+        self.message_user(
+            request, "%s successfully marked as read." % message_bit)
+    mark_as_read.short_description = 'Mark as read'
+
+    def mark_as_unread(self, request, queryset):
+        rows_updated = queryset.update(status=UNREAD)
+        message_bit = create_issue_msg(rows_updated)
+        self.message_user(
+            request, "%s successfully marked as unread." % message_bit)
+    mark_as_unread.short_description = 'Mark as unread'
 
 
 @admin.register(Publisher)
