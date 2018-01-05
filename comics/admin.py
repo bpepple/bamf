@@ -64,14 +64,14 @@ class IssueAdmin(admin.ModelAdmin):
         message_bit = create_issue_msg(rows_updated)
         self.message_user(
             request, "%s successfully marked as read." % message_bit)
-    mark_as_read.short_description = 'Mark as read'
+    mark_as_read.short_description = 'Mark selected issues as read'
 
     def mark_as_unread(self, request, queryset):
         rows_updated = queryset.update(status=UNREAD)
         message_bit = create_issue_msg(rows_updated)
         self.message_user(
             request, "%s successfully marked as unread." % message_bit)
-    mark_as_unread.short_description = 'Mark as unread'
+    mark_as_unread.short_description = 'Mark selected issues as unread'
 
 
 @admin.register(Publisher)
