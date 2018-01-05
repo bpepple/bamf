@@ -68,6 +68,10 @@ $(window).load(function(){
 	});
 
 	/* Reader Controls */
+	$('.reader-controls .exit').click(function(){
+		window.history.back();
+	});
+
 	$('.reader-controls .fit-vertically').click(function(){
 		$('.flexslider').find('.slides').find('li').each(function(){
 			$(this).removeClass('full-width');
