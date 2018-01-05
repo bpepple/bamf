@@ -5,6 +5,20 @@ from .models import (Arc, Character, Creator,
                      Team)
 
 
+UNREAD = 0
+READ = 2
+
+
+def mark_as_read(modeladmin, request, queryset):
+    queryset.update(status=READ)
+mark_as_read.short_description = 'Mark as read'
+
+
+def mark_as_unread(modeladmin, request, queryset):
+    queryset.update(status=UNREAD)
+mark_as_unread.short_description = 'Mark as unread'
+
+
 @admin.register(Arc)
 class ArcAdmin(admin.ModelAdmin):
     search_fields = ('name',)
@@ -32,8 +46,11 @@ class CreatorAdmin(admin.ModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
+    search_fields = ('series__name',)
+    list_display = ('__str__', 'status')
     list_filter = ('import_date', 'date', 'status')
     date_hierarchy = 'date'
+    actions = [mark_as_read, mark_as_unread]
     # form view
     fieldsets = (
         (None, {'fields': ('cvid', 'cvurl', 'series', 'name',
