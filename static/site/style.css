@@ -425,7 +425,7 @@ a.button.reprocess-issue {
 
 .arc-image {
     display: inline-block;
-    width: 29%;
+    width: 20%;
     margin-right: 1%;
     position: relative;
 }
@@ -450,7 +450,7 @@ a.button.reprocess-issue {
 
 .character-image {
     display: inline-block;
-    width: 29%;
+    width: 20%;
     margin-right: 1%;
     position: relative;
 }
@@ -475,7 +475,7 @@ a.button.reprocess-issue {
 
 .creator-image {
     display: inline-block;
-    width: 29%;
+    width: 20%;
     margin-right: 1%;
     position: relative;
 }
@@ -500,7 +500,7 @@ a.button.reprocess-issue {
 
 .series-cover-image {
     display: inline-block;
-    width: 29%;
+    width: 20%;
     margin-right: 1%;
     position: relative;
 }
@@ -525,7 +525,7 @@ a.button.reprocess-issue {
 
 .team-image {
     display: inline-block;
-    width: 29%;
+    width: 20%;
     margin-right: 1%;
     position: relative;
 }
@@ -550,7 +550,7 @@ a.button.reprocess-issue {
 
 .publisher-logo {
     display: inline-block;
-    width: 29%;
+    width: 20%;
     margin-right: 1%;
     position: relative;
 }
@@ -575,7 +575,7 @@ a.button.reprocess-issue {
 
 .issue-cover {
     display: inline-block;
-    width: 29%;
+    width: 20%;
     margin-right: 1%;
     position: relative;
     line-height: 0;
