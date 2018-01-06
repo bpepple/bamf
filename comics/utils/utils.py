@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from PIL import Image
 from django.conf import settings
@@ -11,15 +12,16 @@ def resize_images(path, arg):
         crop_width = int(crop_size[0])
         crop_height = int(crop_size[1])
 
-        filename = os.path.basename(str(path))
-        (shortname, ext) = os.path.splitext(filename)
-        cache_path = 'images/' + shortname + '-' + \
-            str(crop_width) + 'x' + str(crop_height) + ext
+        old_filename = os.path.basename(str(path))
+        (shortname, ext) = os.path.splitext(old_filename)
+        # 18 characters should be more than enough.
+        new_filename = str(uuid.uuid4())[:18]
+        cache_path = 'images/' + new_filename + ext
         new_path = settings.MEDIA_ROOT + '/' + cache_path
         new_url = cache_path
 
         try:
-            img = Image.open(settings.MEDIA_ROOT + '/images/' + filename)
+            img = Image.open(settings.MEDIA_ROOT + '/images/' + old_filename)
             # Check Aspect ratio and resize accordingly
             if crop_width * img.height < crop_height * img.width:
                 height_percent = (float(crop_height) / float(img.size[1]))
