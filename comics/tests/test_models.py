@@ -1,7 +1,30 @@
 from django.test import TestCase
+from django.utils import timezone
 from django.utils.text import slugify
 
-from comics.models import (Publisher, Arc, Team, Character, Creator, Series)
+from comics.models import (Publisher, Arc, Team, Character,
+                           Creator, Series, Issue)
+
+
+class IssueTest(TestCase):
+
+    @classmethod
+    def setUpTestData(self):
+        issue_date = timezone.now().date()
+        mod_time = timezone.now()
+        publisher = Publisher.objects.create(
+            name='DC Comics', slug='dc-comics')
+        series = Series.objects.create(
+            cvid='1234', name='Batman', slug='batman', publisher=publisher)
+        self.issue = Issue.objects.create(cvid='4321', cvurl='http://2.com', slug='batman-1',
+                                          file='/home/b.cbz', mod_ts=mod_time, date=issue_date, number='1', series=series)
+
+    def test_string_representation(self):
+        self.assertEqual(str(self.issue), 'Batman #1')
+
+    def test_verbose_name_plural(self):
+        self.assertEqual(
+            str(self.issue._meta.verbose_name_plural), "issues")
 
 
 class PublisherTest(TestCase):
