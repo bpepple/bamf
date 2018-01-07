@@ -1,11 +1,36 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from comics.models import (Publisher, Series, Creator,
-                           Character, Team, Arc)
+                           Character, Team, Arc, Issue)
 
 
 HTML_OK_CODE = 200
+
+
+class IssueDetailViewTest(TestCase):
+
+    def setUp(self):
+        issue_date = timezone.now().date()
+        mod_time = timezone.now()
+        publisher = Publisher.objects.create(
+            name='DC Comics', slug='dc-comics')
+        series = Series.objects.create(
+            cvid='1234', name='Batman', slug='batman', publisher=publisher)
+        self.issue = Issue.objects.create(cvid='4321', cvurl='http://2.com', slug='batman-1',
+                                          file='/home/b.cbz', mod_ts=mod_time, date=issue_date, number='1', series=series)
+
+    def test_view_url_accessible_by_name(self):
+        url = reverse('issue:detail', args=(self.issue.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_uses_correct_template(self):
+        url = reverse('issue:detail', args=(self.issue.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTemplateUsed(resp, 'comics/issue_detail.html')
 
 
 class PublisherDetailViewTest(TestCase):
