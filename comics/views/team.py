@@ -21,8 +21,7 @@ class TeamDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(TeamDetail, self).get_context_data(**kwargs)
         team = self.get_object()
-        context['issue_list'] = team.issue_set.all(
-        ).order_by('series__sort_title', 'date', 'number')
+        context['issue_list'] = team.issue_set.all()
         return context
 
 

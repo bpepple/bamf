@@ -75,7 +75,7 @@ class Arc(models.Model):
         return self.name
 
     class Meta:
-        ordering = ["name"]
+        ordering = ['name']
 
 
 class Team(models.Model):
@@ -97,7 +97,7 @@ class Team(models.Model):
         return self.name
 
     class Meta:
-        ordering = ["name"]
+        ordering = ['name']
 
 
 class Character(models.Model):
@@ -120,7 +120,7 @@ class Character(models.Model):
         return self.name
 
     class Meta:
-        ordering = ["name"]
+        ordering = ['name']
 
 
 class Creator(models.Model):
@@ -142,7 +142,7 @@ class Creator(models.Model):
         return self.name
 
     class Meta:
-        ordering = ["name"]
+        ordering = ['name']
 
 
 class Publisher(models.Model):
@@ -160,7 +160,7 @@ class Publisher(models.Model):
         return self.name
 
     class Meta:
-        ordering = ["name"]
+        ordering = ['name']
 
 
 class Series(models.Model):
@@ -190,7 +190,7 @@ class Series(models.Model):
 
     class Meta:
         verbose_name_plural = "Series"
-        ordering = ["sort_title"]
+        ordering = ['sort_title', 'year']
 
 
 class Issue(models.Model):
@@ -227,6 +227,9 @@ class Issue(models.Model):
 
     def __str__(self):
         return self.series.name + ' #' + str(self.number)
+
+    class Meta:
+        ordering = ['series__name', 'date', 'number']
 
 
 class Roles(models.Model):

@@ -22,7 +22,7 @@ class CreatorDetail(DetailView):
         creator = self.get_object()
         roles = Roles.objects.filter(creator=creator)
         context['issue_list'] = Issue.objects.filter(
-            id__in=roles.values('issue_id')).order_by('series__sort_title', 'date', 'number')
+            id__in=roles.values('issue_id'))
         return context
 
 
