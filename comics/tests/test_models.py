@@ -13,19 +13,15 @@ class PublisherTest(TestCase):
         self.cvid = 1234
         self.desc = 'Home of Superman'
 
-        Publisher.objects.create(name=self.name,
-                                 slug=self.slug,
-                                 cvid=self.cvid,
-                                 desc=self.desc)
+        self.publisher = Publisher.objects.create(
+            name=self.name, slug=self.slug, cvid=self.cvid, desc=self.desc)
 
     def test_string_representation(self):
-        publisher = Publisher.objects.get(id=1)
-        self.assertEqual(str(publisher), self.name)
+        self.assertEqual(str(self.publisher), self.name)
 
     def test_verbose_name_plural(self):
-        publisher = Publisher.objects.get(id=1)
         self.assertEqual(
-            str(publisher._meta.verbose_name_plural), "publishers")
+            str(self.publisher._meta.verbose_name_plural), "publishers")
 
 
 class ArcTest(TestCase):
@@ -36,18 +32,14 @@ class ArcTest(TestCase):
         self.slug = slugify(self.name)
         self.cvid = 1234
 
-        Arc.objects.create(name=self.name,
-                           slug=self.slug,
-                           cvid=self.cvid)
+        self.arc = Arc.objects.create(
+            name=self.name, slug=self.slug, cvid=self.cvid)
 
     def test_string_representation(self):
-        arc = Arc.objects.get(id=1)
-        self.assertEqual(str(arc), self.name)
+        self.assertEqual(str(self.arc), self.name)
 
     def test_verbose_name_plural(self):
-        arc = Arc.objects.get(id=1)
-        self.assertEqual(
-            str(arc._meta.verbose_name_plural), "arcs")
+        self.assertEqual(str(self.arc._meta.verbose_name_plural), "arcs")
 
 
 class TeamTest(TestCase):
@@ -58,18 +50,14 @@ class TeamTest(TestCase):
         self.slug = slugify(self.name)
         self.cvid = 1234
 
-        Team.objects.create(name=self.name,
-                            slug=self.slug,
-                            cvid=self.cvid)
+        self.team = Team.objects.create(
+            name=self.name, slug=self.slug, cvid=self.cvid)
 
     def test_string_representation(self):
-        team = Team.objects.get(id=1)
-        self.assertEqual(str(team), self.name)
+        self.assertEqual(str(self.team), self.name)
 
     def test_verbose_name_plural(self):
-        team = Team.objects.get(id=1)
-        self.assertEqual(
-            str(team._meta.verbose_name_plural), "teams")
+        self.assertEqual(str(self.team._meta.verbose_name_plural), "teams")
 
 
 class CharacterTest(TestCase):
@@ -80,18 +68,15 @@ class CharacterTest(TestCase):
         self.slug = slugify(self.name)
         self.cvid = 1234
 
-        Character.objects.create(name=self.name,
-                                 slug=self.slug,
-                                 cvid=self.cvid)
+        self.character = Character.objects.create(
+            name=self.name, slug=self.slug, cvid=self.cvid)
 
     def test_string_representation(self):
-        character = Character.objects.get(id=1)
-        self.assertEqual(str(character), self.name)
+        self.assertEqual(str(self.character), self.name)
 
     def test_verbose_name_plural(self):
-        character = Character.objects.get(id=1)
         self.assertEqual(
-            str(character._meta.verbose_name_plural), "characters")
+            str(self.character._meta.verbose_name_plural), "characters")
 
 
 class CreatorTest(TestCase):
@@ -102,18 +87,15 @@ class CreatorTest(TestCase):
         self.slug = slugify(self.name)
         self.cvid = 1234
 
-        Creator.objects.create(name=self.name,
-                               slug=self.slug,
-                               cvid=self.cvid)
+        self.creator = Creator.objects.create(
+            name=self.name, slug=self.slug, cvid=self.cvid)
 
     def test_string_representation(self):
-        creator = Creator.objects.get(id=1)
-        self.assertEqual(str(creator), self.name)
+        self.assertEqual(str(self.creator), self.name)
 
     def test_verbose_name_plural(self):
-        creator = Creator.objects.get(id=1)
         self.assertEqual(
-            str(creator._meta.verbose_name_plural), "creators")
+            str(self.creator._meta.verbose_name_plural), "creators")
 
 
 class SeriesTest(TestCase):
@@ -125,23 +107,15 @@ class SeriesTest(TestCase):
         self.slug = slugify(self.name)
         self.cvid = 1234
 
-        pub, p_create = Publisher.objects.get_or_create(
-            name='DC Comics',
-            slug='dc-comics')
+        pub = Publisher.objects.create(name='DC Comics', slug='dc-comics')
 
-        Series.objects.create(name=self.name,
-                              slug=self.slug,
-                              cvid=self.cvid,
-                              sort_title=self.sort,
-                              publisher=pub,)
+        self.series = Series.objects.create(
+            name=self.name, slug=self.slug, cvid=self.cvid, sort_title=self.sort, publisher=pub)
 
     def test_string_representation(self):
-        series = Series.objects.get(id=1)
-        self.assertEqual(str(series), self.name)
+        self.assertEqual(str(self.series), self.name)
 
     def test_verbose_name_plural(self):
-        series = Series.objects.get(id=1)
-        self.assertEqual(
-            str(series._meta.verbose_name_plural), "Series")
+        self.assertEqual(str(self.series._meta.verbose_name_plural), "Series")
 
 #     TODO: Add test for issue count & unread count.
