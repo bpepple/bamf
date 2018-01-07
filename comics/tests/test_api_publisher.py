@@ -21,7 +21,6 @@ class GetAllPublisherTest(TestCase):
     def test_get_all_publishers(self):
         # get API response
         response = client.get(reverse('api:publisher-list'))
-        print('publisher api test')
         # get data from db
         publishers = Publisher.objects.all()
         serializer = PublisherSerializer(publishers, many=True)
