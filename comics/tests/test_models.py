@@ -18,7 +18,8 @@ class IssueTest(TestCase):
         self.issue = Issue.objects.create(cvid='4321', cvurl='http://2.com', slug='batman-1',
                                           file='/home/b.cbz', mod_ts=mod_time, date=issue_date, number='1', series=series)
 
-    def test_string_representation(self):
+    def test_issue_creation(self):
+        self.assertTrue(isinstance(self.issue, Issue))
         self.assertEqual(str(self.issue), 'Batman #1')
 
     def test_verbose_name_plural(self):
@@ -37,7 +38,8 @@ class PublisherTest(TestCase):
         self.publisher = Publisher.objects.create(
             name=self.name, slug=self.slug, cvid=self.cvid, desc=self.desc)
 
-    def test_string_representation(self):
+    def test_publisher_creation(self):
+        self.assertTrue(isinstance(self.publisher, Publisher))
         self.assertEqual(str(self.publisher), self.name)
 
     def test_verbose_name_plural(self):
@@ -55,7 +57,8 @@ class ArcTest(TestCase):
         self.arc = Arc.objects.create(
             name=self.name, slug=self.slug, cvid=self.cvid)
 
-    def test_string_representation(self):
+    def test_arc_creation(self):
+        self.assertTrue(isinstance(self.arc, Arc))
         self.assertEqual(str(self.arc), self.name)
 
     def test_verbose_name_plural(self):
@@ -72,7 +75,8 @@ class TeamTest(TestCase):
         self.team = Team.objects.create(
             name=self.name, slug=self.slug, cvid=self.cvid)
 
-    def test_string_representation(self):
+    def test_team_creation(self):
+        self.assertTrue(isinstance(self.team, Team))
         self.assertEqual(str(self.team), self.name)
 
     def test_verbose_name_plural(self):
@@ -89,7 +93,8 @@ class CharacterTest(TestCase):
         self.character = Character.objects.create(
             name=self.name, slug=self.slug, cvid=self.cvid)
 
-    def test_string_representation(self):
+    def test_character_creation(self):
+        self.assertTrue(isinstance(self.character, Character))
         self.assertEqual(str(self.character), self.name)
 
     def test_verbose_name_plural(self):
@@ -107,7 +112,8 @@ class CreatorTest(TestCase):
         self.creator = Creator.objects.create(
             name=self.name, slug=self.slug, cvid=self.cvid)
 
-    def test_string_representation(self):
+    def test_creator_creation(self):
+        self.assertTrue(isinstance(self.creator, Creator))
         self.assertEqual(str(self.creator), self.name)
 
     def test_verbose_name_plural(self):
@@ -124,11 +130,11 @@ class SeriesTest(TestCase):
         self.cvid = 1234
 
         pub = Publisher.objects.create(name='DC Comics', slug='dc-comics')
-
         self.series = Series.objects.create(
             name=self.name, slug=self.slug, cvid=self.cvid, sort_title=self.sort, publisher=pub)
 
-    def test_string_representation(self):
+    def test_series_creation(self):
+        self.assertTrue(isinstance(self.series, Series))
         self.assertEqual(str(self.series), self.name)
 
     def test_verbose_name_plural(self):
