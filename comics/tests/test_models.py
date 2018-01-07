@@ -8,8 +8,7 @@ from comics.models import (Publisher, Arc, Team, Character,
 
 class IssueTest(TestCase):
 
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         issue_date = timezone.now().date()
         mod_time = timezone.now()
         publisher = Publisher.objects.create(
@@ -29,8 +28,7 @@ class IssueTest(TestCase):
 
 class PublisherTest(TestCase):
 
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         self.name = 'DC Comics'
         self.slug = slugify(self.name)
         self.cvid = 1234
@@ -49,8 +47,7 @@ class PublisherTest(TestCase):
 
 class ArcTest(TestCase):
 
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         self.name = 'World without Superman'
         self.slug = slugify(self.name)
         self.cvid = 1234
@@ -67,8 +64,7 @@ class ArcTest(TestCase):
 
 class TeamTest(TestCase):
 
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         self.name = 'Justice League'
         self.slug = slugify(self.name)
         self.cvid = 1234
@@ -85,8 +81,7 @@ class TeamTest(TestCase):
 
 class CharacterTest(TestCase):
 
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         self.name = 'Superman'
         self.slug = slugify(self.name)
         self.cvid = 1234
@@ -104,8 +99,7 @@ class CharacterTest(TestCase):
 
 class CreatorTest(TestCase):
 
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         self.name = 'Jason Aaron'
         self.slug = slugify(self.name)
         self.cvid = 1234
@@ -123,8 +117,7 @@ class CreatorTest(TestCase):
 
 class SeriesTest(TestCase):
 
-    @classmethod
-    def setUpTestData(self):
+    def setUp(self):
         self.name = 'The Avengers'
         self.sort = 'Avengers, The'
         self.slug = slugify(self.name)
