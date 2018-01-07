@@ -57,9 +57,7 @@ class SeriesListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        pub, p_create = Publisher.objects.get_or_create(
-            name='Marvel',
-            slug='marvel')
+        pub = Publisher.objects.create(name='Marvel', slug='marvel')
 
         for ser_num in range(PAGINATE_TEST_VAL):
             Series.objects.create(
