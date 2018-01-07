@@ -55,15 +55,10 @@ class PublisherDetailViewTest(TestCase):
 class SeriesDetailViewTest(TestCase):
 
     def setUp(self):
-        pub, p_create = Publisher.objects.get_or_create(
-            name='DC Comics',
-            slug='dc-comics',)
+        pub = Publisher.objects.create(name='DC Comics', slug='dc-comics',)
 
         self.series = Series.objects.create(
-            publisher=pub,
-            name='Superman',
-            slug='superman',
-            cvid=1234,)
+            publisher=pub, name='Superman', slug='superman', cvid=1234,)
 
     def test_view_url_accessible_by_name(self):
         url = reverse('series:detail', args=(self.series.slug,))
@@ -81,9 +76,7 @@ class CreatorDetailViewTest(TestCase):
 
     def setUp(self):
         self.creator = Creator.objects.create(
-            name='Jack Kirby',
-            slug='jack-kirby',
-            cvid=4321)
+            name='Jack Kirby', slug='jack-kirby', cvid=4321)
 
     def test_view_url_accessible_by_name(self):
         url = reverse('creator:detail', args=(self.creator.slug,))
@@ -101,9 +94,7 @@ class CharacterDetailViewTest(TestCase):
 
     def setUp(self):
         self.character = Character.objects.create(
-            name='Captain America',
-            slug='captain-america',
-            cvid=1234)
+            name='Captain America', slug='captain-america', cvid=1234)
 
     def test_view_url_accessible_by_name(self):
         url = reverse('character:detail', args=(self.character.slug,))
@@ -121,9 +112,7 @@ class TeamDetailViewTest(TestCase):
 
     def setUp(self):
         self.team = Team.objects.create(
-            name='The Fantastic Four',
-            slug='the-fantastic-four',
-            cvid=4444)
+            name='The Fantastic Four', slug='the-fantastic-four', cvid=4444)
 
     def test_view_url_accessible_by_name(self):
         url = reverse('team:detail', args=(self.team.slug,))
@@ -141,9 +130,7 @@ class ArcDetailViewTest(TestCase):
 
     def setUp(self):
         self.arc = Arc.objects.create(
-            name='Death of Superman',
-            slug='death-of-superman',
-            cvid=4444)
+            name='Death of Superman', slug='death-of-superman', cvid=4444)
 
     def test_view_url_accessible_by_name(self):
         url = reverse('arc:detail', args=(self.arc.slug,))
