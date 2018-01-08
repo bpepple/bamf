@@ -10,7 +10,7 @@ Bamf is a Django project that allow you to read comic book archives. It is based
 * REST API
 
 ### Installation ###
-* Coming soon!
+To install, please refer to the [Bamf Wiki](https://github.com/bpepple/bamf/wiki/Installation-on-Linux).
 
 ### Screenshots ###
 * Coming soon!
