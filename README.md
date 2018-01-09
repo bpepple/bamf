@@ -1,6 +1,6 @@
 Bamf is a Django project that allow you to read comic book archives. It is based on [Tenma](https://github.com/Tenma-Server/Tenma) and uses the [ComicVine](http://comicvine.gamespot.com) [API](http://comicvine.gamespot.com/api) to retrieve the comic metadata. Most of the difference are behind the interface like:
 * Instead of querying Comic Vine for matches, we read in the comic archive comicinfo.xml (which means you need to tag your comic archives with [ComicTagger](https://github.com/davide-romanini/comictagger)), and get the detailed information from Comic Vine.
-* Read the comic archive directly, instead of unzipping the file in a directory.
+* Read the comic archive directly, instead of unzipping the file into a directory.
 * Images from comic vine are resized on import, and the original is removed.
 
 ### Features ###
