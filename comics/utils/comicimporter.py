@@ -280,20 +280,6 @@ class ComicImporter(object):
 
         return response
 
-    def getCreatorCV(self, api_url):
-        params = self.base_params
-        params['field_list'] = self.creator_fields
-
-        response = requests.get(
-            api_url,
-            params=params,
-            headers=self.headers,
-        ).json()
-
-        data = self.getCVObjectData(response['results'])
-
-        return data
-
     def getTeamCV(self, api_url):
         params = self.base_params
         params['field_list'] = self.team_fields
