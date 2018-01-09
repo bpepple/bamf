@@ -95,7 +95,7 @@ class ComicImporter(object):
         if remove:
             comic.delete()
 
-    def get_cv_object_data(self, response):
+    def getCVObjectData(self, response):
         '''
         Gathers object data from a response and tests each value to make sure
         it exists in the response before trying to set it.
@@ -162,7 +162,7 @@ class ComicImporter(object):
 
         return data
 
-    def getCVIssue(self, issue_cvid):
+    def getIssue(self, issue_cvid):
         issue_params = self.base_params
         issue_params['field_list'] = self.issue_fields
 
@@ -174,11 +174,11 @@ class ComicImporter(object):
             ).json()
         except JSONDecodeError:
             response = None
-            self.logger.info('No value returned from getCVIssue().')
+            self.logger.info('No value returned from getIssue().')
 
         return response
 
-    def getIssueCV(self, issue_cvid, response_issue):
+    def getIssueDetail(self, issue_cvid, response_issue):
         issue_params = self.base_params
         issue_params['field_list'] = self.issue_fields
 
@@ -190,7 +190,7 @@ class ComicImporter(object):
             headers=self.headers,
         ).json()
 
-        data = self.get_cv_object_data(response['results'])
+        data = self.getCVObjectData(response['results'])
 
         issue = Issue.objects.get(cvid=issue_cvid)
         issue.thumb = utils.resize_images(data['image'],
@@ -201,7 +201,7 @@ class ComicImporter(object):
         issue.save()
         os.remove(data['image'])
 
-    def getSeriesCV(self, api_url):
+    def getSeries(self, api_url):
         params = self.base_params
         params['field_list'] = self.series_fields
 
@@ -211,11 +211,11 @@ class ComicImporter(object):
             headers=self.headers,
         ).json()
 
-        data = self.get_cv_object_data(response['results'])
+        data = self.getCVObjectData(response['results'])
 
         return data
 
-    def getPubisherCV(self, response_issue):
+    def getPublisher(self, response_issue):
         series_params = self.base_params
         series_params['field_list'] = 'publisher'
 
@@ -236,11 +236,11 @@ class ComicImporter(object):
             headers=self.headers,
         ).json()
 
-        data = self.get_cv_object_data(response['results'])
+        data = self.getCVObjectData(response['results'])
 
         return data
 
-    def getCVData(self, db_obj, fields, api_url):
+    def getDetailInfo(self, db_obj, fields, api_url):
         params = self.base_params
         params['field_list'] = fields
 
@@ -253,7 +253,7 @@ class ComicImporter(object):
         except JSONDecodeError:
             return False
 
-        data = self.get_cv_object_data(response['results'])
+        data = self.getCVObjectData(response['results'])
 
         # Year (only exists for Series objects)
         if data['year'] is not None:
@@ -265,7 +265,7 @@ class ComicImporter(object):
 
         return True
 
-    def getTeamCharactersCV(self, api_url):
+    def getTeamCharacters(self, api_url):
         params = self.base_params
         params['field_list'] = self.team_fields
 
@@ -290,7 +290,7 @@ class ComicImporter(object):
             headers=self.headers,
         ).json()
 
-        data = self.get_cv_object_data(response['results'])
+        data = self.getCVObjectData(response['results'])
 
         return data
 
@@ -304,7 +304,7 @@ class ComicImporter(object):
             headers=self.headers,
         ).json()
 
-        data = self.get_cv_object_data(response['results'])
+        data = self.getCVObjectData(response['results'])
 
         return data
 
@@ -369,7 +369,7 @@ class ComicImporter(object):
                 return False
 
             # let's get the issue info from CV.
-            issue_response = self.getCVIssue(cvID)
+            issue_response = self.getIssue(cvID)
             if issue_response is None:
                 return False
 
@@ -381,7 +381,7 @@ class ComicImporter(object):
 
             # Get the series info from CV.
             series_url = issue_response['results']['volume']['api_detail_url']
-            data = self.getSeriesCV(series_url)
+            data = self.getSeries(series_url)
 
             if (data['year']) is not None:
                 slugy = (data['name'] + ' ' + data['year'])
@@ -458,13 +458,13 @@ class ComicImporter(object):
                 series=series_obj,)
 
             # Get the issue image & short description from CV.
-            self.getIssueCV(cvID, issue_response)
+            self.getIssueDetail(cvID, issue_response)
             self.logger.info("Added: %s" % issue_obj)
 
             # Adding new publisher we need to grab
             # some additional data from Comic Vine.
             if p_create:
-                p = self.getPubisherCV(issue_response)
+                p = self.getPublisher(issue_response)
                 publisher_obj.logo = utils.resize_images(p['image'],
                                                          IMG_NORMAL_SIZE)
                 publisher_obj.cvid = int(p['cvid'])
@@ -502,9 +502,9 @@ class ComicImporter(object):
                     character_obj.slug = slugify(slugy)
                     character_obj.save()
                     # Alright get the detail information now.
-                    res = self.getCVData(character_obj,
-                                         self.character_fields,
-                                         ch['api_detail_url'])
+                    res = self.getDetailInfo(character_obj,
+                                             self.character_fields,
+                                             ch['api_detail_url'])
 
                     if character_obj.image:
                         base_name = character_obj.image_name()
@@ -541,9 +541,9 @@ class ComicImporter(object):
                     story_obj.slug = slugify(slugy)
                     story_obj.save()
 
-                    res = self.getCVData(story_obj,
-                                         self.arc_fields,
-                                         story_arc['api_detail_url'])
+                    res = self.getDetailInfo(story_obj,
+                                             self.arc_fields,
+                                             story_arc['api_detail_url'])
 
                     if story_obj.image:
                         base_name = story_obj.image_name()
@@ -566,7 +566,7 @@ class ComicImporter(object):
                 issue_obj.teams.add(team_obj)
 
                 # Add any existing character to the team.
-                c_response = self.getTeamCharactersCV(team['api_detail_url'])
+                c_response = self.getTeamCharacters(team['api_detail_url'])
                 if c_response is not None:
                     for character in c_response['results']['characters']:
                         match = Character.objects.filter(cvid=character['id'])
@@ -586,9 +586,9 @@ class ComicImporter(object):
                     team_obj.slug = slugify(slugy)
                     team_obj.save()
 
-                    res = self.getCVData(team_obj,
-                                         self.team_fields,
-                                         team['api_detail_url'])
+                    res = self.getDetailInfo(team_obj,
+                                             self.team_fields,
+                                             team['api_detail_url'])
 
                     if team_obj.image:
                         base_name = team_obj.image_name()
@@ -628,9 +628,9 @@ class ComicImporter(object):
                     creator_obj.slug = slugify(slugy)
                     creator_obj.save()
 
-                    res = self.getCVData(creator_obj,
-                                         self.creator_fields,
-                                         p['api_detail_url'])
+                    res = self.getDetailInfo(creator_obj,
+                                             self.creator_fields,
+                                             p['api_detail_url'])
 
                     if creator_obj.image:
                         base_name = creator_obj.image_name()
