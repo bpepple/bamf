@@ -280,20 +280,6 @@ class ComicImporter(object):
 
         return response
 
-    def getTeamCV(self, api_url):
-        params = self.base_params
-        params['field_list'] = self.team_fields
-
-        response = requests.get(
-            api_url,
-            params=params,
-            headers=self.headers,
-        ).json()
-
-        data = self.getCVObjectData(response['results'])
-
-        return data
-
     def getIssueCVID(self, md):
         # Get the issues cvid
         # TODO: Need to clean this up a bit, but for now it works.
