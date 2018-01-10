@@ -2,10 +2,8 @@ import os.path
 
 from django.conf import settings
 
-
-def get_file(img):
-    new_path = settings.MEDIA_ROOT + '/images/' + str(img)
-    return new_path
+NORMAL_DIR = 'normal/'
+THUMB_DIR = 'thumbnails/'
 
 
 def remove_image(img):
@@ -13,30 +11,44 @@ def remove_image(img):
         os.remove(img)
 
 
-def pre_delete_image(sender, **kwargs):
-    instance = kwargs['instance']
-
-    img = get_file(instance.image_name())
-    remove_image(img)
-
-    thumb = get_file(instance.thumb_name())
-    remove_image(thumb)
-
-
 def pre_delete_arc(sender, **kwargs):
     instance = kwargs['instance']
 
-    img = get_file(instance.image_name())
+    path = settings.MEDIA_ROOT + '/images/arcs/'
+    img = path + NORMAL_DIR + str(instance.image_name())
     remove_image(img)
+
+
+def pre_delete_creator(sender, **kwargs):
+    instance = kwargs['instance']
+
+    path = settings.MEDIA_ROOT + '/images/creators/'
+    img = path + NORMAL_DIR + str(instance.image_name())
+    remove_image(img)
+
+    thumb = path + THUMB_DIR + str(instance.thumb_name())
+    remove_image(thumb)
+
+
+def pre_delete_team(sender, **kwargs):
+    instance = kwargs['instance']
+
+    path = settings.MEDIA_ROOT + '/images/teams/'
+    img = path + NORMAL_DIR + str(instance.image_name())
+    remove_image(img)
+
+    thumb = path + THUMB_DIR + str(instance.thumb_name())
+    remove_image(thumb)
 
 
 def pre_delete_character(sender, **kwargs):
     instance = kwargs['instance']
 
-    img = get_file(instance.image_name())
+    path = settings.MEDIA_ROOT + '/images/characters/'
+    img = path + NORMAL_DIR + str(instance.image_name())
     remove_image(img)
 
-    thumb = get_file(instance.thumb_name())
+    thumb = path + THUMB_DIR + str(instance.thumb_name())
     remove_image(thumb)
 
     # Delete related team if this is the only
@@ -49,17 +61,19 @@ def pre_delete_character(sender, **kwargs):
 def pre_delete_publisher(sender, **kwargs):
     instance = kwargs['instance']
 
-    logo = get_file(instance.logo_name())
+    path = settings.MEDIA_ROOT + '/images/publishers/'
+    logo = path + NORMAL_DIR + str(instance.logo_name())
     remove_image(logo)
 
 
 def pre_delete_issue(sender, **kwargs):
     instance = kwargs['instance']
 
-    cover = get_file(instance.cover_name())
+    path = settings.MEDIA_ROOT + '/images/issues/'
+    cover = path + NORMAL_DIR + str(instance.cover_name())
     remove_image(cover)
 
-    thumb = get_file(instance.thumb_name())
+    thumb = path + THUMB_DIR + (instance.thumb_name())
     remove_image(thumb)
 
     # Delete related arc if this is the only
