@@ -21,9 +21,14 @@ from .comicapi.comicarchive import MetaDataStyle, ComicArchive
 from .comicapi.issuestring import IssueString
 
 
-IMG_NORMAL_SIZE = "320x487"
-IMG_SMALL_SIZE = "200x305"
 IMG_DIRECTORY = settings.MEDIA_ROOT + '/images/'
+
+ARCS_FOLDER = 'arcs'
+CHARACTERS_FOLDERS = 'characters'
+CREATORS_FOLDERS = 'creators'
+ISSUES_FOLDER = 'issues'
+PUBLISHERS_FOLDER = 'publishers'
+TEAMS_FOLDERS = 'teams'
 
 
 def get_recursive_filelist(pathlist):
@@ -193,10 +198,8 @@ class ComicImporter(object):
         data = self.getCVObjectData(response['results'])
 
         issue = Issue.objects.get(cvid=issue_cvid)
-        issue.thumb = utils.resize_images(data['image'],
-                                          IMG_SMALL_SIZE)
-        issue.cover = utils.resize_images(data['image'],
-                                          IMG_NORMAL_SIZE)
+        issue.thumb = utils.resize_images(data['image'], ISSUES_FOLDER, True)
+        issue.cover = utils.resize_images(data['image'], ISSUES_FOLDER, False)
         issue.desc = data['desc']
         issue.save()
         os.remove(data['image'])
@@ -437,8 +440,8 @@ class ComicImporter(object):
             # some additional data from Comic Vine.
             if p_create:
                 p = self.getPublisher(issue_response)
-                publisher_obj.logo = utils.resize_images(p['image'],
-                                                         IMG_NORMAL_SIZE)
+                publisher_obj.logo = utils.resize_images(
+                    p['image'], PUBLISHERS_FOLDER, False)
                 publisher_obj.cvid = int(p['cvid'])
                 publisher_obj.cvurl = p['cvurl']
                 publisher_obj.desc = p['desc']
@@ -481,10 +484,10 @@ class ComicImporter(object):
                     if character_obj.image:
                         base_name = character_obj.image_name()
                         old_image_path = IMG_DIRECTORY + base_name
-                        character_obj.thumb = utils.resize_images(character_obj.image,
-                                                                  IMG_SMALL_SIZE)
-                        character_obj.image = utils.resize_images(character_obj.image,
-                                                                  IMG_NORMAL_SIZE)
+                        character_obj.thumb = utils.resize_images(
+                            character_obj.image, CHARACTERS_FOLDERS, True)
+                        character_obj.image = utils.resize_images(
+                            character_obj.image, CHARACTERS_FOLDERS, False)
                         character_obj.save()
                         os.remove(old_image_path)
 
@@ -520,8 +523,8 @@ class ComicImporter(object):
                     if story_obj.image:
                         base_name = story_obj.image_name()
                         old_image_path = IMG_DIRECTORY + base_name
-                        story_obj.image = utils.resize_images(story_obj.image,
-                                                              IMG_NORMAL_SIZE)
+                        story_obj.image = utils.resize_images(
+                            story_obj.image, ARCS_FOLDER, False)
                         story_obj.save()
                         os.remove(old_image_path)
 
@@ -565,10 +568,10 @@ class ComicImporter(object):
                     if team_obj.image:
                         base_name = team_obj.image_name()
                         old_image_path = IMG_DIRECTORY + base_name
-                        team_obj.thumb = utils.resize_images(team_obj.image,
-                                                             IMG_SMALL_SIZE)
-                        team_obj.image = utils.resize_images(team_obj.image,
-                                                             IMG_NORMAL_SIZE)
+                        team_obj.thumb = utils.resize_images(
+                            team_obj.image, TEAMS_FOLDERS, True)
+                        team_obj.image = utils.resize_images(
+                            team_obj.image, TEAMS_FOLDERS, False)
                         team_obj.save()
                         os.remove(old_image_path)
 
@@ -607,10 +610,10 @@ class ComicImporter(object):
                     if creator_obj.image:
                         base_name = creator_obj.image_name()
                         old_image_path = IMG_DIRECTORY + base_name
-                        creator_obj.thumb = utils.resize_images(creator_obj.image,
-                                                                IMG_SMALL_SIZE)
-                        creator_obj.image = utils.resize_images(creator_obj.image,
-                                                                IMG_NORMAL_SIZE)
+                        creator_obj.thumb = utils.resize_images(
+                            creator_obj.image, CREATORS_FOLDERS, True)
+                        creator_obj.image = utils.resize_images(
+                            creator_obj.image, CREATORS_FOLDERS, False)
                         creator_obj.save()
                         os.remove(old_image_path)
 

@@ -1,2 +1,9 @@
 *
 !.gitignore
+!arcs/
+!characters/
+!creators/
+!issues/
+!publishers/
+!series/
+!teams/

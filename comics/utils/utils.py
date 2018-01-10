@@ -4,19 +4,32 @@ import uuid
 from PIL import Image
 from django.conf import settings
 
+THUMBNAIL_WIDTH = 200
+THUMBNAIL_HEiGHT = 305
 
-def resize_images(path, arg):
+NORMAL_WIDTH = 320
+NORMAL_HEIGHT = 487
+
+
+def resize_images(path, folder, thumb):
     if path:
         # Split width and height
-        crop_size = arg.split('x')
-        crop_width = int(crop_size[0])
-        crop_height = int(crop_size[1])
+        if not thumb:
+            crop_width = NORMAL_WIDTH
+            crop_height = NORMAL_HEIGHT
+        else:
+            crop_width = THUMBNAIL_WIDTH
+            crop_height = THUMBNAIL_HEiGHT
 
         old_filename = os.path.basename(str(path))
         (shortname, ext) = os.path.splitext(old_filename)
         # 18 characters should be more than enough.
-        new_filename = str(uuid.uuid4())[:18]
-        cache_path = 'images/' + new_filename + ext
+        new_filename = str(uuid.uuid4())
+        if not thumb:
+            cache_path = 'images/' + folder + '/normal/' + new_filename + ext
+        else:
+            cache_path = 'images/' + folder + '/thumbnails/' + new_filename + ext
+
         new_path = settings.MEDIA_ROOT + '/' + cache_path
         new_url = cache_path
 
