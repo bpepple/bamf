@@ -420,6 +420,38 @@ a.button.reprocess-issue {
 }
 
 /*
+ * Recently Added Issues
+ */
+.recent-issues {
+    padding: 0 30px;
+}
+
+.recent-issues ul {
+    list-style: none;
+    font-size: 0px;
+    margin-left: -1%;
+    padding: 0;
+}
+
+.recent-issues li {
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    margin: 0 0 1% 1%;
+    vertical-align: top;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 15.5%;
+}
+
+.recent-issues li img {
+    max-width: 100%;
+    height: auto;
+    margin: 0 0 10px;
+}
+
+/*
  *  Arcs
  */
 
