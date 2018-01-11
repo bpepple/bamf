@@ -216,8 +216,8 @@ class Issue(models.Model):
     page_count = models.PositiveSmallIntegerField(
         editable=False, default=1, blank=True)
     mod_ts = models.DateTimeField()
-    import_date = models.DateField('Date Imported',
-                                   auto_now_add=True)
+    import_date = models.DateTimeField('Date Imported',
+                                       auto_now_add=True)
 
     def cover_name(self):
         return os.path.basename(self.cover.name)
