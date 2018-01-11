@@ -451,6 +451,12 @@ a.button.reprocess-issue {
     margin: 0 0 10px;
 }
 
+.recent-issues li p {
+    text-align: center;
+    font-size: 16px;
+    margin: 5px 8px;
+}
+
 /*
  *  Arcs
  */
