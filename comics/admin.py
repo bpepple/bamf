@@ -54,7 +54,7 @@ class IssueAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('cvid', 'cvurl', 'series', 'name',
                            'slug', 'number', 'date', 'desc',
-                           'cover', 'thumb', 'status', 'import_date')}),
+                           'cover', 'thumb', 'status')}),
         ('Related', {'fields': ('arcs', 'characters', 'teams')}),
     )
     filter_horizontal = ('arcs', 'characters', 'teams')
