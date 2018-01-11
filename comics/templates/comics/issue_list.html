@@ -7,7 +7,7 @@
 <div class="searchbox-wrapper">
     <form id="searchform" action="{% url 'series:search' %}" method="get" accept-charset="utf-8">
         <i class="fa fa-search"></i>
-        <input id="searchbox" name="q" type="text" placeholder="Series Search">
+        <input id="searchbox" name="q" type="text" placeholder="Issue Search">
     </form>
 </div>
 
@@ -18,13 +18,6 @@
             <li>
                 <a href="{% url 'issue:detail' issue.slug %}">
                     <img src="{{ issue.cover.url }}" alt = "{{ issue }}" >
-                    <div class="unread-count">
-                        {% if issue.status == 0 %}
-                            <i class="fa fa-circle fa-2x"></i>
-                        {% elif issue.status == 1 %}
-                            <i class="fa fa-adjust fa-2x fa-flip-horizontal"></i>
-                        {% endif %}
-                    </div>
                 </a>
                 <a href="{% url 'issue:detail' issue.slug %}"><p>{{ issue }}</p></a>
             </li>
