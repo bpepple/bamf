@@ -1,5 +1,7 @@
 {% extends parent_template|default:"base.html" %}
 
+{% load staticfiles %}
+
 {% block page-title %}Issue List{% endblock page-title %}
 
 {% block content %}
@@ -17,7 +19,11 @@
         {% for issue in issue_list %}
             <li>
                 <a href="{% url 'issue:detail' issue.slug %}">
-                    <img src="{{ issue.cover.url }}" alt = "{{ issue }}" >
+                    {% if issue.cover %}
+                        <img src="{{ issue.cover.url }}" alt = "{{ issue }}" >
+                    {% else %}
+                        <img src="{% static 'site/image-not-found.png' %}" alt="{{ issue }}" >
+                    {% endif %}
                 </a>
                 <a href="{% url 'issue:detail' issue.slug %}"><p>{{ issue }}</p></a>
             </li>
