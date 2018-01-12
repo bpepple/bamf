@@ -1,4 +1,5 @@
 from datetime import datetime
+import itertools
 from json.decoder import JSONDecodeError
 import logging
 import os
@@ -358,37 +359,29 @@ class ComicImporter(object):
             series_url = issue_response['results']['volume']['api_detail_url']
             data = self.getSeries(series_url)
 
-            if (data['year']) is not None:
-                slugy = (data['name'] + ' ' + data['year'])
-            else:
-                slugy = data['name']
-            # Create the series sort name to deal with titles with 'The' in it.
-            sort_name = utils.create_series_sortname(data['name'])
-
             # Alright let's create the series object.
             series_obj, s_create = Series.objects.get_or_create(
-                cvid=int(data['cvid']),
-                cvurl=data['cvurl'],
-                name=data['name'],
-                sort_title=sort_name,
-                publisher=publisher_obj,
-                year=data['year'],
-                desc=data['desc'],)
+                cvid=int(data['cvid']),)
 
             if s_create:
-                if (data['year']) is not None:
-                    exist_count = Series.objects.filter(
-                        name__iexact=data['name'], year=data['year']).count()
-                else:
-                    exist_count = Series.objects.filter(
-                        name__iexact=data['name']).count()
-                if exist_count > 1:
-                    # Ok, let's drop the count by one since we're including the
-                    # new series in the count.
-                    exist_count = exist_count - 1
-                    slugy = slugy + ' ' + str(exist_count)
+                # Create the series sort name to deal with titles with 'The' in
+                # it.
+                sort_name = utils.create_series_sortname(data['name'])
 
-                series_obj.slug = slugify(slugy)
+                new_slug = orig = slugify(data['name'])
+
+                for x in itertools.count(1):
+                    if not Series.objects.filter(slug=new_slug).exists():
+                        break
+                    new_slug = '%s-%d' % (orig, x)
+
+                series_obj.slug = new_slug
+                series_obj.cvurl = data['cvurl']
+                series_obj.name = data['name']
+                series_obj.sort_title = sort_name
+                series_obj.publisher = publisher_obj
+                series_obj.year = data['year']
+                series_obj.desc = data['desc']
                 series_obj.save()
                 self.logger.info('Added series: %s' % series_obj)
 
@@ -418,11 +411,18 @@ class ComicImporter(object):
             else:
                 slugy = series_obj.name + ' ' + fixed_number
 
+            new_slug = orig = slugify(slugy)
+
+            for x in itertools.count(1):
+                if not Issue.objects.filter(slug=new_slug).exists():
+                    break
+                new_slug = '%s-%d' % (orig, x)
+
             # Create the issue
             issue_obj, i_create = Issue.objects.get_or_create(
                 file=md.path,
                 name=str(md.title),
-                slug=slugify(slugy),
+                slug=new_slug,
                 number=fixed_number,
                 desc=str(md.comments),
                 date=pub_date,
@@ -458,23 +458,15 @@ class ComicImporter(object):
                 issue_obj.characters.add(character_obj)
 
                 if ch_create:
-                    # Check to see if the slug or name exists already in the
-                    # db.
-                    test_slug = slugify(ch['name'])
+                    new_slug = orig = slugify(ch['name'])
 
-                    slug_count = Character.objects.filter(
-                        slug__iexact=test_slug).count()
-                    name_count = Character.objects.filter(
-                        name__iexact=ch['name']).count()
-
-                    if (slug_count > 0 or name_count > 1):
-                        max_count = max(slug_count, name_count)
-                        slugy = ch['name'] + ' ' + str(max_count)
-                    else:
-                        slugy = ch['name']
+                    for x in itertools.count(1):
+                        if not Character.objects.filter(slug=new_slug).exists():
+                            break
+                        new_slug = '%s-%d' % (orig, x)
 
                     character_obj.name = ch['name']
-                    character_obj.slug = slugify(slugy)
+                    character_obj.slug = new_slug
                     character_obj.save()
                     # Alright get the detail information now.
                     res = self.getDetailInfo(character_obj,
@@ -504,16 +496,15 @@ class ComicImporter(object):
                 issue_obj.arcs.add(story_obj)
 
                 if s_create:
-                    test_slug = slugify(story_arc['name'])
-                    slug_count = Arc.objects.filter(
-                        slug__iexact=test_slug).count()
-                    if slug_count > 0:
-                        slugy = story_arc['name'] + ' ' + str(slug_count)
-                    else:
-                        slugy = story_arc['name']
+                    new_slug = orig = slugify(story_arc['name'])
+
+                    for x in itertools.count(1):
+                        if not Arc.objects.filter(slug=new_slug).exists():
+                            break
+                        new_slug = '%s-%d' % (orig, x)
 
                     story_obj.name = story_arc['name']
-                    story_obj.slug = slugify(slugy)
+                    story_obj.slug = new_slug
                     story_obj.save()
 
                     res = self.getDetailInfo(story_obj,
@@ -549,16 +540,15 @@ class ComicImporter(object):
                             match[0].teams.add(team_obj)
 
                 if t_create:
-                    test_slug = slugify(team['name'])
-                    slug_count = Team.objects.filter(
-                        slug__iexact=test_slug).count()
-                    if slug_count > 0:
-                        slugy = team['name'] + ' ' + str(slug_count)
-                    else:
-                        slugy = team['name']
+                    new_slug = orig = slugify(team['name'])
+
+                    for x in itertools.count(1):
+                        if not Team.objects.filter(slug=new_slug).exists():
+                            break
+                        new_slug = '%s-%d' % (orig, x)
 
                     team_obj.name = team['name']
-                    team_obj.slug = slugify(slugy)
+                    team_obj.slug = new_slug
                     team_obj.save()
 
                     res = self.getDetailInfo(team_obj,
@@ -591,16 +581,15 @@ class ComicImporter(object):
                                      roles=re.sub(' ', '', p['role']))
 
                 if c_create:
-                    test_slug = slugify(p['name'])
-                    slug_count = Creator.objects.filter(
-                        slug__iexact=test_slug).count()
-                    if slug_count > 0:
-                        slugy = p['name'] + ' ' + str(slug_count)
-                    else:
-                        slugy = p['name']
+                    new_slug = orig = slugify(p['name'])
+
+                    for x in itertools.count(1):
+                        if not Creator.objects.filter(slug=new_slug).exists():
+                            break
+                        new_slug = '%s-%d' % (orig, x)
 
                     creator_obj.name = p['name']
-                    creator_obj.slug = slugify(slugy)
+                    creator_obj.slug = new_slug
                     creator_obj.save()
 
                     res = self.getDetailInfo(creator_obj,
