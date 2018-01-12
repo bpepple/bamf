@@ -385,13 +385,13 @@ a.button.reprocess-issue {
     position: absolute;
     top: 0px;
     right: 0px;
-    background-color: #40C899;
+    background-color: #6bc0fc;
     box-shadow: 0px 0px 6px #000000;
     border-radius: 16px;
 }
 
 .all-series li .unread-count p {
-    color: #034f84;
+    color: #000000;
     margin: 5px 12px;
     font-weight: bold;
 }
@@ -717,7 +717,7 @@ a.button.reprocess-issue {
     position: absolute;
     top: 5px;
     right: 5px;
-    color: #40C899;
+    color: #6bc0fc;
     text-shadow: 0px 0px 6px #000000;
 }
 
