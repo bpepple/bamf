@@ -66,7 +66,7 @@ class Arc(models.Model):
     name = models.CharField('Arc Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FileField(upload_to='images/', blank=True)
+    image = models.FileField(upload_to='images/', max_length=250, blank=True)
 
     def image_name(self):
         return os.path.basename(self.image.name)
@@ -84,8 +84,8 @@ class Team(models.Model):
     name = models.CharField('Team Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FileField(upload_to='images/', blank=True)
-    thumb = models.FileField(upload_to='images/', blank=True)
+    image = models.FileField(upload_to='images/', max_length=250, blank=True)
+    thumb = models.FileField(upload_to='images/', max_length=250, blank=True)
 
     def image_name(self):
         return os.path.basename(self.image.name)
@@ -107,8 +107,8 @@ class Character(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
-    image = models.FileField(upload_to='images/', blank=True)
-    thumb = models.FileField(upload_to='images/', blank=True)
+    image = models.FileField(upload_to='images/', max_length=250, blank=True)
+    thumb = models.FileField(upload_to='images/', max_length=250, blank=True)
 
     def image_name(self):
         return os.path.basename(self.image.name)
@@ -129,8 +129,8 @@ class Creator(models.Model):
     name = models.CharField('Creator Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.FileField(upload_to='images/', blank=True)
-    thumb = models.FileField(upload_to='images/', blank=True)
+    image = models.FileField(upload_to='images/', max_length=250, blank=True)
+    thumb = models.FileField(upload_to='images/', max_length=250, blank=True)
 
     def image_name(self):
         return os.path.basename(self.image.name)
@@ -151,7 +151,7 @@ class Publisher(models.Model):
     name = models.CharField('Series Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    logo = models.FileField(upload_to='images/', blank=True)
+    logo = models.FileField(upload_to='images/', max_length=250, blank=True)
 
     def logo_name(self):
         return os.path.basename(self.logo.name)
@@ -197,8 +197,8 @@ class Issue(models.Model):
     cvid = models.PositiveIntegerField('ComicVine ID', unique=True)
     cvurl = models.URLField('ComicVine URL', max_length=200, blank=True)
     series = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True)
-    name = models.CharField('Issue Name', max_length=200, blank=True)
-    slug = models.SlugField(max_length=200, unique=True)
+    name = models.CharField('Issue Name', max_length=350, blank=True)
+    slug = models.SlugField(max_length=350, unique=True)
     number = models.CharField('Issue Number', max_length=25)
     date = models.DateField('Cover Date', blank=True)
     desc = models.TextField('Description', max_length=500, blank=True)
@@ -206,9 +206,10 @@ class Issue(models.Model):
     characters = models.ManyToManyField(Character, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
     file = models.CharField('File Path', max_length=300)
-    cover = models.FileField('Cover Image', upload_to='images/', blank=True)
+    cover = models.FileField(
+        'Cover Image', upload_to='images/', max_length=250, blank=True)
     thumb = models.FileField(
-        'Thumbnail Image', upload_to='images/', blank=True)
+        'Thumbnail Image', upload_to='images/', max_length=250, blank=True)
     status = models.PositiveSmallIntegerField(
         'Status', choices=STATUS_CHOICES, default=0, blank=True)
     leaf = models.PositiveSmallIntegerField(
