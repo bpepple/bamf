@@ -243,3 +243,4 @@ class Roles(models.Model):
 
     class Meta:
         verbose_name_plural = "Roles"
+        ordering = ['creator__name']
