@@ -5,10 +5,14 @@ from comics.models import (Arc, Character, Creator,
 
 
 class IssueSerializer(serializers.HyperlinkedModelSerializer):
-    arcs = serializers.StringRelatedField(many=True)
-    characters = serializers.StringRelatedField(many=True)
-    series = serializers.StringRelatedField(many=False)
-    teams = serializers.StringRelatedField(many=True)
+    arcs = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name='api:arc-detail', lookup_field='slug')
+    characters = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name='api:character-detail', lookup_field='slug')
+    series = serializers.HyperlinkedRelatedField(
+        many=False, read_only=True, view_name='api:series-detail', lookup_field='slug')
+    teams = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name='api:team-detail', lookup_field='slug')
 
     class Meta:
         model = Issue
@@ -26,7 +30,8 @@ class PublisherSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SeriesSerializer(serializers.HyperlinkedModelSerializer):
-    publisher = serializers.StringRelatedField(many=False)
+    publisher = serializers.HyperlinkedRelatedField(
+        many=False, read_only=True, view_name='api:publisher-detail', lookup_field='slug')
 
     class Meta:
         model = Series
@@ -44,7 +49,8 @@ class CreatorSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CharacterSerializer(serializers.HyperlinkedModelSerializer):
-    teams = serializers.StringRelatedField(many=True)
+    teams = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name='api:team-detail', lookup_field='slug')
 
     class Meta:
         model = Character
