@@ -8,6 +8,7 @@ from urllib.parse import unquote_plus
 from urllib.request import urlretrieve
 
 from django.conf import settings
+from django.db import IntegrityError
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.text import slugify
@@ -418,19 +419,23 @@ class ComicImporter(object):
                     break
                 new_slug = '%s-%d' % (orig, x)
 
-            # Create the issue
-            issue_obj, i_create = Issue.objects.get_or_create(
-                file=md.path,
-                name=str(md.title),
-                slug=new_slug,
-                number=fixed_number,
-                desc=str(md.comments),
-                date=pub_date,
-                page_count=md.page_count,
-                cvurl=md.webLink,
-                cvid=int(cvID),
-                mod_ts=tz,
-                series=series_obj,)
+            try:
+                # Create the issue
+                issue_obj, i_create = Issue.objects.get_or_create(
+                    file=md.path,
+                    name=str(md.title),
+                    slug=new_slug,
+                    number=fixed_number,
+                    desc=str(md.comments),
+                    date=pub_date,
+                    page_count=md.page_count,
+                    cvurl=md.webLink, cvid=int(cvID),
+                    mod_ts=tz,
+                    series=series_obj,)
+            except IntegrityError as e:
+                print('Error: %s' % e)
+                print('Skipping: %s' % md.path)
+                return
 
             # Get the issue image & short description from CV.
             self.getIssueDetail(cvID, issue_response)
