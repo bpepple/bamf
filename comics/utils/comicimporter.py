@@ -433,8 +433,8 @@ class ComicImporter(object):
                     mod_ts=tz,
                     series=series_obj,)
             except IntegrityError as e:
-                print('Error: %s' % e)
-                print('Skipping: %s' % md.path)
+                self.logger.error('%s' % e)
+                self.logger.info('Skipping: %s' % md.path)
                 return
 
             # Get the issue image & short description from CV.
