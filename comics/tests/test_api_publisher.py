@@ -18,14 +18,9 @@ class GetAllPublisherTest(TestCase):
         Publisher.objects.create(
             name='Marvel', slug='marvel', logo='images/2.jpg')
 
-    def test_get_all_publishers(self):
-        # get API response
-        response = client.get(reverse('api:publisher-list'))
-        # get data from db
-        publishers = Publisher.objects.all()
-        serializer = PublisherSerializer(publishers, many=True)
-        self.assertEqual(response.data, serializer.data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_view_url_accessible_by_name(self):
+        resp = client.get(reverse('api:publisher-list'))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
 
 class GetSinglePublisherTest(TestCase):

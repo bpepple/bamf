@@ -18,14 +18,9 @@ class GetAllTeamsTest(TestCase):
         Team.objects.create(cvid='4321', cvurl='http://2.com',
                             name='The Avengers', slug='the-avengers')
 
-    def test_get_all_teams(self):
-        # get API response
-        response = client.get(reverse('api:team-list'))
-        # get data from db
-        teams = Team.objects.all()
-        serializer = TeamSerializer(teams, many=True)
-        self.assertEqual(response.data, serializer.data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_view_url_accessible_by_name(self):
+        resp = client.get(reverse('api:team-list'))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
 
 class GetSingleTeamTest(TestCase):

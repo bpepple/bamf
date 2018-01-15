@@ -18,14 +18,9 @@ class GetAllArcsTest(TestCase):
         Arc.objects.create(cvid='4321', cvurl='http://2.com',
                            name='Final Crisis', slug='final-crisis')
 
-    def test_get_all_arcs(self):
-        # get API response
-        response = client.get(reverse('api:arc-list'))
-        # get data from db
-        arcs = Arc.objects.all()
-        serializer = ArcSerializer(arcs, many=True)
-        self.assertEqual(response.data, serializer.data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_view_url_accessible_by_name(self):
+        resp = client.get(reverse('api:arc-list'))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
 
 class GetSingleArcTest(TestCase):
