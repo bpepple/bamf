@@ -82,9 +82,32 @@ class PublisherAdmin(admin.ModelAdmin):
 @admin.register(Series)
 class SeriesAdmin(admin.ModelAdmin):
     search_fields = ('name',)
-    list_display = ('name', 'issue_count')
+    list_display = ('name', 'year', 'issue_count')
     list_filter = ('publisher',)
+    actions = ['mark_as_read', 'mark_as_unread']
     prepopulated_fields = {'slug': ('name',)}
+
+    def mark_as_read(self, request, queryset):
+        issues_count = 0
+        for i in range(queryset.count()):
+            issues_updated = Issue.objects.filter(
+                series=queryset[i]).update(status=READ)
+            issues_count += issues_updated
+        message_bit = create_issue_msg(issues_count)
+        self.message_user(
+            request, "%s successfully marked as read." % message_bit)
+    mark_as_read.short_description = 'Mark selected series as read'
+
+    def mark_as_unread(self, request, queryset):
+        issues_count = 0
+        for i in range(queryset.count()):
+            issues_updated = Issue.objects.filter(
+                series=queryset[i]).update(status=UNREAD)
+            issues_count += issues_updated
+        message_bit = create_issue_msg(issues_count)
+        self.message_user(
+            request, "%s successfully marked as unread." % message_bit)
+    mark_as_unread.short_description = 'Mark selected series as unread'
 
 
 @admin.register(Team)
