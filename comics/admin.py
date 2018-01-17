@@ -46,15 +46,16 @@ class CreatorAdmin(admin.ModelAdmin):
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
     search_fields = ('series__name',)
+    readonly_fields = ('file', 'cvid', 'cvurl', 'series', 'number')
     list_display = ('__str__', 'status', 'import_date')
     list_filter = ('import_date', 'date', 'status')
     date_hierarchy = 'date'
     actions = ['mark_as_read', 'mark_as_unread']
     # form view
     fieldsets = (
-        (None, {'fields': ('cvid', 'cvurl', 'series', 'name',
-                           'slug', 'number', 'date', 'desc',
-                           'cover', 'thumb', 'status')}),
+        (None, {'fields': ('cvid', 'file', 'cvurl', 'series',
+                           'name', 'slug', 'number', 'date',
+                           'desc', 'cover', 'thumb', 'status')}),
         ('Related', {'fields': ('arcs', 'characters', 'teams')}),
     )
     filter_horizontal = ('arcs', 'characters', 'teams')
