@@ -77,6 +77,7 @@ class IssueAdmin(admin.ModelAdmin):
 @admin.register(Publisher)
 class PublisherAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+    list_display = ('name', 'series_count',)
 
 
 @admin.register(Series)

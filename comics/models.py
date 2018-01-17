@@ -156,6 +156,9 @@ class Publisher(models.Model):
     def logo_name(self):
         return os.path.basename(self.logo.name)
 
+    def series_count(self):
+        return self.series_set.all().count()
+
     def __str__(self):
         return self.name
 
