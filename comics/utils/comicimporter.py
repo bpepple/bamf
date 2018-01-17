@@ -421,7 +421,7 @@ class ComicImporter(object):
 
             try:
                 # Create the issue
-                issue_obj, i_create = Issue.objects.get_or_create(
+                issue_obj = Issue.objects.create(
                     file=md.path,
                     name=str(md.title),
                     slug=new_slug,
