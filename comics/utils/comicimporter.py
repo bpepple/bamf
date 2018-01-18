@@ -100,7 +100,14 @@ class ComicImporter(object):
                 remove = True
 
         if remove:
-            comic.delete()
+            series = Series.objects.get(id=comic.series.id)
+            s_count = series.issue_count
+            # If this is the only issue for a series, delete the series.
+            if s_count == 1:
+                series.delete()
+                self.logger.info('Deleting series: %s' % series)
+            else:
+                comic.delete()
 
     def getCVObjectData(self, response):
         '''
