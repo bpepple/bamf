@@ -1,11 +1,6 @@
-from functools import reduce
-import operator
-
-from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
-
 
 from comics.models import Issue, Roles
 from comics.utils.reader import ImageAPIHandler
@@ -30,20 +25,6 @@ class IssueDetail(DetailView):
         issue = self.get_object()
         context['roles_list'] = Roles.objects.filter(issue=issue)
         return context
-
-
-class SearchIssueList(IssueList):
-
-    def get_queryset(self):
-        result = super(SearchIssueList, self).get_queryset()
-        query = self.request.GET.get('q')
-        if query:
-            query_list = query.split()
-            result = result.filter(
-                reduce(operator.and_,
-                       (Q(name__icontains=q) for q in query_list)))
-
-        return result
 
 
 def reader(request, slug):

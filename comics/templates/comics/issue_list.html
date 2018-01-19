@@ -6,13 +6,6 @@
 
 {% block content %}
 
-<div class="searchbox-wrapper">
-    <form id="searchform" action="{% url 'series:search' %}" method="get" accept-charset="utf-8">
-        <i class="fa fa-search"></i>
-        <input id="searchbox" name="q" type="text" placeholder="Issue Search">
-    </form>
-</div>
-
 <div class="recent-issues">
 {% if issue_list %}
     <ul>
