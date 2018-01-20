@@ -236,10 +236,18 @@ class Issue(models.Model):
         ordering = ['series__name', 'date', 'number']
 
 
+class Role(models.Model):
+    name = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.name
+
+
 class Roles(models.Model):
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE)
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
     roles = MultiSelectField(choices=ROLE_CHOICES)
+    role = models.ManyToManyField(Role)
 
     def __str__(self):
         return self.issue.series.name + ' #' + str(self.issue.number) + ' - ' + self.creator.name
