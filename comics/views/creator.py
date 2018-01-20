@@ -4,7 +4,7 @@ import operator
 from django.db.models import Q
 from django.views.generic import ListView, DetailView
 
-from comics.models import Creator, Credits, Issue
+from comics.models import Creator, Roles, Issue
 
 PAGINATE = 30
 
@@ -20,9 +20,9 @@ class CreatorDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(CreatorDetail, self).get_context_data(**kwargs)
         creator = self.get_object()
-        issue_credits = Credits.objects.filter(creator=creator)
+        roles = Roles.objects.filter(creator=creator)
         context['issue_list'] = Issue.objects.filter(
-            id__in=issue_credits.values('issue_id'))
+            id__in=roles.values('issue_id'))
         return context
 
 

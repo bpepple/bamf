@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
 
-from comics.models import Issue, Credits
+from comics.models import Issue, Roles
 from comics.utils.reader import ImageAPIHandler
 
 
@@ -23,7 +23,7 @@ class IssueDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(IssueDetail, self).get_context_data(**kwargs)
         issue = self.get_object()
-        context['roles_list'] = Credits.objects.filter(issue=issue)
+        context['roles_list'] = Roles.objects.filter(issue=issue)
         return context
 
 

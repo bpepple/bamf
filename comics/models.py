@@ -6,6 +6,16 @@ from django.db import models
 from solo.models import SingletonModel
 
 
+YEAR_CHOICES = [(r, r) for r in range(1837, datetime.date.today().year + 1)]
+
+# Comic read status
+STATUS_CHOICES = (
+    (0, 'Unread'),
+    (1, 'Partially Read'),
+    (2, 'Read'),
+)
+
+
 class Settings(SingletonModel):
     help_str = ('A 40-character key provided by ComicVine. '
                 'This is used to retrieve metadata about your comics. '
@@ -141,9 +151,6 @@ class Publisher(models.Model):
 
 
 class Series(models.Model):
-    YEAR_CHOICES = [(r, r)
-                    for r in range(1837, datetime.date.today().year + 1)]
-
     cvid = models.PositiveIntegerField('Comic Vine ID', unique=True)
     cvurl = models.URLField('Comic Vine URL', max_length=200, blank=True)
     name = models.CharField('Series Name', max_length=200)
@@ -174,12 +181,6 @@ class Series(models.Model):
 
 
 class Issue(models.Model):
-    STATUS_CHOICES = (
-        (0, 'Unread'),
-        (1, 'Partially Read'),
-        (2, 'Read'),
-    )
-
     cvid = models.PositiveIntegerField('ComicVine ID', unique=True)
     cvurl = models.URLField('ComicVine URL', max_length=200, blank=True)
     series = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True)
@@ -226,7 +227,7 @@ class Role(models.Model):
         return self.name
 
 
-class Credits(models.Model):
+class Roles(models.Model):
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE)
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
     role = models.ManyToManyField(Role)
@@ -235,5 +236,5 @@ class Credits(models.Model):
         return self.issue.series.name + ' #' + str(self.issue.number) + ' - ' + self.creator.name
 
     class Meta:
-        verbose_name_plural = "Credits"
+        verbose_name_plural = "Roles"
         ordering = ['creator__name']
