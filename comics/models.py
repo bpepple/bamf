@@ -3,7 +3,6 @@ import os
 
 from django.core.validators import RegexValidator
 from django.db import models
-from multiselectfield import MultiSelectField
 from solo.models import SingletonModel
 
 
@@ -14,21 +13,6 @@ STATUS_CHOICES = (
     (0, 'Unread'),
     (1, 'Partially Read'),
     (2, 'Read'),
-)
-
-# Creator roles for an issue
-ROLE_CHOICES = (
-    ('artist', 'Artist'),
-    ('colorist', 'Colorist'),
-    ('cover', 'Cover'),
-    ('editor', 'Editor'),
-    ('inker', 'Inker'),
-    ('journalist', 'Journalist'),
-    ('letterer', 'Letterer'),
-    ('other', 'Other'),
-    ('penciler', 'Penciler'),
-    ('production', 'Production'),
-    ('writer', 'Writer'),
 )
 
 
@@ -246,7 +230,6 @@ class Role(models.Model):
 class Roles(models.Model):
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE)
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
-    roles = MultiSelectField(choices=ROLE_CHOICES)
     role = models.ManyToManyField(Role)
 
     def __str__(self):

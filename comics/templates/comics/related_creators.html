@@ -17,7 +17,12 @@
 					</div>
 				</a>
 				<a href="{% url 'creator:detail' roles.creator.slug %}"><p>{{ roles.creator.name }}</p></a>
-				<p><small><em>{{ roles.roles }}</em></small></p>
+				<p>
+				{% for r in roles.role.all %}
+				{% if not forloop.first %}, {% endif %}
+				    <small><em>{{ r.name }}</em></small>
+				{% endfor %}
+				</p>
 			</li>
 			{% endfor %}
 		</ul>
