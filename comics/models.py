@@ -3,6 +3,7 @@ import os
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.functional import cached_property
 from solo.models import SingletonModel
 
 
@@ -165,6 +166,7 @@ class Series(models.Model):
     def issue_count(self):
         return self.issue_set.all().count()
 
+    @cached_property
     def unread_issue_count(self):
         return self.issue_set.exclude(status=2).count()
 
