@@ -3,6 +3,8 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from rest_framework.documentation import include_docs_urls
 
+from django.conf import settings
+
 from comics.urls import (
     arc as arc_urls,
     character as character_urls,
@@ -33,3 +35,9 @@ urlpatterns = [
     path('', include(settings_urls)),
     path('', include(team_urls)),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]
