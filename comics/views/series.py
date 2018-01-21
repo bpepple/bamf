@@ -13,6 +13,10 @@ PAGINATE = 30
 class SeriesList(ListView):
     model = Series
     paginate_by = PAGINATE
+    queryset = (
+        Series.objects
+        .prefetch_related('issue_set')
+    )
 
 
 class SeriesDetail(DetailView):
