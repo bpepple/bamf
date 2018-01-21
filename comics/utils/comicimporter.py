@@ -171,7 +171,7 @@ class ComicImporter(object):
             'name': name,
             'year': year,
             'number': number,
-            'desc': desc,
+            'desc': utils.truncate_description(desc),
             'image': image,
         }
 

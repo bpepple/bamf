@@ -80,6 +80,16 @@ def create_series_sortname(title):
     return sort_name
 
 
+def truncate_description(desc_txt):
+    # TODO: Truncate to last sentence instead of character.
+    if len(desc_txt) > 500:
+        desc = desc_txt[:496] + '...'
+    else:
+        desc = desc_txt
+
+    return desc
+
+
 def test_image(image_path):
     ''' returns a filepath string if the file is valid and not broken '''
 
