@@ -14,7 +14,12 @@ LIMIT_RESULTS = PAGINATE * 3
 class IssueList(ListView):
     model = Issue
     paginate_by = PAGINATE
-    queryset = Issue.objects.order_by('-import_date')[:LIMIT_RESULTS]
+    queryset = (
+        Issue.objects
+        .prefetch_related('series')
+        .only('series', 'number', 'slug', 'cover')
+        .order_by('-import_date')[:LIMIT_RESULTS]
+    )
 
 
 class IssueDetail(DetailView):
