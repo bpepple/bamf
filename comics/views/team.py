@@ -21,7 +21,11 @@ class TeamDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(TeamDetail, self).get_context_data(**kwargs)
         team = self.get_object()
-        context['issue_list'] = team.issue_set.all()
+        context['issue_list'] = (
+            team.issue_set.all()
+            .select_related('series')
+            .only('slug', 'thumb', 'number', 'status', 'series__name')
+        )
         return context
 
 
