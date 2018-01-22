@@ -21,8 +21,11 @@ class CreatorDetail(DetailView):
         context = super(CreatorDetail, self).get_context_data(**kwargs)
         creator = self.get_object()
         roles = Roles.objects.filter(creator=creator)
-        context['issue_list'] = Issue.objects.filter(
-            id__in=roles.values('issue_id'))
+        context['issue_list'] = (
+            Issue.objects.filter(id__in=roles.values('issue_id'))
+            .select_related('series')
+            .only('slug', 'thumb', 'number', 'status', 'series__name')
+        )
         return context
 
 
