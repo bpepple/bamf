@@ -21,7 +21,11 @@ class CharacterDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(CharacterDetail, self).get_context_data(**kwargs)
         character = self.get_object()
-        context['issue_list'] = character.issue_set.all()
+        context['issue_list'] = (
+            character.issue_set.all()
+            .select_related('series')
+            .only('slug', 'thumb', 'number', 'status', 'series__name')
+        )
         return context
 
 
