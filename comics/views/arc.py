@@ -20,7 +20,11 @@ class ArcDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ArcDetail, self).get_context_data(**kwargs)
         arc = self.get_object()
-        context['issue_list'] = arc.issue_set.all()
+        context['issue_list'] = (
+            arc.issue_set.all()
+            .select_related('series')
+            .only('slug', 'thumb', 'number', 'status', 'series__name')
+        )
         return context
 
 
