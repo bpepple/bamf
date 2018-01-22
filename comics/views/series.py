@@ -21,6 +21,10 @@ class SeriesList(ListView):
 
 class SeriesDetail(DetailView):
     model = Series
+    queryset = (
+        Series.objects
+        .select_related('publisher')
+    )
 
 
 class SearchSeriesList(SeriesList):

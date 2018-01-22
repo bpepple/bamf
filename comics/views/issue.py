@@ -16,7 +16,7 @@ class IssueList(ListView):
     paginate_by = PAGINATE
     queryset = (
         Issue.objects
-        .prefetch_related('series')
+        .select_related('series')
         .only('series', 'number', 'slug', 'cover')
         .order_by('-import_date')[:LIMIT_RESULTS]
     )
