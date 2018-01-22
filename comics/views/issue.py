@@ -24,11 +24,19 @@ class IssueList(ListView):
 
 class IssueDetail(DetailView):
     model = Issue
+    queryset = (
+        Issue.objects
+        .select_related('series', 'series__publisher')
+    )
 
     def get_context_data(self, **kwargs):
         context = super(IssueDetail, self).get_context_data(**kwargs)
         issue = self.get_object()
-        context['roles_list'] = Roles.objects.filter(issue=issue)
+        context['roles_list'] = (
+            Roles.objects.filter(issue=issue)
+            .prefetch_related('role')
+            .select_related('creator')
+        )
         return context
 
 
