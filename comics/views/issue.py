@@ -17,7 +17,7 @@ class IssueList(ListView):
     queryset = (
         Issue.objects
         .select_related('series')
-        .only('series', 'number', 'slug', 'cover')
+        .only('series', 'number', 'slug', 'cover', 'status')
         .order_by('-import_date')[:LIMIT_RESULTS]
     )
 
