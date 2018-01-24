@@ -1,5 +1,7 @@
 import os
 import uuid
+import re
+from bs4 import BeautifulSoup
 
 from PIL import Image
 from django.conf import settings
@@ -80,14 +82,92 @@ def create_series_sortname(title):
     return sort_name
 
 
-def truncate_description(desc_txt):
-    # TODO: Truncate to last sentence instead of character.
-    if len(desc_txt) > 500:
-        desc = desc_txt[:496] + '...'
-    else:
-        desc = desc_txt
+def cleanup_html(string, remove_html_tables):
+    if string is None:
+        return ""
+    # find any tables
+    soup = BeautifulSoup(string, 'html.parser')
+    tables = soup.findAll('table')
 
-    return desc
+    # remove all newlines first
+    string = string.replace("\n", "")
+
+    # put in our own
+    string = string.replace("<br>", "\n")
+    string = string.replace("</p>", "\n\n")
+    string = string.replace("<h4>", "*")
+    string = string.replace("</h4>", "*\n")
+
+    # remove the tables
+    p = re.compile(r'<table[^<]*?>.*?<\/table>')
+    if remove_html_tables:
+        string = p.sub('', string)
+        string = string.replace("*List of covers and their creators:*", "")
+    else:
+        string = p.sub('{}', string)
+
+    # now strip all other tags
+    p = re.compile(r'<[^<]*?>')
+    newstring = p.sub('', string)
+
+    newstring = newstring.replace('&nbsp;', ' ')
+    newstring = newstring.replace('&amp;', '&')
+
+    newstring = newstring.strip()
+
+    if not remove_html_tables:
+        # now rebuild the tables into text from BSoup
+        try:
+            table_strings = []
+            for table in tables:
+                rows = []
+                hdrs = []
+                col_widths = []
+                for hdr in table.findAll('th'):
+                    item = hdr.string.strip()
+                    hdrs.append(item)
+                    col_widths.append(len(item))
+                rows.append(hdrs)
+
+                for row in table.findAll('tr'):
+                    cols = []
+                    col = row.findAll('td')
+                    i = 0
+                    for c in col:
+                        item = c.string.strip()
+                        cols.append(item)
+                        if len(item) > col_widths[i]:
+                            col_widths[i] = len(item)
+                        i += 1
+                    if len(cols) != 0:
+                        rows.append(cols)
+                # now we have the data, make it into text
+                fmtstr = ""
+                for w in col_widths:
+                    fmtstr += " {{:{}}}|".format(w + 1)
+                width = sum(col_widths) + len(col_widths) * 2
+                table_text = ""
+                counter = 0
+                for row in rows:
+                    table_text += fmtstr.format(*row) + "\n"
+                    if counter == 0 and len(hdrs) != 0:
+                        table_text += "-" * width + "\n"
+                    counter += 1
+
+                table_strings.append(table_text)
+
+            newstring = newstring.format(*table_strings)
+        except:
+            # we caught an error rebuilding the table.
+            # just bail and remove the formatting
+            print("table parse error")
+            newstring.replace("{}", "")
+
+    # Truncate the string if it's still over 500 characters long.
+    if len(newstring) > 500:
+        newstring = newstring[:499]
+
+    return newstring
 
 
 def test_image(image_path):

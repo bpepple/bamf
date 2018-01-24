@@ -10,7 +10,6 @@ from urllib.request import urlretrieve
 from django.conf import settings
 from django.db import IntegrityError
 from django.utils import timezone
-from django.utils.html import strip_tags
 from django.utils.text import slugify
 import requests
 import requests_cache
@@ -150,7 +149,7 @@ class ComicImporter(object):
             if desc == '':
                 if 'description' in response:
                     if response['description']:
-                        desc = strip_tags(response['description'])
+                        desc = response['description']
 
         # Get Image
         image = ''
@@ -171,7 +170,7 @@ class ComicImporter(object):
             'name': name,
             'year': year,
             'number': number,
-            'desc': utils.truncate_description(desc),
+            'desc': utils.cleanup_html(desc, True),
             'image': image,
         }
 
