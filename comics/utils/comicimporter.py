@@ -1,6 +1,5 @@
 from datetime import datetime
 import itertools
-from json.decoder import JSONDecodeError
 import logging
 import os
 import re
@@ -22,8 +21,6 @@ from . import utils
 from .comicapi.comicarchive import MetaDataStyle, ComicArchive
 from .comicapi.issuestring import IssueString
 
-
-IMG_DIRECTORY = settings.MEDIA_ROOT + '/images/'
 
 ARCS_FOLDER = 'arcs'
 CHARACTERS_FOLDERS = 'characters'
@@ -128,21 +125,18 @@ class ComicImporter(object):
 
         # Get Start Year (only exists for Series objects)
         year = ''
-
         if 'start_year' in response:
             if response['start_year']:
                 year = response['start_year']
 
         # Get Number (only exists for Issue objects)
         number = ''
-
         if 'issue_number' in response:
             if response['issue_number']:
                 number = response['issue_number']
 
         # Get Description (Favor short description if available)
         desc = ''
-
         if 'deck' in response:
             if response['deck']:
                 desc = response['deck']
@@ -153,7 +147,6 @@ class ComicImporter(object):
 
         # Get Image
         image = ''
-
         if 'image' in response:
             if response['image']:
                 image_url = self.imageurl + \
@@ -186,9 +179,9 @@ class ComicImporter(object):
                 params=issue_params,
                 headers=self.headers,
             ).json()
-        except JSONDecodeError:
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
             response = None
-            self.logger.info('No value returned from getIssue().')
 
         return response
 
@@ -198,11 +191,15 @@ class ComicImporter(object):
 
         api_url = response_issue['results']['api_detail_url']
 
-        response = requests.get(
-            api_url,
-            params=issue_params,
-            headers=self.headers,
-        ).json()
+        try:
+            response = requests.get(
+                api_url,
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            return False
 
         data = self.getCVObjectData(response['results'])
 
@@ -213,15 +210,21 @@ class ComicImporter(object):
         issue.save()
         os.remove(data['image'])
 
+        return True
+
     def getSeries(self, api_url):
         params = self.base_params
         params['field_list'] = self.series_fields
 
-        response = requests.get(
-            api_url,
-            params=params,
-            headers=self.headers,
-        ).json()
+        try:
+            response = requests.get(
+                api_url,
+                params=params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('s' % e)
+            return None
 
         data = self.getCVObjectData(response['results'])
 
@@ -231,22 +234,30 @@ class ComicImporter(object):
         series_params = self.base_params
         series_params['field_list'] = 'publisher'
 
-        response_series = requests.get(
-            response_issue['results']['volume']['api_detail_url'],
-            params=series_params,
-            headers=self.headers,
-        ).json()
+        try:
+            response_series = requests.get(
+                response_issue['results']['volume']['api_detail_url'],
+                params=series_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            return None
 
         params = self.base_params
         params['field_list'] = self.publisher_fields
 
         api_url = response_series['results']['publisher']['api_detail_url']
 
-        response = requests.get(
-            api_url,
-            params=params,
-            headers=self.headers,
-        ).json()
+        try:
+            response = requests.get(
+                api_url,
+                params=params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s', e)
+            return None
 
         data = self.getCVObjectData(response['results'])
 
@@ -262,7 +273,8 @@ class ComicImporter(object):
                 params=params,
                 headers=self.headers,
             ).json()
-        except JSONDecodeError:
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
             return False
 
         data = self.getCVObjectData(response['results'])
@@ -287,10 +299,20 @@ class ComicImporter(object):
                 params=params,
                 headers=self.headers,
             ).json()
-        except ValueError:
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
             response = None
 
         return response
+
+    def create_images(self, db_obj, img_dir, thumb):
+        base_name = db_obj.image_name()
+        old_image_path = settings.MEDIA_ROOT + '/images/' + base_name
+        if thumb:
+            db_obj.thumb = utils.resize_images(db_obj.image, img_dir, True)
+        db_obj.image = utils.resize_images(db_obj.image, img_dir, False)
+        db_obj.save()
+        os.remove(old_image_path)
 
     def getIssueCVID(self, md):
         # Get the issues cvid
@@ -344,7 +366,7 @@ class ComicImporter(object):
     def addComicFromMetadata(self, md):
         if not md.isEmpty:
             # Let's get the issue Comic Vine id from the archive's metadata
-            # If it's not there we'll skipp the issue.
+            # If it's not there we'll skip the issue.
             cvID = self.getIssueCVID(md)
             if cvID is None:
                 issue_name = md.series + ' #' + md.number
@@ -366,32 +388,29 @@ class ComicImporter(object):
             # Get the series info from CV.
             series_url = issue_response['results']['volume']['api_detail_url']
             data = self.getSeries(series_url)
+            if data is not None:
+                # Alright let's create the series object.
+                series_obj, s_create = Series.objects.get_or_create(
+                    cvid=int(data['cvid']),)
 
-            # Alright let's create the series object.
-            series_obj, s_create = Series.objects.get_or_create(
-                cvid=int(data['cvid']),)
+                if s_create:
+                    # Create the slug & make sure it's not a duplicate
+                    new_slug = orig = slugify(data['name'])
+                    for x in itertools.count(1):
+                        if not Series.objects.filter(slug=new_slug).exists():
+                            break
+                        new_slug = '%s-%d' % (orig, x)
 
-            if s_create:
-                # Create the series sort name to deal with titles with 'The' in
-                # it.
-                sort_name = utils.create_series_sortname(data['name'])
-
-                new_slug = orig = slugify(data['name'])
-
-                for x in itertools.count(1):
-                    if not Series.objects.filter(slug=new_slug).exists():
-                        break
-                    new_slug = '%s-%d' % (orig, x)
-
-                series_obj.slug = new_slug
-                series_obj.cvurl = data['cvurl']
-                series_obj.name = data['name']
-                series_obj.sort_title = sort_name
-                series_obj.publisher = publisher_obj
-                series_obj.year = data['year']
-                series_obj.desc = data['desc']
-                series_obj.save()
-                self.logger.info('Added series: %s' % series_obj)
+                    sort_name = utils.create_series_sortname(data['name'])
+                    series_obj.slug = new_slug
+                    series_obj.cvurl = data['cvurl']
+                    series_obj.name = data['name']
+                    series_obj.sort_title = sort_name
+                    series_obj.publisher = publisher_obj
+                    series_obj.year = data['year']
+                    series_obj.desc = data['desc']
+                    series_obj.save()
+                    self.logger.info('Added series: %s' % series_obj)
 
             # Ugh, deal wih the timezone
             current_timezone = timezone.get_current_timezone()
@@ -445,23 +464,27 @@ class ComicImporter(object):
                 return
 
             # Get the issue image & short description from CV.
-            self.getIssueDetail(cvID, issue_response)
-            self.logger.info("Added: %s" % issue_obj)
+            res = self.getIssueDetail(cvID, issue_response)
+            if res:
+                self.logger.info("Added: %s" % issue_obj)
+            else:
+                self.logger.warning(
+                    'No detail information was saved for %s' % issue_obj)
 
             # Adding new publisher we need to grab
             # some additional data from Comic Vine.
             if p_create:
                 p = self.getPublisher(issue_response)
-                publisher_obj.logo = utils.resize_images(
-                    p['image'], PUBLISHERS_FOLDER, False)
-                publisher_obj.cvid = int(p['cvid'])
-                publisher_obj.cvurl = p['cvurl']
-                publisher_obj.desc = p['desc']
-                publisher_obj.save()
-                # Delete the original image
-                os.remove(p['image'])
-
-                self.logger.info('Added publisher: %s' % publisher_obj)
+                if p is not None:
+                    publisher_obj.logo = utils.resize_images(
+                        p['image'], PUBLISHERS_FOLDER, False)
+                    publisher_obj.cvid = int(p['cvid'])
+                    publisher_obj.cvurl = p['cvurl']
+                    publisher_obj.desc = p['desc']
+                    publisher_obj.save()
+                    # Delete the original image
+                    os.remove(p['image'])
+                    self.logger.info('Added publisher: %s' % publisher_obj)
 
             # Add the characters.
             for ch in issue_response['results']['character_credits']:
@@ -471,7 +494,6 @@ class ComicImporter(object):
 
                 if ch_create:
                     new_slug = orig = slugify(ch['name'])
-
                     for x in itertools.count(1):
                         if not Character.objects.filter(slug=new_slug).exists():
                             break
@@ -486,20 +508,14 @@ class ComicImporter(object):
                                              ch['api_detail_url'])
 
                     if character_obj.image:
-                        base_name = character_obj.image_name()
-                        old_image_path = IMG_DIRECTORY + base_name
-                        character_obj.thumb = utils.resize_images(
-                            character_obj.image, CHARACTERS_FOLDERS, True)
-                        character_obj.image = utils.resize_images(
-                            character_obj.image, CHARACTERS_FOLDERS, False)
-                        character_obj.save()
-                        os.remove(old_image_path)
+                        self.create_images(
+                            character_obj, CHARACTERS_FOLDERS, True)
 
                     if res:
                         self.logger.info('Added character: %s' % character_obj)
                     else:
-                        self.logger.info('No Character detail info available for: %s'
-                                         % character_obj)
+                        self.logger.warning(
+                            'No Character detail was saved for: %s' % character_obj)
 
             # Add the storyarc.
             for story_arc in issue_response['results']['story_arc_credits']:
@@ -509,7 +525,6 @@ class ComicImporter(object):
 
                 if s_create:
                     new_slug = orig = slugify(story_arc['name'])
-
                     for x in itertools.count(1):
                         if not Arc.objects.filter(slug=new_slug).exists():
                             break
@@ -524,12 +539,7 @@ class ComicImporter(object):
                                              story_arc['api_detail_url'])
 
                     if story_obj.image:
-                        base_name = story_obj.image_name()
-                        old_image_path = IMG_DIRECTORY + base_name
-                        story_obj.image = utils.resize_images(
-                            story_obj.image, ARCS_FOLDER, False)
-                        story_obj.save()
-                        os.remove(old_image_path)
+                        self.create_images(story_obj, ARCS_FOLDER, False)
 
                     if res:
                         self.logger.info('Added storyarc: %s' % story_obj)
@@ -553,7 +563,6 @@ class ComicImporter(object):
 
                 if t_create:
                     new_slug = orig = slugify(team['name'])
-
                     for x in itertools.count(1):
                         if not Team.objects.filter(slug=new_slug).exists():
                             break
@@ -568,14 +577,7 @@ class ComicImporter(object):
                                              team['api_detail_url'])
 
                     if team_obj.image:
-                        base_name = team_obj.image_name()
-                        old_image_path = IMG_DIRECTORY + base_name
-                        team_obj.thumb = utils.resize_images(
-                            team_obj.image, TEAMS_FOLDERS, True)
-                        team_obj.image = utils.resize_images(
-                            team_obj.image, TEAMS_FOLDERS, False)
-                        team_obj.save()
-                        os.remove(old_image_path)
+                        self.create_images(team_obj, TEAMS_FOLDERS, True)
 
                     if res:
                         self.logger.info('Added team: %s' % team_obj)
@@ -600,7 +602,6 @@ class ComicImporter(object):
 
                 if c_create:
                     new_slug = orig = slugify(p['name'])
-
                     for x in itertools.count(1):
                         if not Creator.objects.filter(slug=new_slug).exists():
                             break
@@ -615,14 +616,7 @@ class ComicImporter(object):
                                              p['api_detail_url'])
 
                     if creator_obj.image:
-                        base_name = creator_obj.image_name()
-                        old_image_path = IMG_DIRECTORY + base_name
-                        creator_obj.thumb = utils.resize_images(
-                            creator_obj.image, CREATORS_FOLDERS, True)
-                        creator_obj.image = utils.resize_images(
-                            creator_obj.image, CREATORS_FOLDERS, False)
-                        creator_obj.save()
-                        os.remove(old_image_path)
+                        self.create_images(creator_obj, CREATORS_FOLDERS, True)
 
                     if res:
                         self.logger.info('Added creator: %s' % creator_obj)
