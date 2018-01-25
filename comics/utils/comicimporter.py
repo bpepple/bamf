@@ -433,10 +433,10 @@ class ComicImporter(object):
                     name=str(md.title),
                     slug=new_slug,
                     number=fixed_number,
-                    desc=str(md.comments),
                     date=pub_date,
                     page_count=md.page_count,
-                    cvurl=md.webLink, cvid=int(cvID),
+                    cvurl=md.webLink,
+                    cvid=int(cvID),
                     mod_ts=tz,
                     series=series_obj,)
             except IntegrityError as e:
