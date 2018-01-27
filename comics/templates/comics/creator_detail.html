@@ -15,11 +15,9 @@
 			{% endif %}
 		</div>
 		{% if creator.desc %}
-		{% autoescape off %}
 		<div class="creator-description">
-			<p>{{ creator.desc|truncatewords:180 }}</p>
+			<p>{{ creator.desc|linebreaks }}</p>
 		</div>
-		{% endautoescape %}
 		{% endif %}
 
 		{% include "comics/comicvine_link.html" with cvurl=creator.cvurl %}
