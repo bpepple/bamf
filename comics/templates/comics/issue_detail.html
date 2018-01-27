@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="issue-info-wrapper">
-	{% if issue.cover|length %}
+	{% if issue.cover %}
 	<div class="issue-cover">
 		<div class="issue-cover-image">
 			{% autoescape off %}
@@ -19,9 +19,7 @@
 	{% endif %}
 	<div class="issue-info">
 		<div class="issue-title">
-			{% if issue.series.name %}
 			<h1>{{ issue.series.name }}</h1>
-			{% endif %}
 			<h3>Issue #{{ issue.number }}{% if issue.name != 'None' %} - <i>{{ issue.name }}</i>{% endif %}</h3>
 			{% if issue.date %}
 			<p>Released: {{ issue.date }}</p>
