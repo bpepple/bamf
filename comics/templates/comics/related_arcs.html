@@ -8,13 +8,9 @@
 
 		<a href="{% url 'arc:detail' arc.slug %}"><i>{{ arc.name }}</i></a>
 
-		{% if not forloop.last %}
-			,
-		{% endif %}
+		{% if not forloop.last %},{% endif %}
 
-		{% if forloop.last %}
-			</p>
-		{% endif %}
+		{% if forloop.last %}</p>{% endif %}
 
 	{% endfor %}
 </div>
