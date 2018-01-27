@@ -22,7 +22,7 @@
 			{% if issue.series.name %}
 			<h1>{{ issue.series.name }}</h1>
 			{% endif %}
-			<h3>Issue #{{ issue.number }}{% if issue.name %} - <i>{{ issue.name }}</i>{% endif %}</h3>
+			<h3>Issue #{{ issue.number }}{% if issue.name != 'None' %} - <i>{{ issue.name }}</i>{% endif %}</h3>
 			{% if issue.date %}
 			<p>Released: {{ issue.date }}</p>
 			{% endif %}
