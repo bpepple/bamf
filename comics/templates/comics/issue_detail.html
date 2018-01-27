@@ -19,7 +19,7 @@
 	{% endif %}
 	<div class="issue-info">
 		<div class="issue-title">
-			<h1>{{ issue.series.name }}</h1>
+			<h1><a href="{% url 'series:detail' issue.series.slug %}">{{ issue.series.name }}</a></h1>
 			<h3>Issue #{{ issue.number }}{% if issue.name != 'None' %} - <i>{{ issue.name }}</i>{% endif %}</h3>
 			{% if issue.date %}
 			<p>Released: {{ issue.date }}</p>
