@@ -100,7 +100,8 @@ class SeriesAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_display = ('name', 'year', 'issue_count')
     list_filter = ('publisher',)
-    actions = ['mark_as_read', 'mark_as_unread']
+    actions = ['mark_as_read', 'mark_as_unread',
+               'refresh_series_issues_metadata']
     prepopulated_fields = {'slug': ('name',)}
 
     def mark_as_read(self, request, queryset):
@@ -112,7 +113,7 @@ class SeriesAdmin(admin.ModelAdmin):
         message_bit = create_issue_msg(issues_count)
         self.message_user(
             request, "%s successfully marked as read." % message_bit)
-    mark_as_read.short_description = 'Mark selected series as read'
+    mark_as_read.short_description = 'Mark selected Series as read'
 
     def mark_as_unread(self, request, queryset):
         issues_count = 0
@@ -123,7 +124,20 @@ class SeriesAdmin(admin.ModelAdmin):
         message_bit = create_issue_msg(issues_count)
         self.message_user(
             request, "%s successfully marked as unread." % message_bit)
-    mark_as_unread.short_description = 'Mark selected series as unread'
+    mark_as_unread.short_description = 'Mark selected Series as unread'
+
+    def refresh_series_issues_metadata(self, request, queryset):
+        issues_count = 0
+        for i in range(queryset.count()):
+            series = Issue.objects.filter(series=queryset[i])
+            for num in range(series.count()):
+                success = refresh_issue_task(series[num].cvid)
+                if success:
+                    issues_count += 1
+        message_bit = create_issue_msg(issues_count)
+        self.message_user(
+            request, "%s metadata successfully updated." % message_bit)
+    refresh_series_issues_metadata.short_description = 'Refresh selected Series issues metadata'
 
 
 @admin.register(Team)
