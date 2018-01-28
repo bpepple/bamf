@@ -47,8 +47,8 @@ class ComicImporter(object):
         logging.getLogger("requests").setLevel(logging.WARNING)
         self.logger = logging.getLogger('bamf')
         # Setup requests caching
-        requests_cache.install_cache('./media/CACHE/comicvine-cache',
-                                     backend="sqlite",
+        requests_cache.install_cache('cv-cache',
+                                     backend='redis',
                                      expire_after=1800)
         requests_cache.core.remove_expired_responses()
         # temporary values until settings view is created.
@@ -67,6 +67,7 @@ class ComicImporter(object):
         self.publisher_fields = 'deck,description,id,image,name,site_detail_url'
         self.series_fields = 'api_detail_url,deck,description,id,name,publisher,site_detail_url,start_year'
         self.issue_fields = 'api_detail_url,character_credits,cover_date,deck,description,id,image,issue_number,name,person_credits,site_detail_url,story_arc_credits,team_credits,volume'
+        self.refresh_issue_fields = 'api_detail_url,cover_date,deck,description,id,issue_number,name,site_detail_url,volume'
         self.team_fields = 'characters,deck,description,id,image,name,site_detail_url'
         # Initial Comic Book info to search
         self.style = MetaDataStyle.CIX
@@ -184,6 +185,30 @@ class ComicImporter(object):
             response = None
 
         return response
+
+    def refreshIssueData(self, cvid):
+        issue_params = self.base_params
+        issue_params['field_list'] = self.refresh_issue_fields
+
+        try:
+            resp = requests.get(
+                self.baseurl + 'issue/4000-' + str(cvid),
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            return False
+
+        data = self.getCVObjectData(resp['results'])
+
+        issue = Issue.objects.get(cvid=cvid)
+        issue.desc = data['desc']
+        issue.name = data['name']
+        issue.save()
+        self.logger.info('Refreshed metadata for: %s' % issue)
+
+        return True
 
     def getIssueDetail(self, issue_cvid, response_issue):
         issue_params = self.base_params

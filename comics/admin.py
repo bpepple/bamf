@@ -4,6 +4,8 @@ from .models import (Arc, Character, Creator,
                      Issue, Publisher, Series,
                      Team)
 
+from comics.tasks import refresh_issue_task
+
 
 UNREAD = 0
 READ = 2
@@ -50,7 +52,7 @@ class IssueAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'status', 'import_date')
     list_filter = ('import_date', 'date', 'status')
     date_hierarchy = 'date'
-    actions = ['mark_as_read', 'mark_as_unread']
+    actions = ['mark_as_read', 'mark_as_unread', 'refresh_issue_metadata']
     # form view
     fieldsets = (
         (None, {'fields': ('cvid', 'file', 'cvurl', 'series',
@@ -73,6 +75,18 @@ class IssueAdmin(admin.ModelAdmin):
         self.message_user(
             request, "%s successfully marked as unread." % message_bit)
     mark_as_unread.short_description = 'Mark selected issues as unread'
+
+    def refresh_issue_metadata(self, request, queryset):
+        rows_updated = 0
+        for issue in queryset:
+            success = refresh_issue_task(issue.cvid)
+            if success:
+                rows_updated += 1
+
+        message_bit = create_issue_msg(rows_updated)
+        self.message_user(
+            request, "%s metadata successfuly refreshed." % message_bit)
+    refresh_issue_metadata.short_description = 'Refresh selected issues metadata'
 
 
 @admin.register(Publisher)
