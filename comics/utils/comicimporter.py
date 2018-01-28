@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import itertools
 import logging
 import os
@@ -47,9 +47,10 @@ class ComicImporter(object):
         logging.getLogger("requests").setLevel(logging.WARNING)
         self.logger = logging.getLogger('bamf')
         # Setup requests caching
+        expire_after = timedelta(hours=1)
         requests_cache.install_cache('cv-cache',
                                      backend='redis',
-                                     expire_after=1800)
+                                     expire_after=expire_after)
         requests_cache.core.remove_expired_responses()
         # temporary values until settings view is created.
         self.api_key = Settings.get_solo().api_key
