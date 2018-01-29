@@ -4,7 +4,8 @@ from .models import (Arc, Character, Creator,
                      Issue, Publisher, Series,
                      Team)
 
-from comics.tasks import refresh_issue_task, refresh_series_task, refresh_publisher_task
+from comics.tasks import (refresh_issue_task, refresh_series_task,
+                          refresh_publisher_task, refresh_character_task)
 
 
 UNREAD = 0
@@ -38,6 +39,15 @@ def create_publisher_msg(rows_updated):
     return message_bit
 
 
+def create_character_msg(rows_update):
+    if rows_update == 1:
+        message_bit = "1 character was"
+    else:
+        message_bit = "%s characters were" % rows_update
+
+    return message_bit
+
+
 @admin.register(Arc)
 class ArcAdmin(admin.ModelAdmin):
     search_fields = ('name',)
@@ -48,6 +58,7 @@ class ArcAdmin(admin.ModelAdmin):
 class CharacterAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    actions = ['refresh_character_metadata']
     # form view
     fieldsets = (
         (None, {'fields': ('cvid', 'cvurl', 'name',
@@ -55,6 +66,17 @@ class CharacterAdmin(admin.ModelAdmin):
         ('Related', {'fields': ('teams',)}),
     )
     filter_horizontal = ('teams',)
+
+    def refresh_character_metadata(self, request, queryset):
+        rows_updated = 0
+        for character in queryset:
+            success = refresh_character_task(character.cvid)
+            if success:
+                rows_updated += 1
+
+        message_bit = create_character_msg(rows_updated)
+        self.message_user(request, "%s successfully refreshed." % message_bit)
+    refresh_character_metadata.short_description = 'Refresh selected Characters metadata'
 
 
 @admin.register(Creator)

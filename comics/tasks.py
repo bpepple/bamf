@@ -33,3 +33,11 @@ def refresh_publisher_task(cvid):
     success = ci.refreshPublisherData(cvid)
 
     return success
+
+
+@task()
+def refresh_character_task(cvid):
+    ci = ComicImporter()
+    success = ci.refreshCharacterData(cvid)
+
+    return success

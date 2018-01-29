@@ -41,6 +41,7 @@ def get_recursive_filelist(pathlist):
 
 
 class CVTypeID:
+    Character = '4005'
     Issue = '4000'
     Publisher = '4010'
     Volume = '4050'
@@ -176,6 +177,30 @@ class ComicImporter(object):
         }
 
         return data
+
+    def refreshCharacterData(self, cvid):
+        issue_params = self.base_params
+        issue_params['field_list'] = self.character_fields
+
+        try:
+            resp = requests.get(
+                self.baseurl + '/character/' +
+                CVTypeID.Character + '-' + str(cvid),
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.info('%s' % e)
+            return False
+
+        data = self.getCVObjectData(resp['results'])
+
+        character = Character.objects.get(cvid=cvid)
+        character.desc = data['desc']
+        character.save()
+        self.logger.info('Refreshed metadata for: %s' % character)
+
+        return True
 
     def refreshIssueData(self, cvid):
         issue_params = self.base_params
