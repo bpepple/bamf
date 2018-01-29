@@ -25,3 +25,11 @@ def refresh_series_task(cvid):
     success = ci.refreshSeriesData(cvid)
 
     return success
+
+
+@task()
+def refresh_publisher_task(cvid):
+    ci = ComicImporter()
+    success = ci.refreshPublisherData(cvid)
+
+    return success

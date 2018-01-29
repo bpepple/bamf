@@ -221,7 +221,31 @@ class ComicImporter(object):
         series.desc = data['desc']
         series.year = data['year']
         series.save()
-        self.logger.info('Refreshed metadata for:')
+        self.logger.info('Refreshed metadata for: %s' % series)
+
+        return True
+
+    def refreshPublisherData(self, cvid):
+        issue_params = self.base_params
+        issue_params['field_list'] = self.publisher_fields
+
+        try:
+            resp = requests.get(
+                self.baseurl + '/publisher/' +
+                CVTypeID.Publisher + '-' + str(cvid),
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            return False
+
+        data = self.getCVObjectData(resp['results'])
+
+        publisher = Publisher.objects.get(cvid=cvid)
+        publisher.desc = data['desc']
+        publisher.save()
+        self.logger.info('Refresh metadata for: %s' % publisher)
 
         return True
 

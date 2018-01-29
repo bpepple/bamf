@@ -4,7 +4,7 @@ from .models import (Arc, Character, Creator,
                      Issue, Publisher, Series,
                      Team)
 
-from comics.tasks import refresh_issue_task, refresh_series_task
+from comics.tasks import refresh_issue_task, refresh_series_task, refresh_publisher_task
 
 
 UNREAD = 0
@@ -25,6 +25,15 @@ def create_series_msg(rows_updated):
         message_bit = "1 series was"
     else:
         message_bit = "%s series were" % rows_updated
+
+    return message_bit
+
+
+def create_publisher_msg(rows_updated):
+    if rows_updated == 1:
+        message_bit = "1 publisher was"
+    else:
+        message_bit = "%s publishers were" % rows_updated
 
     return message_bit
 
@@ -102,6 +111,18 @@ class IssueAdmin(admin.ModelAdmin):
 class PublisherAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = ('name', 'series_count',)
+    actions = ['refresh_publisher_metadata']
+
+    def refresh_publisher_metadata(self, request, queryset):
+        rows_updated = 0
+        for publisher in queryset:
+            success = refresh_publisher_task(publisher.cvid)
+            if success:
+                rows_updated += 1
+
+        message_bit = create_publisher_msg(rows_updated)
+        self.message_user(request, "%s successfully refreshed." % message_bit)
+    refresh_publisher_metadata.short_description = 'Refresh selected Publishers metadata'
 
 
 @admin.register(Series)
