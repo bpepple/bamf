@@ -49,3 +49,11 @@ def refresh_creator_task(cvid):
     success = ci.refreshCreatorData(cvid)
 
     return success
+
+
+@task()
+def refresh_team_task(cvid):
+    ci = ComicImporter()
+    success = ci.refreshTeamData(cvid)
+
+    return success

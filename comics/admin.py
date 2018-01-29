@@ -6,7 +6,7 @@ from .models import (Arc, Character, Creator,
 
 from comics.tasks import (refresh_issue_task, refresh_series_task,
                           refresh_publisher_task, refresh_character_task,
-                          refresh_creator_task)
+                          refresh_creator_task, refresh_team_task)
 
 
 UNREAD = 0
@@ -54,6 +54,15 @@ def create_creator_msg(rows_update):
         message_bit = "1 creator was"
     else:
         message_bit = "%s creators were" % rows_update
+
+    return message_bit
+
+
+def create_team_msg(rows_updated):
+    if rows_updated == 1:
+        message_bit = "1 team was"
+    else:
+        message_bit = "%s teams were" % rows_updated
 
     return message_bit
 
@@ -230,3 +239,15 @@ class SeriesAdmin(admin.ModelAdmin):
 class TeamAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    actions = ['refresh_team_metadata']
+
+    def refresh_team_metadata(self, request, queryset):
+        rows_updated = 0
+        for team in queryset:
+            success = refresh_team_task(team.cvid)
+            if success:
+                rows_updated += 1
+
+        message_bit = create_team_msg(rows_updated)
+        self.message_user(request, "%s successfully refreshed." % message_bit)
+    refresh_team_metadata.short_description = 'Refresh selected Teams metadata'
