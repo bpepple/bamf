@@ -40,20 +40,20 @@ def create_publisher_msg(rows_updated):
     return message_bit
 
 
-def create_character_msg(rows_update):
-    if rows_update == 1:
+def create_character_msg(rows_updated):
+    if rows_updated == 1:
         message_bit = "1 character was"
     else:
-        message_bit = "%s characters were" % rows_update
+        message_bit = "%s characters were" % rows_updated
 
     return message_bit
 
 
-def create_creator_msg(rows_update):
-    if rows_update == 1:
+def create_creator_msg(rows_updated):
+    if rows_updated == 1:
         message_bit = "1 creator was"
     else:
-        message_bit = "%s creators were" % rows_update
+        message_bit = "%s creators were" % rows_updated
 
     return message_bit
 
