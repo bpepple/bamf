@@ -43,6 +43,7 @@ def get_recursive_filelist(pathlist):
 class CVTypeID:
     Character = '4005'
     Issue = '4000'
+    Person = '4040'
     Publisher = '4010'
     Volume = '4050'
 
@@ -195,10 +196,41 @@ class ComicImporter(object):
 
         data = self.getCVObjectData(resp['results'])
 
+        # Currently I'm not refreshing the image until the
+        # cropping code is refactored, so let's remove the image.
+        os.remove(data['image'])
+
         character = Character.objects.get(cvid=cvid)
         character.desc = data['desc']
         character.save()
         self.logger.info('Refreshed metadata for: %s' % character)
+
+        return True
+
+    def refreshCreatorData(self, cvid):
+        issue_params = self.base_params
+        issue_params['field_list'] = self.creator_fields
+
+        try:
+            resp = requests.get(
+                self.baseurl + '/person/' + CVTypeID.Person + '-' + str(cvid),
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            return False
+
+        data = self.getCVObjectData(resp['results'])
+
+        # Currently I'm not refreshing the image until the
+        # cropping code is refactored, so let's remove the image.
+        os.remove(data['image'])
+
+        creator = Creator.objects.get(cvid=cvid)
+        creator.desc = data['desc']
+        creator.save()
+        self.logger.inf('Refresh metadata for: %s' % creator)
 
         return True
 
@@ -266,6 +298,10 @@ class ComicImporter(object):
             return False
 
         data = self.getCVObjectData(resp['results'])
+
+        # Currently I'm not refreshing the image until the
+        # cropping code is refactored, so let's remove the image.
+        os.remove(data['image'])
 
         publisher = Publisher.objects.get(cvid=cvid)
         publisher.desc = data['desc']

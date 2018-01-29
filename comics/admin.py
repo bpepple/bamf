@@ -5,7 +5,8 @@ from .models import (Arc, Character, Creator,
                      Team)
 
 from comics.tasks import (refresh_issue_task, refresh_series_task,
-                          refresh_publisher_task, refresh_character_task)
+                          refresh_publisher_task, refresh_character_task,
+                          refresh_creator_task)
 
 
 UNREAD = 0
@@ -48,6 +49,15 @@ def create_character_msg(rows_update):
     return message_bit
 
 
+def create_creator_msg(rows_update):
+    if rows_update == 1:
+        message_bit = "1 creator was"
+    else:
+        message_bit = "%s creators were" % rows_update
+
+    return message_bit
+
+
 @admin.register(Arc)
 class ArcAdmin(admin.ModelAdmin):
     search_fields = ('name',)
@@ -83,6 +93,18 @@ class CharacterAdmin(admin.ModelAdmin):
 class CreatorAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    actions = ['refresh_creator_metadata']
+
+    def refresh_creator_metadata(self, request, queryset):
+        rows_updated = 0
+        for creator in queryset:
+            success = refresh_creator_task(creator.cvid)
+            if success:
+                rows_updated += 1
+
+        message_bit = create_creator_msg(rows_updated)
+        self.message_user(request, "%s successfully refreshed." % message_bit)
+    refresh_creator_metadata.short_description = 'Refresh selected Creators metadata'
 
 
 @admin.register(Issue)
