@@ -191,7 +191,7 @@ class ComicImporter(object):
                 headers=self.headers,
             ).json()
         except requests.exceptions.RequestException as e:
-            self.logger.info('%s' % e)
+            self.logger.error('%s' % e)
             return False
 
         data = self.getCVObjectData(resp['results'])
