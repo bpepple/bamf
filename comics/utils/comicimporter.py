@@ -45,6 +45,7 @@ class CVTypeID:
     Issue = '4000'
     Person = '4040'
     Publisher = '4010'
+    StoryArc = '4045'
     Team = '4060'
     Volume = '4050'
 
@@ -335,6 +336,34 @@ class ComicImporter(object):
         team.desc = data['desc']
         team.save()
         self.logger.info('Refreshed metadata for: %s' % team)
+
+        return True
+
+    def refreshArcData(self, cvid):
+        issue_params = self.base_params
+        issue_params['field_list'] = self.arc_fields
+
+        try:
+            resp = requests.get(
+                self.baseurl + '/story_arc/' +
+                CVTypeID.StoryArc + '-' + str(cvid),
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            return False
+
+        data = self.getCVObjectData(resp['results'])
+
+        # Currently I'm not refreshing the image until the
+        # cropping code is refactored, so let's remove the image.
+        os.remove(data['image'])
+
+        arc = Arc.objects.get(cvid=cvid)
+        arc.desc = data['desc']
+        arc.save()
+        self.logger.info('Refreshed metadata for: %s' % arc)
 
         return True
 

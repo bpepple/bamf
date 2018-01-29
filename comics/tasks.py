@@ -57,3 +57,11 @@ def refresh_team_task(cvid):
     success = ci.refreshTeamData(cvid)
 
     return success
+
+
+@task()
+def refresh_arc_task(cvid):
+    ci = ComicImporter()
+    success = ci.refreshArcData(cvid)
+
+    return success

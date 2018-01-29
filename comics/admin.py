@@ -6,11 +6,21 @@ from .models import (Arc, Character, Creator,
 
 from comics.tasks import (refresh_issue_task, refresh_series_task,
                           refresh_publisher_task, refresh_character_task,
-                          refresh_creator_task, refresh_team_task)
+                          refresh_creator_task, refresh_team_task,
+                          refresh_arc_task)
 
 
 UNREAD = 0
 READ = 2
+
+
+def create_arc_msg(rows_updated):
+    if rows_updated == 1:
+        message_bit = "1 story arc was"
+    else:
+        message_bit = "%s story arcs were" % rows_updated
+
+    return message_bit
 
 
 def create_issue_msg(rows_updated):
@@ -71,6 +81,18 @@ def create_team_msg(rows_updated):
 class ArcAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    actions = ['refresh_arc_metadata']
+
+    def refresh_arc_metadata(self, request, queryset):
+        rows_updated = 0
+        for arc in queryset:
+            success = refresh_arc_task(arc.cvid)
+            if success:
+                rows_updated += 1
+
+        message_bit = create_arc_msg(rows_updated)
+        self.message_user(request, "%s successfully refreshed." % message_bit)
+    refresh_arc_metadata.short_description = 'Refresh selected Story Arcs metadata'
 
 
 @admin.register(Character)
