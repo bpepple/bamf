@@ -7,6 +7,7 @@ from .utils.comicimporter import ComicImporter
 def import_comic_files_task():
     ci = ComicImporter()
     ci.import_comic_files()
+
     return
 
 
@@ -14,4 +15,13 @@ def import_comic_files_task():
 def refresh_issue_task(cvid):
     ci = ComicImporter()
     success = ci.refreshIssueData(cvid)
+
+    return success
+
+
+@task()
+def refresh_series_task(cvid):
+    ci = ComicImporter()
+    success = ci.refreshSeriesData(cvid)
+
     return success

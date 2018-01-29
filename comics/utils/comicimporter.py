@@ -40,6 +40,12 @@ def get_recursive_filelist(pathlist):
     return filelist
 
 
+class CVTypeID:
+    Issue = '4000'
+    Publisher = '4010'
+    Volume = '4050'
+
+
 class ComicImporter(object):
 
     def __init__(self):
@@ -56,7 +62,7 @@ class ComicImporter(object):
         self.api_key = Settings.get_solo().api_key
         self.directory_path = Settings.get_solo().comics_directory
         # API Strings
-        self.baseurl = 'https://comicvine.gamespot.com/api/'
+        self.baseurl = 'https://comicvine.gamespot.com/api'
         self.imageurl = 'https://comicvine.gamespot.com/api/image/'
         self.base_params = {'format': 'json',
                             'api_key': self.api_key}
@@ -171,29 +177,13 @@ class ComicImporter(object):
 
         return data
 
-    def getIssue(self, issue_cvid):
-        issue_params = self.base_params
-        issue_params['field_list'] = self.issue_fields
-
-        try:
-            response = requests.get(
-                self.baseurl + 'issue/4000-' + str(issue_cvid),
-                params=issue_params,
-                headers=self.headers,
-            ).json()
-        except requests.exceptions.RequestException as e:
-            self.logger.error('%s' % e)
-            response = None
-
-        return response
-
     def refreshIssueData(self, cvid):
         issue_params = self.base_params
         issue_params['field_list'] = self.refresh_issue_fields
 
         try:
             resp = requests.get(
-                self.baseurl + 'issue/4000-' + str(cvid),
+                self.baseurl + '/issue/' + CVTypeID.Issue + '-' + str(cvid),
                 params=issue_params,
                 headers=self.headers,
             ).json()
@@ -210,6 +200,47 @@ class ComicImporter(object):
         self.logger.info('Refreshed metadata for: %s' % issue)
 
         return True
+
+    def refreshSeriesData(self, cvid):
+        issue_params = self.base_params
+        issue_params['field_list'] = self.series_fields
+
+        try:
+            resp = requests.get(
+                self.baseurl + '/volume/' + CVTypeID.Volume + '-' + str(cvid),
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            return False
+
+        data = self.getCVObjectData(resp['results'])
+
+        series = Series.objects.get(cvid=cvid)
+        series.desc = data['desc']
+        series.year = data['year']
+        series.save()
+        self.logger.info('Refreshed metadata for:')
+
+        return True
+
+    def getIssue(self, issue_cvid):
+        issue_params = self.base_params
+        issue_params['field_list'] = self.issue_fields
+
+        try:
+            response = requests.get(
+                self.baseurl + '/issue/' +
+                CVTypeID.Issue + '-' + str(issue_cvid),
+                params=issue_params,
+                headers=self.headers,
+            ).json()
+        except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            response = None
+
+        return response
 
     def getIssueDetail(self, issue_cvid, response_issue):
         issue_params = self.base_params

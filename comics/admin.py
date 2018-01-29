@@ -4,7 +4,7 @@ from .models import (Arc, Character, Creator,
                      Issue, Publisher, Series,
                      Team)
 
-from comics.tasks import refresh_issue_task
+from comics.tasks import refresh_issue_task, refresh_series_task
 
 
 UNREAD = 0
@@ -16,6 +16,15 @@ def create_issue_msg(rows_updated):
         message_bit = "1 issue was"
     else:
         message_bit = "%s issues were" % rows_updated
+
+    return message_bit
+
+
+def create_series_msg(rows_updated):
+    if rows_updated == 1:
+        message_bit = "1 series was"
+    else:
+        message_bit = "%s series were" % rows_updated
 
     return message_bit
 
@@ -101,6 +110,7 @@ class SeriesAdmin(admin.ModelAdmin):
     list_display = ('name', 'year', 'issue_count')
     list_filter = ('publisher',)
     actions = ['mark_as_read', 'mark_as_unread',
+               'refresh_series_metadata',
                'refresh_series_issues_metadata']
     prepopulated_fields = {'slug': ('name',)}
 
@@ -126,6 +136,17 @@ class SeriesAdmin(admin.ModelAdmin):
             request, "%s successfully marked as unread." % message_bit)
     mark_as_unread.short_description = 'Mark selected Series as unread'
 
+    def refresh_series_metadata(self, request, queryset):
+        rows_updated = 0
+        for series in queryset:
+            success = refresh_series_task(series.cvid)
+            if success:
+                rows_updated += 1
+
+        message_bit = create_series_msg(rows_updated)
+        self.message_user(request, "%s successfully refreshed." % message_bit)
+    refresh_series_metadata.short_description = 'Refresh selected Series metadata'
+
     def refresh_series_issues_metadata(self, request, queryset):
         issues_count = 0
         for i in range(queryset.count()):
@@ -136,7 +157,7 @@ class SeriesAdmin(admin.ModelAdmin):
                     issues_count += 1
         message_bit = create_issue_msg(issues_count)
         self.message_user(
-            request, "%s metadata successfully updated." % message_bit)
+            request, "%s successfully updated." % message_bit)
     refresh_series_issues_metadata.short_description = 'Refresh selected Series issues metadata'
 
 
