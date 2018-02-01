@@ -3,7 +3,7 @@ certifi==2017.11.5
 chardet==3.0.4
 coreapi==2.3.3
 coreschema==0.0.4
-Django==2.0.1
+Django==2.0.2
 django-debug-toolbar==1.9.1
 django-multiselectfield==0.1.8
 django-solo==1.1.3
