@@ -1,12 +1,18 @@
 {% extends parent_template|default:"base.html" %}
 
+{% load staticfiles %}
+
 {% block content %}
 
 <div class="series-info-wrapper">
-	{% if series.issue_numerical_order_set.first.cover|length %}
+	{% if series.issue_numerical_order_set.first.cover %}
 	<div class="series-cover-image">
 		<img src="{{ series.issue_numerical_order_set.first.cover.url }}" >
 	</div>
+    {% else %}
+    <div class="series-cover-image">
+        <img src="{% static 'site/image-not-found.png' %}" alt="{{ series.name }}" >
+    </div>
 	{% endif %}
 	<div class="series-info">
 		<div class="series-title">
