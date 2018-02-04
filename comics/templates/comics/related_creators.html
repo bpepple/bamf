@@ -2,27 +2,24 @@
 
 {% if roles_list %}
 <div class="related related-creators">
-	<h2>Creators</h2>
+    <h2>Creators</h2>
 	<div class="flexslider related-slider">
-		<ul class="slides">
-			{% for roles in roles_list %}
-			<li>
-				<a href="{% url 'creator:detail' roles.creator.slug %}">
-					<div class="image">
-					{% if roles.creator.image %}
-						<img src="{{ roles.creator.thumb.url }}" alt="{{ roles.creator.name }}" >
-					{% else %}
-						<img src="{% static 'site/image-not-found.png' %}" alt="{{ roles.creator.name }}" >
-					{% endif %}
-					</div>
-				</a>
-				<a href="{% url 'creator:detail' roles.creator.slug %}"><p>{{ roles.creator.name }}</p></a>
-				<p>
-				{% for r in roles.role.all %}
-				{% if not forloop.first %}, {% endif %}
-				    <small><em>{{ r.name }}</em></small>
-				{% endfor %}
-				</p>
+        <ul class="slides">
+            {% for roles in roles_list %}
+            <li>
+                <a href="{% url 'creator:detail' roles.creator.slug %}">
+                    <div class="image">
+                    {% if roles.creator.image %}
+                        <img src="{{ roles.creator.thumb.url }}" alt="{{ roles.creator.name }}" >
+                    {% else %}
+				        <img src="{% static 'site/image-not-found.png' %}" alt="{{ roles.creator.name }}" >
+				    {% endif %}
+				    </div>
+                </a>
+                <a href="{% url 'creator:detail' roles.creator.slug %}"><p>{{ roles.creator.name }}</p></a>
+                <p>
+                {% for r in roles.role.all %}{% if not forloop.first %}, {% endif %}<small><em>{{ r.name }}</em></small>{% endfor %}
+                </p>
 			</li>
 			{% endfor %}
 		</ul>
