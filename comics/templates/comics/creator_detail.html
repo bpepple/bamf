@@ -1,13 +1,17 @@
 {% extends parent_template|default:"base.html" %}
 
+{% load staticfiles %}
+
 {% block content %}
 
 <div class="creator-info-wrapper">
+    <div class="creator-image">
 	{% if creator.image %}
-	<div class="creator-image">
 		<img src="{{ creator.image.url }}" >
-	</div>
+    {% else %}
+       <img src="{% static 'site/image-not-found.png' %}" >
 	{% endif %}
+	</div>
 	<div class="creator-info">
 		<div class="creator-name">
 			<h1>{{ creator.name }}</h1>
@@ -19,7 +23,6 @@
 		{% endif %}
 
 		{% include "comics/comicvine_link.html" with cvurl=creator.cvurl %}
-
 	</div>
 </div>
 

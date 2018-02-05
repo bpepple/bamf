@@ -5,15 +5,13 @@
 {% block content %}
 
 <div class="series-info-wrapper">
-	{% if series.issue_numerical_order_set.first.cover %}
-	<div class="series-cover-image">
-		<img src="{{ series.issue_numerical_order_set.first.cover.url }}" >
-	</div>
-    {% else %}
     <div class="series-cover-image">
+	{% if series.issue_numerical_order_set.first.cover %}
+		<img src="{{ series.issue_numerical_order_set.first.cover.url }}" >
+    {% else %}
         <img src="{% static 'site/image-not-found.png' %}" alt="{{ series.name }}" >
-    </div>
 	{% endif %}
+	</div>
 	<div class="series-info">
 		<div class="series-title">
 			<h1>{{ series.name }}</h1>
@@ -31,7 +29,6 @@
 
 	</div>
 </div>
-
 
 {% include "comics/related_publisher.html" with publisher=series.publisher %}
 
