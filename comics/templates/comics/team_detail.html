@@ -3,16 +3,14 @@
 {% block content %}
 
 <div class="team-info-wrapper">
-	{% if team.image|length %}
+	{% if team.image %}
 	<div class="team-image">
 		<img src="{{ team.image.url }}" >
 	</div>
 	{% endif %}
 	<div class="team-info">
 		<div class="team-name">
-			{% if team.name %}
 			<h1>{{ team.name }}</h1>
-			{% endif %}
 		</div>
 		{% if team.desc %}
 		<div class="team-description">
