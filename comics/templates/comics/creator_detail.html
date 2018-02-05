@@ -3,16 +3,14 @@
 {% block content %}
 
 <div class="creator-info-wrapper">
-	{% if creator.image|length %}
+	{% if creator.image %}
 	<div class="creator-image">
 		<img src="{{ creator.image.url }}" >
 	</div>
 	{% endif %}
 	<div class="creator-info">
 		<div class="creator-name">
-			{% if creator.name %}
 			<h1>{{ creator.name }}</h1>
-			{% endif %}
 		</div>
 		{% if creator.desc %}
 		<div class="creator-description">
