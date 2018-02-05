@@ -1,18 +1,22 @@
 {% extends parent_template|default:"base.html" %}
 
+{% load staticfiles %}
+
 {% block content %}
 
 <div class="arc-info-wrapper">
-	{% if arc.image|length %}
+	{% if arc.image %}
 	<div class="arc-image">
 		<img src="{{ arc.image.url }}" >
+	</div>
+	{% else %}
+	<div class="arc-image">
+	   <img src="{% static 'site/image-not-found.png' %}" alt="{{ arc.name }}" >
 	</div>
 	{% endif %}
 	<div class="arc-info">
 		<div class="arc-title">
-			{% if arc.name %}
 			<h1>{{ arc.name }}</h1>
-			{% endif %}
 		</div>
 		{% if arc.desc %}
 		<div class="arc-description">
