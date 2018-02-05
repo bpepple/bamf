@@ -1,22 +1,33 @@
 {% extends parent_template|default:"base.html" %}
 
+{% load staticfiles %}
+
 {% block content %}
 
 <div class="issue-info-wrapper">
-	{% if issue.cover %}
-	<div class="issue-cover">
-		<div class="issue-cover-image">
-			{% autoescape off %}
-			<img src="{{ issue.cover.url }}" >
-			{% endautoescape %}
-			<div class="issue-cover-overlay">
-                <a href="{% url 'issue:reader' issue.slug %}">
-                    <i class="read-button fa fa-eye"></i>
-                </a>
-            </div>
+    <div class="issue-cover">
+        <div class="issue-cover-image">
+            {% if issue.cover %}
+                {% autoescape off %}
+                    <img src="{{ issue.cover.url }}" >
+                {% endautoescape %}
+                <div class="issue-cover-overlay">
+                    <a href="{% url 'issue:reader' issue.slug %}">
+                        <i class="read-button fa fa-eye"></i>
+                    </a>
+                </div>
+            {% else %}
+                {% autoescape off %}
+                    <img src="{% static 'site/image-not-found.png' %}" >
+                {% endautoescape %}
+                <div class="issue-cover-overlay">
+                    <a href="{% url 'issue:reader' issue.slug %}">
+                        <i class="read-button fa fa-eye"></i>
+                    </a>
+                </div>
+            {% endif %}
 		</div>
 	</div>
-	{% endif %}
 	<div class="issue-info">
 		<div class="issue-title">
 			<h1><a href="{% url 'series:detail' issue.series.slug %}">{{ issue.series.name }}</a></h1>
