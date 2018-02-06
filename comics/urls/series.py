@@ -7,9 +7,9 @@ from comics.views.series import SeriesList, SearchSeriesList, SeriesDetail
 
 app_name = 'series'
 urlpatterns = [
-    path('series/', SeriesList.as_view(), name='list'),
-    path('series/<slug:slug>/', SeriesDetail.as_view(), name='detail'),
-    re_path(r'^series/search/?$', SearchSeriesList.as_view(), name='search'),
+    path('', SeriesList.as_view(), name='list'),
+    path('<slug:slug>/', SeriesDetail.as_view(), name='detail'),
+    re_path(r'^search/?$', SearchSeriesList.as_view(), name='search'),
 ]
 
 if settings.DEBUG:

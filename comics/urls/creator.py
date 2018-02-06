@@ -7,9 +7,9 @@ from comics.views.creator import CreatorDetail, CreatorList, SearchCreatorList
 
 app_name = 'creator'
 urlpatterns = [
-    path('creator/', CreatorList.as_view(), name='list'),
-    path('creator/<slug:slug>/', CreatorDetail.as_view(), name='detail'),
-    re_path(r'^creator/search/?$', SearchCreatorList.as_view(), name='search'),
+    path('', CreatorList.as_view(), name='list'),
+    path('<slug:slug>/', CreatorDetail.as_view(), name='detail'),
+    re_path(r'^search/?$', SearchCreatorList.as_view(), name='search'),
 ]
 
 if settings.DEBUG:

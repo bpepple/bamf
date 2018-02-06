@@ -1,9 +1,8 @@
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 from rest_framework.documentation import include_docs_urls
-
-from django.conf import settings
 
 from comics.urls import (
     arc as arc_urls,
@@ -24,16 +23,16 @@ urlpatterns = [
     path('docs/', include_docs_urls(title='Bamf API')),
     path('', RedirectView.as_view(pattern_name='series:list',
                                   permanent=False)),
-    path('', include(arc_urls)),
-    path('', include(character_urls)),
-    path('', include(creator_urls)),
-    path('', include(importer_urls)),
+    path('arc/', include(arc_urls)),
+    path('character/', include(character_urls)),
+    path('creator/', include(creator_urls)),
+    path('importer/', include(importer_urls)),
     path('', include(issue_urls)),
-    path('', include(publisher_urls)),
-    path('', include(router_urls)),
-    path('', include(series_urls)),
-    path('', include(settings_urls)),
-    path('', include(team_urls)),
+    path('publisher/', include(publisher_urls)),
+    path('api/', include(router_urls)),
+    path('series/', include(series_urls)),
+    path('server-settings/', include(settings_urls)),
+    path('team/', include(team_urls)),
 ]
 
 if settings.DEBUG:

@@ -7,9 +7,9 @@ from comics.views.team import TeamDetail, TeamList, SearchTeamList
 
 app_name = 'team'
 urlpatterns = [
-    path('team/', TeamList.as_view(), name='list'),
-    path('team/<slug:slug>/', TeamDetail.as_view(), name='detail'),
-    re_path(r'^team/search/?$', SearchTeamList.as_view(), name='search'),
+    path('', TeamList.as_view(), name='list'),
+    path('<slug:slug>/', TeamDetail.as_view(), name='detail'),
+    re_path(r'^search/?$', SearchTeamList.as_view(), name='search'),
 ]
 
 if settings.DEBUG:

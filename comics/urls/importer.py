@@ -5,5 +5,5 @@ from comics.views.importer import importer
 
 app_name = 'importer'
 urlpatterns = [
-    path('importer/', importer, name='index'),
+    path('', importer, name='index'),
 ]
