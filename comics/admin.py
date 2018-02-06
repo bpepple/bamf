@@ -14,65 +14,11 @@ UNREAD = 0
 READ = 2
 
 
-def create_arc_msg(rows_updated):
+def create_msg(rows_updated):
     if rows_updated == 1:
-        message_bit = "1 story arc was"
+        message_bit = "1 item was"
     else:
-        message_bit = "%s story arcs were" % rows_updated
-
-    return message_bit
-
-
-def create_issue_msg(rows_updated):
-    if rows_updated == 1:
-        message_bit = "1 issue was"
-    else:
-        message_bit = "%s issues were" % rows_updated
-
-    return message_bit
-
-
-def create_series_msg(rows_updated):
-    if rows_updated == 1:
-        message_bit = "1 series was"
-    else:
-        message_bit = "%s series were" % rows_updated
-
-    return message_bit
-
-
-def create_publisher_msg(rows_updated):
-    if rows_updated == 1:
-        message_bit = "1 publisher was"
-    else:
-        message_bit = "%s publishers were" % rows_updated
-
-    return message_bit
-
-
-def create_character_msg(rows_updated):
-    if rows_updated == 1:
-        message_bit = "1 character was"
-    else:
-        message_bit = "%s characters were" % rows_updated
-
-    return message_bit
-
-
-def create_creator_msg(rows_updated):
-    if rows_updated == 1:
-        message_bit = "1 creator was"
-    else:
-        message_bit = "%s creators were" % rows_updated
-
-    return message_bit
-
-
-def create_team_msg(rows_updated):
-    if rows_updated == 1:
-        message_bit = "1 team was"
-    else:
-        message_bit = "%s teams were" % rows_updated
+        message_bit = "%s items were" % rows_updated
 
     return message_bit
 
@@ -90,7 +36,7 @@ class ArcAdmin(admin.ModelAdmin):
             if success:
                 rows_updated += 1
 
-        message_bit = create_arc_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(request, "%s successfully refreshed." % message_bit)
     refresh_arc_metadata.short_description = 'Refresh selected Story Arcs metadata'
 
@@ -115,7 +61,7 @@ class CharacterAdmin(admin.ModelAdmin):
             if success:
                 rows_updated += 1
 
-        message_bit = create_character_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(request, "%s successfully refreshed." % message_bit)
     refresh_character_metadata.short_description = 'Refresh selected Characters metadata'
 
@@ -133,7 +79,7 @@ class CreatorAdmin(admin.ModelAdmin):
             if success:
                 rows_updated += 1
 
-        message_bit = create_creator_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(request, "%s successfully refreshed." % message_bit)
     refresh_creator_metadata.short_description = 'Refresh selected Creators metadata'
 
@@ -157,14 +103,14 @@ class IssueAdmin(admin.ModelAdmin):
 
     def mark_as_read(self, request, queryset):
         rows_updated = queryset.update(status=READ)
-        message_bit = create_issue_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(
             request, "%s successfully marked as read." % message_bit)
     mark_as_read.short_description = 'Mark selected issues as read'
 
     def mark_as_unread(self, request, queryset):
         rows_updated = queryset.update(status=UNREAD)
-        message_bit = create_issue_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(
             request, "%s successfully marked as unread." % message_bit)
     mark_as_unread.short_description = 'Mark selected issues as unread'
@@ -176,7 +122,7 @@ class IssueAdmin(admin.ModelAdmin):
             if success:
                 rows_updated += 1
 
-        message_bit = create_issue_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(
             request, "%s metadata successfuly refreshed." % message_bit)
     refresh_issue_metadata.short_description = 'Refresh selected issues metadata'
@@ -195,7 +141,7 @@ class PublisherAdmin(admin.ModelAdmin):
             if success:
                 rows_updated += 1
 
-        message_bit = create_publisher_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(request, "%s successfully refreshed." % message_bit)
     refresh_publisher_metadata.short_description = 'Refresh selected Publishers metadata'
 
@@ -216,7 +162,7 @@ class SeriesAdmin(admin.ModelAdmin):
             issues_updated = Issue.objects.filter(
                 series=queryset[i]).update(status=READ)
             issues_count += issues_updated
-        message_bit = create_issue_msg(issues_count)
+        message_bit = create_msg(issues_count)
         self.message_user(
             request, "%s successfully marked as read." % message_bit)
     mark_as_read.short_description = 'Mark selected Series as read'
@@ -227,7 +173,7 @@ class SeriesAdmin(admin.ModelAdmin):
             issues_updated = Issue.objects.filter(
                 series=queryset[i]).update(status=UNREAD)
             issues_count += issues_updated
-        message_bit = create_issue_msg(issues_count)
+        message_bit = create_msg(issues_count)
         self.message_user(
             request, "%s successfully marked as unread." % message_bit)
     mark_as_unread.short_description = 'Mark selected Series as unread'
@@ -239,7 +185,7 @@ class SeriesAdmin(admin.ModelAdmin):
             if success:
                 rows_updated += 1
 
-        message_bit = create_series_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(request, "%s successfully refreshed." % message_bit)
     refresh_series_metadata.short_description = 'Refresh selected Series metadata'
 
@@ -251,7 +197,7 @@ class SeriesAdmin(admin.ModelAdmin):
                 success = refresh_issue_task(series[num].cvid)
                 if success:
                     issues_count += 1
-        message_bit = create_issue_msg(issues_count)
+        message_bit = create_msg(issues_count)
         self.message_user(
             request, "%s successfully updated." % message_bit)
     refresh_series_issues_metadata.short_description = 'Refresh selected Series issues metadata'
@@ -270,6 +216,6 @@ class TeamAdmin(admin.ModelAdmin):
             if success:
                 rows_updated += 1
 
-        message_bit = create_team_msg(rows_updated)
+        message_bit = create_msg(rows_updated)
         self.message_user(request, "%s successfully refreshed." % message_bit)
     refresh_team_metadata.short_description = 'Refresh selected Teams metadata'
