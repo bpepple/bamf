@@ -5,9 +5,9 @@
 {% block content %}
 
 <div class="searchbox-wrapper">
-    <form id="searchform" action="{% url 'publisher:search' %}" method="get" accept-charset="utf-8">
+    <form id="searchform" action="{% url 'publisher:search' page=1 %}" method="get" accept-charset="utf-8">
         <i class="fa fa-search"></i>
-        <input id="searchbox" name="q" type="text" placeholder="Publisher Search">
+        <input id="searchbox" name="q" type="search" placeholder="Publisher Search">
     </form>
 </div>
 
@@ -34,3 +34,53 @@
 </div>
 
 {% endblock content %}
+
+{% block pagination %}
+    {% if is_paginated %}
+        <span class="page-link">
+            {% if page_obj.number > 1 %}
+                {% if request.GET.q %}
+                    <a href="{% url 'publisher:search' page=1 %}?{{ request.GET.urlencode }}">&lArr;</a>
+                {% else %}
+                    <a href="{% url 'publisher:list' page=1 %}">&lArr;</a>
+                {% endif %}
+            {% else %}
+                <span>&lArr;</span>
+            {% endif %}
+
+            {% if page_obj.has_previous %}
+                {% if request.GET.q %}
+                    <a href="{% url 'publisher:search' page=page_obj.previous_page_number %}?{{ request.GET.urlencode }}">&larr;</a>
+                {% else %}
+                    <a href="{% url 'publisher:list' page=page_obj.previous_page_number %}">&larr;</a>
+                {% endif %}
+            {% else %}
+                <span>&larr;</span>
+            {% endif %}
+
+            <span class="page-item">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                {% if request.GET.q %}
+                    <a href="{% url 'publisher:search' page=page_obj.next_page_number %}?{{ request.GET.urlencode }}">&rarr;</a>
+                {% else %}
+                    <a href="{% url 'publisher:list' page=page_obj.next_page_number %}">&rarr;</a>
+                {% endif %}
+            {% else %}
+                <span>&rarr;</span>
+            {% endif %}
+
+            {% if page_obj.number < paginator.num_pages %}
+                {% if request.GET.q %}
+                    <a href="{% url 'publisher:search' page=paginator.num_pages %}?{{ request.GET.urlencode }}">&rArr;</a>
+                {% else %}
+                    <a href="{% url 'publisher:list' page=paginator.num_pages %}">&rArr;</a>
+                {% endif %}
+            {% else %}
+                <span>&rArr;</span>
+            {% endif %}
+        </span>
+    {% endif %}
+{% endblock %}

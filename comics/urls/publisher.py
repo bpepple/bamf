@@ -7,9 +7,9 @@ from comics.views.publisher import PublisherDetail, PublisherList, SearchPublish
 
 app_name = 'publisher'
 urlpatterns = [
-    path('', PublisherList.as_view(), name='list'),
+    path('page<int:page>/', PublisherList.as_view(), name='list'),
     path('<slug:slug>/', PublisherDetail.as_view(), name='detail'),
-    re_path(r'^search/?$',
+    re_path(r'^search/(?:page(?P<page>\d+)/)?$',
             SearchPublisherList.as_view(), name='search'),
 ]
 
