@@ -150,20 +150,20 @@ class CharacterListViewTest(TestCase):
                 cvid=character)
 
     def test_view_url_exists_at_desired_location(self):
-        resp = self.client.get('/character/')
+        resp = self.client.get('/character/page1/')
         self.assertEqual(resp.status_code, HTML_OK_CODE)
 
     def test_view_url_accessible_by_name(self):
-        resp = self.client.get(reverse('character:list'))
+        resp = self.client.get(reverse('character:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
 
     def test_view_uses_correct_template(self):
-        resp = self.client.get(reverse('character:list'))
+        resp = self.client.get(reverse('character:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/character_list.html')
 
     def test_pagination_is_twenty_eight(self):
-        resp = self.client.get(reverse('character:list'))
+        resp = self.client.get(reverse('character:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
         self.assertTrue(resp.context['is_paginated'] == True)
@@ -171,7 +171,7 @@ class CharacterListViewTest(TestCase):
             len(resp.context['character_list']) == PAGINATE_DEFAULT_VAL)
 
     def test_lists_all_characters(self):
-        resp = self.client.get(reverse('character:list') + '?page=2')
+        resp = self.client.get(reverse('character:list', args=(2,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
         self.assertTrue(resp.context['is_paginated'] == True)
