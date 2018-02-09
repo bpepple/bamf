@@ -7,9 +7,9 @@ from comics.views.character import CharacterDetail, CharacterList, SearchCharact
 
 app_name = 'character'
 urlpatterns = [
-    path('', CharacterList.as_view(), name='list'),
+    path('page<int:page>/', CharacterList.as_view(), name='list'),
     path('<slug:slug>/', CharacterDetail.as_view(), name='detail'),
-    re_path(r'^search/?$', SearchCharacterList.as_view(), name='search'),
+    re_path(r'^search/(?:page(?P<page>\d+)/)?$', SearchCharacterList.as_view(), name='search'),
 ]
 
 if settings.DEBUG:
