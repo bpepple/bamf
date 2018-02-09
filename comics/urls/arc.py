@@ -7,9 +7,9 @@ from comics.views.arc import ArcDetail, ArcList, SearchArcList
 
 app_name = 'arc'
 urlpatterns = [
-    path('', ArcList.as_view(), name='list'),
+    path('page<int:page>/', ArcList.as_view(), name='list'),
     path('<slug:slug>/', ArcDetail.as_view(), name='detail'),
-    re_path(r'^search/?$', SearchArcList.as_view(), name='search'),
+    re_path(r'^search/(?:page(?P<page>\d+)/)?$', SearchArcList.as_view(), name='search'),
 ]
 
 if settings.DEBUG:

@@ -24,7 +24,7 @@
                 <li><a href="{% url 'creator:list' %}">Creators</a></li>
                 <li><a href="{% url 'character:list' %}">Characters</a></li>
                 <li><a href="{% url 'team:list' %}">Teams</a></li>
-                <li><a href="{% url 'arc:list' %}">Story Arcs</a></li>
+                <li><a href="{% url 'arc:list' page=1 %}">Story Arcs</a></li>
                 <li><a href="{% url 'issue:list' %}">Latest Added</a></li>
                 <li style="float:right"><a data-toggle="modal" data-target="#modal"><i class="settings-button fa fa-cog"></i></a></li>
             </ul>
