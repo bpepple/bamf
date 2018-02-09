@@ -19,7 +19,7 @@
         <header>
             {% block menu %}
             <ul>
-                <li><a class="active" href="{% url 'series:list' %}">Series</a></li>
+                <li><a class="active" href="{% url 'series:list' page=1 %}">Series</a></li>
                 <li><a href="{% url 'publisher:list' %}">Publishers</a></li>
                 <li><a href="{% url 'creator:list' %}">Creators</a></li>
                 <li><a href="{% url 'character:list' %}">Characters</a></li>
@@ -36,41 +36,11 @@
         </div>
     </body>
     
-    {% if is_paginated %}
     <div class="center">
         <div class="pagination">
-            <span class="page-link">
-                {% if page_obj.number > 1 %}
-                    <a href="{{ request.path }}?page=1">&lArr;</a>
-                {% else %}
-                    <span>&lArr;</span>
-                {% endif %}
-                
-                {% if page_obj.has_previous %}
-                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">&larr;</a>
-                {% else %}
-                    <span>&larr;</span>
-                {% endif %}
-                
-                <span class="page-item">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                </span>
-                
-                {% if page_obj.has_next %}
-                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">&rarr;</a>
-                {% else %}
-                    <span>&rarr;</span>
-                {% endif %}
- 
-                {% if page_obj.number < paginator.num_pages %}
-                    <a href="{{ request.path }}?page={{ paginator.num_pages }}">&rArr;</a>
-                {% else %}
-                    <span>&rArr;</span>
-                {% endif %}
-              </span>
+            {% block pagination %}{% endblock %}
         </div>
-     </div>
-     {% endif %}
+    </div>
 
     <footer>
         <div class="metadata-disclaimer">

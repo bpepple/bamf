@@ -21,7 +21,7 @@ from comics.urls import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('docs/', include_docs_urls(title='Bamf API')),
-    path('', RedirectView.as_view(pattern_name='series:list',
+    path('', RedirectView.as_view(url='/series/page1',
                                   permanent=False)),
     path('arc/', include(arc_urls)),
     path('character/', include(character_urls)),
