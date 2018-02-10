@@ -35,12 +35,14 @@
             {% block content %}{% endblock %}
         </div>
     </body>
-    
+
+{% if is_paginated %}
     <div class="center">
         <div class="pagination">
             {% block pagination %}{% endblock %}
         </div>
     </div>
+{% endif %}
 
     <footer>
         <div class="metadata-disclaimer">
