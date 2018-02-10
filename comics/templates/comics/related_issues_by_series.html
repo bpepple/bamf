@@ -8,14 +8,13 @@
 
 		{% ifchanged issue.series.slug %}
 		{% if not forloop.first %}
-			</ul>
+		  </ul>
 		</div>
 		{% endif %}
 		<a href="{% url 'series:detail' issue.series.slug %}"><h3>{{ issue.series.name }}</h3></a>
 		<div class="flexslider related-slider">
-			<ul class="slides">
+		   <ul class="slides">
 		{% endifchanged %}
-
 				<li>
 					<a href="{% url 'issue:detail' issue.slug %}">
 						<div class="image">
@@ -33,7 +32,10 @@
 					</a>
 					<a href="{% url 'issue:detail' issue.slug %}"><p>Issue #{{ issue.number }}</p></a>
 				</li>
-		
+        {% if forloop.last %}
+            </ul>
+        </div>
+        {% endif %}
 	{% endfor %}
 	</div>
 </div>
