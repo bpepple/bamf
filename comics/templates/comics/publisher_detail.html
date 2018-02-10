@@ -7,9 +7,9 @@
 <div class="publisher-info-wrapper">
     <div class="publisher-logo">
 	{% if publisher.logo %}
-		<img src="{{ publisher.logo.url }}" >
+		<img src="{{ publisher.logo.url }}" alt="{{ publisher.name }}" >
     {% else %}
-       <img src="{% static 'site/image-not-found.png' %}" alt="{{ arc.name }}" >
+       <img src="{% static 'site/image-not-found.png' %}" alt="Image not found" >
 	{% endif %}
 	</div>
 	<div class="publisher-info">
@@ -18,7 +18,7 @@
 		</div>
 		{% if publisher.desc %}
 		<div class="publisher-description">
-			<p>{{ publisher.desc|linebreaks }}</p>
+            {{ publisher.desc|linebreaks }}
 		</div>
 		{% endif %}
 
