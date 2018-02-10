@@ -7,9 +7,9 @@
 <div class="series-info-wrapper">
     <div class="series-cover-image">
 	{% if series.issue_numerical_order_set.first.cover %}
-		<img src="{{ series.issue_numerical_order_set.first.cover.url }}" >
+		<img src="{{ series.issue_numerical_order_set.first.cover.url }}" alt="{{ series.name }}" >
     {% else %}
-        <img src="{% static 'site/image-not-found.png' %}" alt="{{ series.name }}" >
+        <img src="{% static 'site/image-not-found.png' %}" alt="Image not found" >
 	{% endif %}
 	</div>
 	<div class="series-info">
@@ -21,7 +21,7 @@
 		</div>
 		{% if series.desc %}
 		<div class="series-description">
-			<p>{{ series.desc|linebreaks }}</p>
+	       {{ series.desc|linebreaks }}
 		</div>
 		{% endif %}
 
