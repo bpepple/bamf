@@ -9,7 +9,7 @@
         <div class="issue-cover-image">
             {% if issue.cover %}
                 {% autoescape off %}
-                    <img src="{{ issue.cover.url }}" >
+                    <img src="{{ issue.cover.url }}" alt="{{issue.series.name}} #{{ issue.number}}" >
                 {% endautoescape %}
                 <div class="issue-cover-overlay">
                     <a href="{% url 'issue:reader' issue.slug %}">
@@ -18,7 +18,7 @@
                 </div>
             {% else %}
                 {% autoescape off %}
-                    <img src="{% static 'site/image-not-found.png' %}" >
+                    <img src="{% static 'site/image-not-found.png' %}" alt="Image not found" >
                 {% endautoescape %}
                 <div class="issue-cover-overlay">
                     <a href="{% url 'issue:reader' issue.slug %}">
@@ -26,29 +26,29 @@
                     </a>
                 </div>
             {% endif %}
-		</div>
-	</div>
-	<div class="issue-info">
-		<div class="issue-title">
-			<h1><a href="{% url 'series:detail' issue.series.slug %}">{{ issue.series.name }}</a></h1>
-			<h3>Issue #{{ issue.number }}{% if issue.name != 'None' %} - <i>{{ issue.name }}</i>{% endif %}</h3>
-			{% if issue.date %}
-			<p>Released: {{ issue.date }}</p>
-			{% endif %}
-			<p>{{ issue.page_count }} pages</p>
-		</div>
+        </div>
+    </div>
+    <div class="issue-info">
+        <div class="issue-title">
+            <h1><a href="{% url 'series:detail' issue.series.slug %}">{{ issue.series.name }}</a></h1>
+            <h3>Issue #{{ issue.number }}{% if issue.name != 'None' %} - <i>{{ issue.name }}</i>{% endif %}</h3>
+            {% if issue.date %}
+                <p>Released: {{ issue.date }}</p>
+            {% endif %}
+            <p>{{ issue.page_count }} pages</p>
+        </div>
 
-		{% include "comics/related_arcs.html" with arc_list=issue.arcs.all %}
+        {% include "comics/related_arcs.html" with arc_list=issue.arcs.all %}
 
-		{% if issue.desc %}
-		<div class="issue-description">
-			<p>{{ issue.desc|linebreaks }}</p>
-		</div>
-		{% endif %}
+        {% if issue.desc %}
+        <div class="issue-description">
+            {{ issue.desc|linebreaks }}
+        </div>
+        {% endif %}
 
-		{% include "comics/comicvine_link.html" with cvurl=issue.cvurl %}
+        {% include "comics/comicvine_link.html" with cvurl=issue.cvurl %}
 
-	</div>
+    </div>
 </div>
 
 {% include "comics/related_publisher.html" with publisher=issue.series.publisher %}
