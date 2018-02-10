@@ -8,7 +8,7 @@ from comics.views.issue import (IssueList, IssueDetail, reader,
 
 app_name = 'issue'
 urlpatterns = [
-    path('issue/', IssueList.as_view(), name='list'),
+    path('issue/page<int:page>/', IssueList.as_view(), name='list'),
     path('issue/<slug:slug>/', IssueDetail.as_view(), name='detail'),
     path('issue/<slug:slug>/reader/', reader, name='reader'),
     path('issue/<slug:slug>/update-status/',

@@ -33,3 +33,37 @@
 </div>
 
 {% endblock content %}
+
+{% block pagination %}
+    {% if is_paginated %}
+        <span class="page-link">
+            {% if page_obj.number > 1 %}
+                <a href="{% url 'issue:list' page=1 %}">&lArr;</a>
+            {% else %}
+                <span>&lArr;</span>
+            {% endif %}
+
+            {% if page_obj.has_previous %}
+                <a href="{% url 'issue:list' page=page_obj.previous_page_number %}">&larr;</a>
+            {% else %}
+                <span>&larr;</span>
+            {% endif %}
+
+            <span class="page-item">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="{% url 'issue:list' page=page_obj.next_page_number %}">&rarr;</a>
+            {% else %}
+                <span>&rarr;</span>
+            {% endif %}
+
+            {% if page_obj.number < paginator.num_pages %}
+                <a href="{% url 'issue:list' page=paginator.num_pages %}">&rArr;</a>
+            {% else %}
+                <span>&rArr;</span>
+            {% endif %}
+        </span>
+    {% endif %}
+{% endblock %}
