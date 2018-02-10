@@ -21,7 +21,7 @@
                 <a href="{% url 'creator:detail' creator.slug %}">
                     <div class="image">
                     {% if creator.image %}
-                        <img src="{{ creator.image.url }}" >
+                        <img src="{{ creator.image.url }}" alt="{{ role.creator.name }}">
                     {% else %}
                         <img src="{% static 'site/image-not-found.png' %}" alt="{{ roles.creator.name }}" >
                     {% endif %}
