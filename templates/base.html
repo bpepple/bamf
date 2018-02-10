@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
         <title>Bamf</title>
         <link rel="shortcut icon" type="image/png" href="{% static 'site/logo.png' %}"/>
         <link rel="stylesheet" href="{% static 'site/flexslider/flexslider.css' %}" type="text/css">
@@ -34,38 +35,36 @@
         <div id="content">
             {% block content %}{% endblock %}
         </div>
+
+        {% if is_paginated %}
+            <div class="center">
+                <div class="pagination">
+                    {% block pagination %}{% endblock %}
+                </div>
+            </div>
+        {% endif %}
+
+        <footer>
+            <div class="metadata-disclaimer">
+                <div class="text">
+                    <p>Metadata on this page is retrieved from </p>
+                </div>
+                <div class="logo">
+                    <a target="_blank" href="http://comicvine.gamespot.com"><img src ="{% static 'site/comicvine_logo.png' %}" alt="Comic Vine"></a>
+                </div>
+            </div>
+        </footer>
+        <div class="modal" id="modal"></div>
+        <script>
+            $('.settings-button').on('click', function (event) {
+                var modal = $('#modal')
+                $.ajax({
+                    url: "{% url 'comics:server-settings' %}",
+                    context: document.body
+                }).done(function(response) {
+                    modal.html(response);
+                });
+            })
+        </script>
     </body>
-
-{% if is_paginated %}
-    <div class="center">
-        <div class="pagination">
-            {% block pagination %}{% endblock %}
-        </div>
-    </div>
-{% endif %}
-
-    <footer>
-        <div class="metadata-disclaimer">
-            <div class="text">
-                <p>Metadata on this page is retrieved from </p>
-            </div>
-            <div class="logo">
-                <a target="_blank" href="http://comicvine.gamespot.com"><img src ="{% static 'site/comicvine_logo.png' %}"></a>
-            </div>
-        </div>
-    </footer>
-
-    <div class="modal" id="modal"></div>
-
-    <script>
-        $('.settings-button').on('click', function (event) {
-            var modal = $('#modal')
-            $.ajax({
-                url: "{% url 'comics:server-settings' %}",
-                context: document.body
-            }).done(function(response) {
-                modal.html(response);
-            });
-        })
-    </script>
 </html>
