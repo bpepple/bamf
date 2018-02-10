@@ -7,9 +7,9 @@
 <div class="character-info-wrapper">
     <div class="character-image">
 	{% if character.image %}
-        <img src="{{ character.image.url }}" >
+        <img src="{{ character.image.url }}" alt="{{ character.name }}" >
     {% else %}
-	   <img src="{% static 'site/image-not-found.png' %}" >
+	   <img src="{% static 'site/image-not-found.png' %}" alt="Image not found" >
 	{% endif %}
 	</div>
 	<div class="character-info">
@@ -18,7 +18,7 @@
 		</div>
 		{% if character.desc %}
 		<div class="character-description">
-			<p>{{ character.desc|linebreaks }}</p>
+			{{ character.desc|linebreaks }}
 		</div>
 		{% endif %}
 
