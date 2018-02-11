@@ -136,14 +136,6 @@ footer .metadata-disclaimer img {
 /*
  *  Server Settings Modal
  */
-
-#navbar .settings-button {
-    cursor: pointer;
-    float: right;
-    font-size: 25px;
-    margin: 12px 0
-}
-
 #modal {
     position: fixed;
     top: 0;
@@ -222,15 +214,6 @@ a.button.import-comics {
 #modal .modal-body .errorlist {
     margin-top: 0;
 }
-
-/*
- *  Issue Update Modal
- */
-
-a.button.reprocess-issue {
-    width: 70px;
-}
-
 
 /*
  *  Flexslider - Related Sliders
