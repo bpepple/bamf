@@ -27,7 +27,11 @@
                 <li><a href="{% url 'team:list' page=1 %}">Teams</a></li>
                 <li><a href="{% url 'arc:list' page=1 %}">Story Arcs</a></li>
                 <li><a href="{% url 'issue:list' page=1 %}">Latest Added</a></li>
-                <li style="float:right"><a data-toggle="modal" data-target="#modal"><i class="settings-button fa fa-cog"></i></a></li>
+                <li style="float:right">
+                    <a data-toggle="modal" data-target="#modal">
+                        <i class="settings-button fa fa-cog fa-lg"></i>
+                    </a>
+                </li>
             </ul>
             {% endblock %}
         </header>
