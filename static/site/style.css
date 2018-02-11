@@ -365,6 +365,7 @@ a.button.import-comics {
     max-width: 100%;
     height: auto;
     margin: 0 0 10px;
+    border-radius: 8px;
 }
 
 .all-series li .unread-count {
@@ -435,6 +436,7 @@ a.button.import-comics {
     max-width: 100%;
     height: auto;
     margin: 0 0 10px;
+    border-radius: 8px;
 }
 
 .recent-issues li p {
@@ -456,6 +458,7 @@ a.button.import-comics {
 
 .arc-image img {
     width: 100%;
+    border-radius: 8px;
 }
 
 .arc-info {
@@ -481,6 +484,7 @@ a.button.import-comics {
 
 .character-image img {
     width: 100%;
+    border-radius: 8px;
 }
 
 .character-info {
@@ -506,6 +510,7 @@ a.button.import-comics {
 
 .creator-image img {
     width: 100%;
+    border-radius: 8px;
 }
 
 .creator-info {
@@ -531,6 +536,7 @@ a.button.import-comics {
 
 .series-cover-image img {
     width: 100%;
+    border-radius: 8px;
 }
 
 .series-info {
@@ -556,6 +562,7 @@ a.button.import-comics {
 
 .team-image img {
     width: 100%;
+    border-radius: 8px;
 }
 
 .team-info {
@@ -581,6 +588,7 @@ a.button.import-comics {
 
 .publisher-logo img {
     width: 100%;
+    border-radius: 8px;
 }
 
 .publisher-info {
@@ -612,6 +620,7 @@ a.button.import-comics {
     top: 0;
     left: 0;
     background: rgba(0,0,0,0);
+    border-radius: 8px;
     transition: 0.5s all;
     -moz-transition: 0.5s all;
     -webkit-transition: 0.5s all;
@@ -642,12 +651,6 @@ a.button.import-comics {
     transform: translate(-50%, -50%);
 }
 
-.issue-cover i.issue-update-button {
-    font-size: 2.5rem;
-    bottom: 10px;
-    right: 10px;
-}
-
 .issue-cover .issue-cover-image:hover .issue-cover-overlay{
     background: rgba(0, 0, 0, 0.5) !important;
 }
@@ -659,6 +662,7 @@ a.button.import-comics {
 
 .issue-cover img {
     width: 100%;
+    border-radius: 8px;
 }
 
 .issue-info {
@@ -683,6 +687,7 @@ a.button.import-comics {
 
 .related-publisher img {
     max-width: 100px;
+    border-radius: 8px;
 }
 
 /*
