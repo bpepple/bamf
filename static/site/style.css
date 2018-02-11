@@ -109,6 +109,9 @@ header li a:hover {
     background-color: #111;
 }
 
+header .settings-button {
+	cursor: pointer;
+}
 /*
  *  Footer
  */
