@@ -239,6 +239,10 @@ a.button.import-comics {
     position: relative;
 }
 
+.flexslider.related-slider .image img {
+	border-radius: 8px;
+}
+
 .flexslider.related-slider li .image:after {
     content: '.';
     font-size: 0;
