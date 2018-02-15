@@ -58,9 +58,7 @@ class IssueViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = (
         Issue.objects
         .select_related('series')
-        .prefetch_related('characters')
-        .prefetch_related('teams')
-        .prefetch_related('arcs')
+        .prefetch_related('arcs', 'characters', 'teams')
     )
     serializer_class = IssueSerializer
     lookup_field = 'slug'
