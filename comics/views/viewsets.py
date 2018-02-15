@@ -55,7 +55,13 @@ class IssueViewSet(viewsets.ReadOnlyModelViewSet):
     read:
     Returns the information of an individual issue.
     """
-    queryset = Issue.objects.all()
+    queryset = (
+        Issue.objects
+        .select_related('series')
+        .prefetch_related('characters')
+        .prefetch_related('teams')
+        .prefetch_related('arcs')
+    )
     serializer_class = IssueSerializer
     lookup_field = 'slug'
 
