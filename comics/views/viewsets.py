@@ -87,7 +87,10 @@ class SeriesViewSet(viewsets.ReadOnlyModelViewSet):
     read:
     Returns the information of an individual comic series.
     """
-    queryset = Series.objects.all()
+    queryset = (
+        Series.objects
+        .select_related('publisher')
+    )
     serializer_class = SeriesSerializer
     lookup_field = 'slug'
 
