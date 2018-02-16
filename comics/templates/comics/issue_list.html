@@ -15,7 +15,11 @@
                     {% if issue.cover %}
                         <img src="{{ issue.cover.url }}" alt = "{{ issue }}" >
                     {% else %}
-                        <img src="{% static 'site/image-not-found.png' %}" alt="{{ issue }}" >
+                        <img src="{% static 'site/image-not-found.png' %}" alt="Image not found" >
+                    {% endif %}
+                    {# TODO: Use font awesome icons to differentiate between Unread & Partially Read #}
+                    {% if issue.status < 2 %}
+                        <div class="status"></div>
                     {% endif %}
                 </a>
                 <a href="{% url 'issue:detail' issue.slug %}"><p>{{ issue }}</p></a>

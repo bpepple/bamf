@@ -372,6 +372,17 @@ a.button.import-comics {
     border-radius: 8px;
 }
 
+.all-series li .status {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 32px;
+    height: 32px;
+    background: #6bc0fc;
+    box-shadow: 0px 0px 6px #000000;
+    border-radius: 16px;
+}
+
 .all-series li .unread-count {
     position: absolute;
     top: 0px;
@@ -674,7 +685,6 @@ a.button.import-comics {
     top: 5px;
     right: 5px;
     color: #6bc0fc;
-    text-shadow: 0px 0px 6px #000000;
 }
 
 /*
