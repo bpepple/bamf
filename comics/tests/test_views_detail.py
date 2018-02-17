@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -12,6 +13,12 @@ HTML_OK_CODE = 200
 class IssueDetailViewTest(TestCase):
 
     def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client.login(username='brian', password='1234')
+
         issue_date = timezone.now().date()
         mod_time = timezone.now()
         publisher = Publisher.objects.create(
@@ -36,6 +43,12 @@ class IssueDetailViewTest(TestCase):
 class PublisherDetailViewTest(TestCase):
 
     def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client.login(username='brian', password='1234')
+
         self.publisher = Publisher.objects.create(
             name='DC Comics',
             slug='dc-comics')
@@ -55,6 +68,12 @@ class PublisherDetailViewTest(TestCase):
 class SeriesDetailViewTest(TestCase):
 
     def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client.login(username='brian', password='1234')
+
         pub = Publisher.objects.create(name='DC Comics', slug='dc-comics',)
 
         self.series = Series.objects.create(
@@ -75,6 +94,12 @@ class SeriesDetailViewTest(TestCase):
 class CreatorDetailViewTest(TestCase):
 
     def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client.login(username='brian', password='1234')
+
         self.creator = Creator.objects.create(
             name='Jack Kirby', slug='jack-kirby', cvid=4321)
 
@@ -93,6 +118,12 @@ class CreatorDetailViewTest(TestCase):
 class CharacterDetailViewTest(TestCase):
 
     def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client.login(username='brian', password='1234')
+
         self.character = Character.objects.create(
             name='Captain America', slug='captain-america', cvid=1234)
 
@@ -111,6 +142,12 @@ class CharacterDetailViewTest(TestCase):
 class TeamDetailViewTest(TestCase):
 
     def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client.login(username='brian', password='1234')
+
         self.team = Team.objects.create(
             name='The Fantastic Four', slug='the-fantastic-four', cvid=4444)
 
@@ -129,6 +166,12 @@ class TeamDetailViewTest(TestCase):
 class ArcDetailViewTest(TestCase):
 
     def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client.login(username='brian', password='1234')
+
         self.arc = Arc.objects.create(
             name='Death of Superman', slug='death-of-superman', cvid=4444)
 
