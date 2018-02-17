@@ -19,6 +19,7 @@ from comics.urls import (
 
 
 urlpatterns = [
+    path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('docs/', include_docs_urls(title='Bamf API')),
     path('', RedirectView.as_view(url='/series/page1',

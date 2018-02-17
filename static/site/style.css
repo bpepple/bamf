@@ -97,7 +97,7 @@ header li {
     float: left;
 }
 
-header li a {
+header li a, .dropbtn {
     display: block;
     color: white;
     text-align: center;
@@ -105,13 +105,49 @@ header li a {
     text-decoration: none;
 }
 
-header li a:hover {
-    background-color: #111;
+header li a:hover, .dropdown:hover .dropbtn {
+    background-color: #6bc0fc;
+    color: black;
+}
+
+header li.dropdown {
+    display: inline-block;
+}
+
+header .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #6bc0fc;
+    min-width: 93px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+header .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+header .dropdown-content a:hover {
+	color: white;
+	background-color: #022e4e;
+}
+
+header .dropdown:hover .dropdown-content {
+    display: block;
 }
 
 header .settings-button {
 	cursor: pointer;
 }
+
+header .settings-button:hover {
+	color: black
+}
+
 /*
  *  Footer
  */
