@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 
@@ -20,7 +20,6 @@ class PublisherListViewTest(TestCase):
         user.set_password('1234')
         user.save()
 
-        self.client = Client()
         self.client.login(username='brian', password='1234')
 
         for pub_num in range(PAGINATE_TEST_VAL):
@@ -67,7 +66,6 @@ class SeriesListViewTest(TestCase):
         user.set_password('1234')
         user.save()
 
-        self.client = Client()
         self.client.login(username='brian', password='1234')
 
         pub = Publisher.objects.create(name='Marvel', slug='marvel')
@@ -119,7 +117,6 @@ class CreatorListViewTest(TestCase):
         user.set_password('1234')
         user.save()
 
-        self.client = Client()
         self.client.login(username='brian', password='1234')
 
         for creator in range(PAGINATE_TEST_VAL):
@@ -165,7 +162,6 @@ class CharacterListViewTest(TestCase):
         user.set_password('1234')
         user.save()
 
-        self.client = Client()
         self.client.login(username='brian', password='1234')
 
         for character in range(PAGINATE_TEST_VAL):
@@ -211,7 +207,6 @@ class TeamListViewTest(TestCase):
         user.set_password('1234')
         user.save()
 
-        self.client = Client()
         self.client.login(username='brian', password='1234')
 
         for team in range(PAGINATE_TEST_VAL):
@@ -256,7 +251,6 @@ class ArcListViewTest(TestCase):
         user.set_password('1234')
         user.save()
 
-        self.client = Client()
         self.client.login(username='brian', password='1234')
 
         for arc in range(PAGINATE_TEST_VAL):
