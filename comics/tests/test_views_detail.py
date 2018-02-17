@@ -39,6 +39,12 @@ class IssueDetailViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/issue_detail.html')
 
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(
+            reverse('issue:detail', args=(self.issue.slug,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/issue/batman-1/')
+
 
 class PublisherDetailViewTest(TestCase):
 
@@ -63,6 +69,13 @@ class PublisherDetailViewTest(TestCase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/publisher_detail.html')
+
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(
+            reverse('publisher:detail', args=(self.publisher.slug,)))
+        self.assertRedirects(
+            resp, '/accounts/login/?next=/publisher/dc-comics/')
 
 
 class SeriesDetailViewTest(TestCase):
@@ -90,6 +103,12 @@ class SeriesDetailViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/series_detail.html')
 
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(
+            reverse('series:detail', args=(self.series.slug,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/series/superman/')
+
 
 class CreatorDetailViewTest(TestCase):
 
@@ -113,6 +132,13 @@ class CreatorDetailViewTest(TestCase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/creator_detail.html')
+
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(
+            reverse('creator:detail', args=(self.creator.slug,)))
+        self.assertRedirects(
+            resp, '/accounts/login/?next=/creator/jack-kirby/')
 
 
 class CharacterDetailViewTest(TestCase):
@@ -138,6 +164,13 @@ class CharacterDetailViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/character_detail.html')
 
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(
+            reverse('character:detail', args=(self.character.slug,)))
+        self.assertRedirects(
+            resp, '/accounts/login/?next=/character/captain-america/')
+
 
 class TeamDetailViewTest(TestCase):
 
@@ -162,6 +195,12 @@ class TeamDetailViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/team_detail.html')
 
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('team:detail', args=(self.team.slug,)))
+        self.assertRedirects(
+            resp, '/accounts/login/?next=/team/the-fantastic-four/')
+
 
 class ArcDetailViewTest(TestCase):
 
@@ -185,3 +224,9 @@ class ArcDetailViewTest(TestCase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/arc_detail.html')
+
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('arc:detail', args=(self.arc.slug,)))
+        self.assertRedirects(
+            resp, '/accounts/login/?next=/arc/death-of-superman/')
