@@ -1,6 +1,7 @@
 from functools import reduce
 import operator
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import ListView, DetailView
 
@@ -10,7 +11,7 @@ from comics.models import Series
 PAGINATE = 30
 
 
-class SeriesList(ListView):
+class SeriesList(LoginRequiredMixin, ListView):
     model = Series
     paginate_by = PAGINATE
     queryset = (
@@ -19,7 +20,7 @@ class SeriesList(ListView):
     )
 
 
-class SeriesDetail(DetailView):
+class SeriesDetail(LoginRequiredMixin, DetailView):
     model = Series
     queryset = (
         Series.objects
