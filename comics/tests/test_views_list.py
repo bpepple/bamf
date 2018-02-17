@@ -1,5 +1,6 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 from comics.models import (Publisher, Series, Creator,
                            Character, Team, Arc)
@@ -14,8 +15,14 @@ PAGINATE_DIFF_VAL = (PAGINATE_TEST_VAL - PAGINATE_DEFAULT_VAL)
 
 class PublisherListViewTest(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client = Client()
+        self.client.login(username='brian', password='1234')
+
         for pub_num in range(PAGINATE_TEST_VAL):
             Publisher.objects.create(
                 name='Publisher %s' % pub_num,
@@ -55,8 +62,14 @@ class PublisherListViewTest(TestCase):
 
 class SeriesListViewTest(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client = Client()
+        self.client.login(username='brian', password='1234')
+
         pub = Publisher.objects.create(name='Marvel', slug='marvel')
 
         for ser_num in range(PAGINATE_TEST_VAL):
@@ -101,8 +114,14 @@ class SeriesListViewTest(TestCase):
 
 class CreatorListViewTest(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client = Client()
+        self.client.login(username='brian', password='1234')
+
         for creator in range(PAGINATE_TEST_VAL):
             Creator.objects.create(
                 name='Creator %s' % creator,
@@ -141,8 +160,14 @@ class CreatorListViewTest(TestCase):
 
 class CharacterListViewTest(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client = Client()
+        self.client.login(username='brian', password='1234')
+
         for character in range(PAGINATE_TEST_VAL):
             Character.objects.create(
                 name='Character %s' % character,
@@ -181,8 +206,14 @@ class CharacterListViewTest(TestCase):
 
 class TeamListViewTest(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client = Client()
+        self.client.login(username='brian', password='1234')
+
         for team in range(PAGINATE_TEST_VAL):
             Team.objects.create(
                 name='Team %s' % team,
@@ -220,8 +251,14 @@ class TeamListViewTest(TestCase):
 
 class ArcListViewTest(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        self.client = Client()
+        self.client.login(username='brian', password='1234')
+
         for arc in range(PAGINATE_TEST_VAL):
             Arc.objects.create(
                 name='Arc %s' % arc,
