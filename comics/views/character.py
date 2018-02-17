@@ -1,6 +1,7 @@
 from functools import reduce
 import operator
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import ListView, DetailView
 
@@ -10,12 +11,12 @@ from comics.models import Character
 PAGINATE = 30
 
 
-class CharacterList(ListView):
+class CharacterList(LoginRequiredMixin, ListView):
     model = Character
     paginate_by = PAGINATE
 
 
-class CharacterDetail(DetailView):
+class CharacterDetail(LoginRequiredMixin, DetailView):
     model = Character
 
     def get_context_data(self, **kwargs):
