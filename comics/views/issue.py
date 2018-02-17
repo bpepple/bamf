@@ -1,5 +1,7 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, ListView
 
 from comics.models import Issue, Roles
@@ -11,7 +13,7 @@ PAGINATE = 30
 LIMIT_RESULTS = PAGINATE * 3
 
 
-class IssueList(ListView):
+class IssueList(LoginRequiredMixin, ListView):
     model = Issue
     paginate_by = PAGINATE
     queryset = (
@@ -22,7 +24,7 @@ class IssueList(ListView):
     )
 
 
-class IssueDetail(DetailView):
+class IssueDetail(LoginRequiredMixin, DetailView):
     model = Issue
     queryset = (
         Issue.objects
@@ -40,6 +42,7 @@ class IssueDetail(DetailView):
         return context
 
 
+@login_required
 def reader(request, slug):
     issue = get_object_or_404(Issue, slug=slug)
 
@@ -52,6 +55,7 @@ def reader(request, slug):
     return render(request, 'comics/reader.html', {'issue': issue, 'data_uri': uri_list})
 
 
+@login_required
 def update_issue_status(request, slug):
     issue = Issue.objects.get(slug=slug)
 
