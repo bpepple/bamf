@@ -1,20 +1,22 @@
 from functools import reduce
 import operator
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import ListView, DetailView
 
 from comics.models import Arc
 
+
 PAGINATE = 30
 
 
-class ArcList(ListView):
+class ArcList(LoginRequiredMixin, ListView):
     model = Arc
     paginate_by = PAGINATE
 
 
-class ArcDetail(DetailView):
+class ArcDetail(LoginRequiredMixin, DetailView):
     model = Arc
 
     def get_context_data(self, **kwargs):
