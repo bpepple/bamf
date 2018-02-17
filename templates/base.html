@@ -31,6 +31,9 @@
                 <li style="float:right" class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Account</a>
                     <div class="dropdown-content">
+                    {% if user.is_superuser %}
+                        <a href="{% url 'admin:index' %}">Admin</a>
+                    {% endif %}
                         <a href="{% url 'logout' %}">Logout</a>
                     </div>
                 </li>
