@@ -1,10 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic import UpdateView
 
 from comics.models import Settings
 
 
-class ServerSettingsView(UpdateView):
+class ServerSettingsView(LoginRequiredMixin, UpdateView):
     model = Settings
     fields = '__all__'
     template_name = 'comics/server_settings.html'
