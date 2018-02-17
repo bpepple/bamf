@@ -58,6 +58,11 @@ class PublisherListViewTest(TestCase):
         self.assertTrue(
             len(resp.context['publisher_list']) == PAGINATE_DIFF_VAL)
 
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('publisher:list', args=(1,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/publisher/page1/')
+
 
 class SeriesListViewTest(TestCase):
 
@@ -109,6 +114,11 @@ class SeriesListViewTest(TestCase):
         self.assertTrue(resp.context['is_paginated'] == True)
         self.assertTrue(len(resp.context['series_list']) == PAGINATE_DIFF_VAL)
 
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('series:list', args=(1,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/series/page1/')
+
 
 class CreatorListViewTest(TestCase):
 
@@ -153,6 +163,11 @@ class CreatorListViewTest(TestCase):
         self.assertTrue(resp.context['is_paginated'] == True)
         self.assertTrue(
             len(resp.context['creator_list']) == PAGINATE_DIFF_VAL)
+
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('creator:list', args=(1,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/creator/page1/')
 
 
 class CharacterListViewTest(TestCase):
@@ -199,6 +214,11 @@ class CharacterListViewTest(TestCase):
         self.assertTrue(
             len(resp.context['character_list']) == PAGINATE_DIFF_VAL)
 
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('character:list', args=(1,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/character/page1/')
+
 
 class TeamListViewTest(TestCase):
 
@@ -243,6 +263,11 @@ class TeamListViewTest(TestCase):
         self.assertTrue(
             len(resp.context['team_list']) == PAGINATE_DIFF_VAL)
 
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('team:list', args=(1,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/team/page1/')
+
 
 class ArcListViewTest(TestCase):
 
@@ -286,3 +311,8 @@ class ArcListViewTest(TestCase):
         self.assertTrue(resp.context['is_paginated'] == True)
         self.assertTrue(
             len(resp.context['arc_list']) == PAGINATE_DIFF_VAL)
+
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('arc:list', args=(1,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/arc/page1/')
