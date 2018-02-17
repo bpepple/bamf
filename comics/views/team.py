@@ -1,6 +1,7 @@
 from functools import reduce
 import operator
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import ListView, DetailView
 
@@ -10,12 +11,12 @@ from comics.models import Team
 PAGINATE = 30
 
 
-class TeamList(ListView):
+class TeamList(LoginRequiredMixin, ListView):
     model = Team
     paginate_by = PAGINATE
 
 
-class TeamDetail(DetailView):
+class TeamDetail(LoginRequiredMixin, DetailView):
     model = Team
 
     def get_context_data(self, **kwargs):
