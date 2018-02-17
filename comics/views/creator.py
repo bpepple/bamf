@@ -1,20 +1,22 @@
 from functools import reduce
 import operator
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import ListView, DetailView
 
 from comics.models import Creator, Roles, Issue
 
+
 PAGINATE = 30
 
 
-class CreatorList(ListView):
+class CreatorList(LoginRequiredMixin, ListView):
     model = Creator
     paginate_by = PAGINATE
 
 
-class CreatorDetail(DetailView):
+class CreatorDetail(LoginRequiredMixin, DetailView):
     model = Creator
 
     def get_context_data(self, **kwargs):
