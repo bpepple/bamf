@@ -118,7 +118,7 @@ header .dropdown-content {
     display: none;
     position: absolute;
     background-color: #6bc0fc;
-    min-width: 93px;
+    min-width: 110px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
