@@ -28,19 +28,23 @@
                 <li><a href="{% url 'team:list' page=1 %}">Teams</a></li>
                 <li><a href="{% url 'arc:list' page=1 %}">Story Arcs</a></li>
                 <li><a href="{% url 'issue:list' page=1 %}">Latest Added</a></li>
-                <li style="float:right">
-                    <a data-toggle="modal" data-target="#modal">
-                        <i class="settings-button fa fa-cog fa-lg"></i>
-                    </a>
-                </li>
                 <li style="float:right" class="dropdown">
-                    <a href="javascript:void(0)" class="dropbtn">{{ user.first_name }}</a>
+                    {% if user.first_name|length %}
+                        <a href="javascript:void(0)" class="dropbtn">{{ user.first_name }}</a>
+                    {% else %}
+                        <a href="javascript:void(0)" class="dropbtn">Admin</a>
+                    {% endif %}
                     <div class="dropdown-content">
                     {% if user.is_superuser %}
                         <a href="{% url 'admin:index' %}">Admin</a>
                     {% endif %}
                         <a href="{% url 'logout' %}">Logout</a>
                     </div>
+                </li>
+                <li style="float:right">
+                    <a data-toggle="modal" data-target="#modal">
+                        <i class="settings-button fa fa-cog fa-lg"></i>
+                    </a>
                 </li>
                 {% endif %}
             </ul>
