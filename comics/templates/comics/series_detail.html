@@ -9,7 +9,7 @@
 	{% if series.issue_numerical_order_set.first.cover %}
 		<img src="{{ series.issue_numerical_order_set.first.cover.url }}" alt="{{ series.name }}" >
     {% else %}
-        <img src="{% static 'site/image-not-found.png' %}" alt="Image not found" >
+        <img src="{% static 'site/img/image-not-found.png' %}" alt="Image not found" >
 	{% endif %}
 	</div>
 	<div class="series-info">

@@ -12,7 +12,7 @@
 						{% if issue.thumb %}
 							<img src="{{ issue.thumb.url }}" alt = "{{ series.name }}" >
 						{% else %}
-							<img src="{% static 'site/image-not-found.png' %}" alt="{{ series.name }}" >
+							<img src="{% static 'site/img/image-not-found.png' %}" alt="{{ series.name }}" >
 						{% endif %}
 						{% if issue.status == 0 %}
 							<i class="fa fa-circle fa-2x"></i>
