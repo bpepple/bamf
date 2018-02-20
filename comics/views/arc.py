@@ -25,7 +25,7 @@ class ArcDetail(LoginRequiredMixin, DetailView):
         context['issue_list'] = (
             arc.issue_set.all()
             .select_related('series')
-            .only('slug', 'thumb', 'number', 'status', 'series__name')
+            .only('slug', 'cover', 'number', 'status', 'series__name')
         )
         return context
 

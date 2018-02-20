@@ -26,7 +26,7 @@ class CreatorDetail(LoginRequiredMixin, DetailView):
         context['issue_list'] = (
             Issue.objects.filter(id__in=roles.values('issue_id'))
             .select_related('series')
-            .only('slug', 'thumb', 'number', 'status', 'series__name')
+            .only('slug', 'cover', 'number', 'status', 'series__name')
         )
         return context
 
