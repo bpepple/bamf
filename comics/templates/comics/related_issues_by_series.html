@@ -18,8 +18,8 @@
 				<li>
 					<a href="{% url 'issue:detail' issue.slug %}">
 						<div class="image">
-							{% if issue.thumb %}
-								<img src="{{ issue.thumb.url }}" alt="{{ series.name }}" >
+							{% if issue.cover %}
+								<img src="{{ issue.cover.url }}" alt="{{ series.name }}" >
 							{% else %}
 						        <img src="{% static 'site/img/image-not-found.png' %}" alt="{{ series.name }}" >
 							{% endif %}

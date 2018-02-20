@@ -9,8 +9,8 @@
 			<li>
 				<a href="{% url 'team:detail' team.slug %}">
 					<div class="image">
-						{% if team.thumb %}
-							<img src="{{ team.thumb.url }}" alt="{{ team.name }}" >
+						{% if team.image %}
+							<img src="{{ team.image.url }}" alt="{{ team.name }}" >
 						{% else %}
 							<img src="{% static 'site/img/image-not-found.png' %}" alt="{{ team.name }}" >
 						{% endif %}

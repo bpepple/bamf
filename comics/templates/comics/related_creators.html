@@ -10,7 +10,7 @@
                 <a href="{% url 'creator:detail' roles.creator.slug %}">
                     <div class="image">
                     {% if roles.creator.image %}
-                        <img src="{{ roles.creator.thumb.url }}" alt="{{ roles.creator.name }}" >
+                        <img src="{{ roles.creator.image.url }}" alt="{{ roles.creator.name }}" >
                     {% else %}
 				        <img src="{% static 'site/img/image-not-found.png' %}" alt="{{ roles.creator.name }}" >
 				    {% endif %}
