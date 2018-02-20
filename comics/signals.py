@@ -3,7 +3,6 @@ import os.path
 from django.conf import settings
 
 NORMAL_DIR = 'normal/'
-THUMB_DIR = 'thumbnails/'
 
 
 def remove_image(img):
@@ -26,9 +25,6 @@ def pre_delete_creator(sender, **kwargs):
     img = path + NORMAL_DIR + str(instance.image_name())
     remove_image(img)
 
-    thumb = path + THUMB_DIR + str(instance.thumb_name())
-    remove_image(thumb)
-
 
 def pre_delete_team(sender, **kwargs):
     instance = kwargs['instance']
@@ -37,9 +33,6 @@ def pre_delete_team(sender, **kwargs):
     img = path + NORMAL_DIR + str(instance.image_name())
     remove_image(img)
 
-    thumb = path + THUMB_DIR + str(instance.thumb_name())
-    remove_image(thumb)
-
 
 def pre_delete_character(sender, **kwargs):
     instance = kwargs['instance']
@@ -47,9 +40,6 @@ def pre_delete_character(sender, **kwargs):
     path = settings.MEDIA_ROOT + '/images/characters/'
     img = path + NORMAL_DIR + str(instance.image_name())
     remove_image(img)
-
-    thumb = path + THUMB_DIR + str(instance.thumb_name())
-    remove_image(thumb)
 
     # Delete related team if this is the only
     # character related to that team.
@@ -72,9 +62,6 @@ def pre_delete_issue(sender, **kwargs):
     path = settings.MEDIA_ROOT + '/images/issues/'
     cover = path + NORMAL_DIR + str(instance.cover_name())
     remove_image(cover)
-
-    thumb = path + THUMB_DIR + (instance.thumb_name())
-    remove_image(thumb)
 
     # Delete related arc if this is the only
     # issue related to that arc.

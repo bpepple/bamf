@@ -49,7 +49,7 @@ class CharacterAdmin(admin.ModelAdmin):
     # form view
     fieldsets = (
         (None, {'fields': ('cvid', 'cvurl', 'name',
-                           'slug', 'desc', 'image', 'thumb')}),
+                           'slug', 'desc', 'image')}),
         ('Related', {'fields': ('teams',)}),
     )
     filter_horizontal = ('teams',)
@@ -96,7 +96,7 @@ class IssueAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('cvid', 'file', 'cvurl', 'series',
                            'name', 'slug', 'number', 'date',
-                           'desc', 'cover', 'thumb', 'status')}),
+                           'desc', 'cover', 'status')}),
         ('Related', {'fields': ('arcs', 'characters', 'teams')}),
     )
     filter_horizontal = ('arcs', 'characters', 'teams')

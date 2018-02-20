@@ -403,8 +403,7 @@ class ComicImporter(object):
         data = self.getCVObjectData(response['results'])
 
         issue = Issue.objects.get(cvid=issue_cvid)
-        issue.thumb = utils.resize_images(data['image'], ISSUES_FOLDER, True)
-        issue.cover = utils.resize_images(data['image'], ISSUES_FOLDER, False)
+        issue.cover = utils.resize_images(data['image'], ISSUES_FOLDER)
         issue.desc = data['desc']
         issue.save()
         os.remove(data['image'])
@@ -504,12 +503,10 @@ class ComicImporter(object):
 
         return response
 
-    def create_images(self, db_obj, img_dir, thumb):
+    def create_images(self, db_obj, img_dir):
         base_name = db_obj.image_name()
         old_image_path = settings.MEDIA_ROOT + '/images/' + base_name
-        if thumb:
-            db_obj.thumb = utils.resize_images(db_obj.image, img_dir, True)
-        db_obj.image = utils.resize_images(db_obj.image, img_dir, False)
+        db_obj.image = utils.resize_images(db_obj.image, img_dir)
         db_obj.save()
         os.remove(old_image_path)
 
@@ -676,7 +673,7 @@ class ComicImporter(object):
                 p = self.getPublisher(issue_response)
                 if p is not None:
                     publisher_obj.logo = utils.resize_images(
-                        p['image'], PUBLISHERS_FOLDER, False)
+                        p['image'], PUBLISHERS_FOLDER)
                     publisher_obj.cvid = int(p['cvid'])
                     publisher_obj.cvurl = p['cvurl']
                     publisher_obj.desc = p['desc']
@@ -707,8 +704,7 @@ class ComicImporter(object):
                                              ch['api_detail_url'])
 
                     if character_obj.image:
-                        self.create_images(
-                            character_obj, CHARACTERS_FOLDERS, True)
+                        self.create_images(character_obj, CHARACTERS_FOLDERS)
 
                     if res:
                         self.logger.info('Added character: %s' % character_obj)
@@ -738,7 +734,7 @@ class ComicImporter(object):
                                              story_arc['api_detail_url'])
 
                     if story_obj.image:
-                        self.create_images(story_obj, ARCS_FOLDER, False)
+                        self.create_images(story_obj, ARCS_FOLDER)
 
                     if res:
                         self.logger.info('Added storyarc: %s' % story_obj)
@@ -776,7 +772,7 @@ class ComicImporter(object):
                                              team['api_detail_url'])
 
                     if team_obj.image:
-                        self.create_images(team_obj, TEAMS_FOLDERS, True)
+                        self.create_images(team_obj, TEAMS_FOLDERS)
 
                     if res:
                         self.logger.info('Added team: %s' % team_obj)
@@ -815,7 +811,7 @@ class ComicImporter(object):
                                              p['api_detail_url'])
 
                     if creator_obj.image:
-                        self.create_images(creator_obj, CREATORS_FOLDERS, True)
+                        self.create_images(creator_obj, CREATORS_FOLDERS)
 
                     if res:
                         self.logger.info('Added creator: %s' % creator_obj)

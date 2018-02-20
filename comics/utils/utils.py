@@ -6,31 +6,21 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from django.conf import settings
 
-THUMBNAIL_WIDTH = 200
-THUMBNAIL_HEiGHT = 305
-
 NORMAL_WIDTH = 320
 NORMAL_HEIGHT = 487
 
 
-def resize_images(path, folder, thumb):
+def resize_images(path, folder):
     if path:
         # Split width and height
-        if not thumb:
-            crop_width = NORMAL_WIDTH
-            crop_height = NORMAL_HEIGHT
-        else:
-            crop_width = THUMBNAIL_WIDTH
-            crop_height = THUMBNAIL_HEiGHT
+        crop_width = NORMAL_WIDTH
+        crop_height = NORMAL_HEIGHT
 
         old_filename = os.path.basename(str(path))
         (shortname, ext) = os.path.splitext(old_filename)
         # 18 characters should be more than enough.
         new_filename = str(uuid.uuid4())
-        if not thumb:
-            cache_path = 'images/' + folder + '/normal/' + new_filename + ext
-        else:
-            cache_path = 'images/' + folder + '/thumbnails/' + new_filename + ext
+        cache_path = 'images/' + folder + '/normal/' + new_filename + ext
 
         new_path = settings.MEDIA_ROOT + '/' + cache_path
         new_url = cache_path
