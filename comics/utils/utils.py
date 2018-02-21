@@ -20,7 +20,7 @@ def resize_images(path, folder):
         (shortname, ext) = os.path.splitext(old_filename)
         # 18 characters should be more than enough.
         new_filename = str(uuid.uuid4())
-        cache_path = 'images/' + folder + '/normal/' + new_filename + ext
+        cache_path = 'images/' + folder + '/' + new_filename + ext
 
         new_path = settings.MEDIA_ROOT + '/' + cache_path
         new_url = cache_path
