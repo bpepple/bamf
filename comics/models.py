@@ -43,9 +43,6 @@ class Arc(models.Model):
     desc = models.TextField('Description', max_length=500, blank=True)
     image = models.ImageField(upload_to='images/arcs/', blank=True)
 
-    def image_name(self):
-        return os.path.basename(self.image.name)
-
     def __str__(self):
         return self.name
 
@@ -60,9 +57,6 @@ class Team(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     image = models.ImageField(upload_to='images/teams/', blank=True)
-
-    def image_name(self):
-        return os.path.basename(self.image.name)
 
     def __str__(self):
         return self.name
@@ -80,9 +74,6 @@ class Character(models.Model):
     teams = models.ManyToManyField(Team, blank=True)
     image = models.ImageField(upload_to='images/characters/', blank=True)
 
-    def image_name(self):
-        return os.path.basename(self.image.name)
-
     def __str__(self):
         return self.name
 
@@ -98,9 +89,6 @@ class Creator(models.Model):
     desc = models.TextField('Description', max_length=500, blank=True)
     image = models.ImageField(upload_to='images/creators/', blank=True)
 
-    def image_name(self):
-        return os.path.basename(self.image.name)
-
     def __str__(self):
         return self.name
 
@@ -115,9 +103,6 @@ class Publisher(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     logo = models.ImageField(upload_to='images/publishers/', blank=True)
-
-    def logo_name(self):
-        return os.path.basename(self.logo.name)
 
     def series_count(self):
         return self.series_set.all().count()
@@ -193,9 +178,6 @@ class Issue(models.Model):
     mod_ts = models.DateTimeField()
     import_date = models.DateTimeField('Date Imported',
                                        auto_now_add=True)
-
-    def cover_name(self):
-        return os.path.basename(self.cover.name)
 
     def __str__(self):
         return self.series.name + ' #' + str(self.number)
