@@ -1,43 +1,12 @@
-import os.path
 
-from django.conf import settings
-
-
-def remove_image(img):
-    if os.path.isfile(img):
-        os.remove(img)
+def pre_delete_image(sender, instance, **kwargs):
+    if (instance.image):
+        instance.image.delete(False)
 
 
-def pre_delete_arc(sender, **kwargs):
-    instance = kwargs['instance']
-
-    path = settings.MEDIA_ROOT + '/images/arcs/'
-    img = path + str(instance.image_name())
-    remove_image(img)
-
-
-def pre_delete_creator(sender, **kwargs):
-    instance = kwargs['instance']
-
-    path = settings.MEDIA_ROOT + '/images/creators/'
-    img = path + str(instance.image_name())
-    remove_image(img)
-
-
-def pre_delete_team(sender, **kwargs):
-    instance = kwargs['instance']
-
-    path = settings.MEDIA_ROOT + '/images/teams/'
-    img = path + str(instance.image_name())
-    remove_image(img)
-
-
-def pre_delete_character(sender, **kwargs):
-    instance = kwargs['instance']
-
-    path = settings.MEDIA_ROOT + '/images/characters/'
-    img = path + str(instance.image_name())
-    remove_image(img)
+def pre_delete_character(sender, instance, **kwargs):
+    if (instance.image):
+        instance.image.delete(False)
 
     # Delete related team if this is the only
     # character related to that team.
@@ -46,20 +15,14 @@ def pre_delete_character(sender, **kwargs):
             team.delete()
 
 
-def pre_delete_publisher(sender, **kwargs):
-    instance = kwargs['instance']
-
-    path = settings.MEDIA_ROOT + '/images/publishers/'
-    logo = path + str(instance.logo_name())
-    remove_image(logo)
+def pre_delete_publisher(sender, instance, **kwargs):
+    if (instance.logo):
+        instance.logo.delete(False)
 
 
-def pre_delete_issue(sender, **kwargs):
-    instance = kwargs['instance']
-
-    path = settings.MEDIA_ROOT + '/images/issues/'
-    cover = path + str(instance.cover_name())
-    remove_image(cover)
+def pre_delete_issue(sender, instance, **kwargs):
+    if (instance.cover):
+        instance.cover.delete(False)
 
     # Delete related arc if this is the only
     # issue related to that arc.
