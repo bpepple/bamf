@@ -40,7 +40,8 @@ class Arc(models.Model):
     name = models.CharField('Arc Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.ImageField(upload_to='images/arcs/', blank=True)
+    image = models.ImageField(upload_to='images/arcs/',
+                              max_length=150, blank=True)
 
     def __str__(self):
         return self.name
@@ -55,7 +56,8 @@ class Team(models.Model):
     name = models.CharField('Team Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.ImageField(upload_to='images/teams/', blank=True)
+    image = models.ImageField(
+        upload_to='images/teams/', max_length=150, blank=True)
 
     def __str__(self):
         return self.name
@@ -71,7 +73,8 @@ class Character(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
-    image = models.ImageField(upload_to='images/characters/', blank=True)
+    image = models.ImageField(
+        upload_to='images/characters/', max_length=150, blank=True)
 
     def __str__(self):
         return self.name
@@ -86,7 +89,8 @@ class Creator(models.Model):
     name = models.CharField('Creator Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    image = models.ImageField(upload_to='images/creators/', blank=True)
+    image = models.ImageField(
+        upload_to='images/creators/', max_length=150, blank=True)
 
     def __str__(self):
         return self.name
@@ -101,7 +105,8 @@ class Publisher(models.Model):
     name = models.CharField('Series Name', max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     desc = models.TextField('Description', max_length=500, blank=True)
-    logo = models.ImageField(upload_to='images/publishers/', blank=True)
+    logo = models.ImageField(
+        upload_to='images/publishers/', max_length=150, blank=True)
 
     def series_count(self):
         return self.series_set.all().count()
@@ -167,7 +172,7 @@ class Issue(models.Model):
     teams = models.ManyToManyField(Team, blank=True)
     file = models.CharField('File Path', max_length=300)
     cover = models.ImageField(
-        'Cover Image', upload_to='images/issues/', blank=True)
+        'Cover Image', upload_to='images/issues/', max_length=150, blank=True)
     status = models.PositiveSmallIntegerField(
         'Status', choices=STATUS_CHOICES, default=0, blank=True)
     leaf = models.PositiveSmallIntegerField(
