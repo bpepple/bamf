@@ -504,7 +504,7 @@ class ComicImporter(object):
         return response
 
     def create_images(self, db_obj, img_dir):
-        base_name = db_obj.image_name()
+        base_name = os.path.basename(db_obj.image.name)
         old_image_path = settings.MEDIA_ROOT + '/images/' + base_name
         db_obj.image = utils.resize_images(db_obj.image, img_dir)
         db_obj.save()
