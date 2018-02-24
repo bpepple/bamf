@@ -2,6 +2,7 @@ import datetime
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.urls import reverse
 from django.utils.functional import cached_property
 from solo.models import SingletonModel
 
@@ -43,6 +44,9 @@ class Arc(models.Model):
     image = models.ImageField(upload_to='images/arcs/',
                               max_length=150, blank=True)
 
+    def get_absolute_url(self):
+        return reverse('arc:detail', args=[self.slug])
+
     def __str__(self):
         return self.name
 
@@ -58,6 +62,9 @@ class Team(models.Model):
     desc = models.TextField('Description', max_length=500, blank=True)
     image = models.ImageField(
         upload_to='images/teams/', max_length=150, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('team:detail', args=[self.slug])
 
     def __str__(self):
         return self.name
@@ -76,6 +83,9 @@ class Character(models.Model):
     image = models.ImageField(
         upload_to='images/characters/', max_length=150, blank=True)
 
+    def get_absolute_url(self):
+        return reverse('character:detail', args=[self.slug])
+
     def __str__(self):
         return self.name
 
@@ -92,6 +102,9 @@ class Creator(models.Model):
     image = models.ImageField(
         upload_to='images/creators/', max_length=150, blank=True)
 
+    def get_absolute_url(self):
+        return reverse('creator:detail', args=[self.slug])
+
     def __str__(self):
         return self.name
 
@@ -107,6 +120,9 @@ class Publisher(models.Model):
     desc = models.TextField('Description', max_length=500, blank=True)
     logo = models.ImageField(
         upload_to='images/publishers/', max_length=150, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('publisher:detail', args=[self.slug])
 
     def series_count(self):
         return self.series_set.all().count()
@@ -132,6 +148,9 @@ class Series(models.Model):
     year = models.PositiveSmallIntegerField(
         'year', choices=YEAR_CHOICES, default=datetime.datetime.now().year, blank=True)
     desc = models.TextField('Description', max_length=500, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('series:detail', args=[self.slug])
 
     def __str__(self):
         return self.name
@@ -182,6 +201,9 @@ class Issue(models.Model):
     mod_ts = models.DateTimeField()
     import_date = models.DateTimeField('Date Imported',
                                        auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse('issue:detail', args=[self.slug])
 
     def __str__(self):
         return self.series.name + ' #' + str(self.number)
