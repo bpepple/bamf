@@ -136,9 +136,25 @@ class SeriesTest(TestCase):
         cls.slug = slugify(cls.name)
         cls.cvid = 1234
 
+        issue_date = timezone.now().date()
+        mod_time = timezone.now()
+
         pub = Publisher.objects.create(name='DC Comics', slug='dc-comics')
         cls.series = Series.objects.create(
             name=cls.name, slug=cls.slug, cvid=cls.cvid, sort_title=cls.sort, publisher=pub)
+
+        # Create 10 issues to test unread counts.
+        for i in range(10):
+            slug = slugify(cls.name + ' ' + str(i))
+            tst_file = '/home/b-' + str(i) + '.cbz'
+            Issue.objects.create(cvid=str(i), cvurl='http://2.com', slug=slug,
+                                 file=tst_file, mod_ts=mod_time, date=issue_date,
+                                 number=str(i), series=cls.series)
+
+        # Mark one of the issues as Read.
+        iss = Issue.objects.get(id=1)
+        iss.status = 2
+        iss.save()
 
     def test_series_creation(self):
         self.assertTrue(isinstance(self.series, Series))
@@ -147,4 +163,10 @@ class SeriesTest(TestCase):
     def test_verbose_name_plural(self):
         self.assertEqual(str(self.series._meta.verbose_name_plural), "Series")
 
-#     TODO: Add test for issue count & unread count.
+    def test_unread_issue_count(self):
+        unread_count = self.series.unread_issue_count
+        self.assertEqual(unread_count, 9)
+
+    def test_issue_count(self):
+        issue_count = self.series.issue_count
+        self.assertEqual(issue_count, 10)
