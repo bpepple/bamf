@@ -12,12 +12,11 @@ HTML_OK_CODE = 200
 
 class IssueDetailViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
-
-        self.client.login(username='brian', password='1234')
 
         issue_date = timezone.now().date()
         mod_time = timezone.now()
@@ -25,8 +24,11 @@ class IssueDetailViewTest(TestCase):
             name='DC Comics', slug='dc-comics')
         series = Series.objects.create(
             cvid='1234', name='Batman', slug='batman', publisher=publisher)
-        self.issue = Issue.objects.create(cvid='4321', cvurl='http://2.com', slug='batman-1',
-                                          file='/home/b.cbz', mod_ts=mod_time, date=issue_date, number='1', series=series)
+        cls.issue = Issue.objects.create(cvid='4321', cvurl='http://2.com', slug='batman-1',
+                                         file='/home/b.cbz', mod_ts=mod_time, date=issue_date, number='1', series=series)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_accessible_by_name(self):
         url = reverse('issue:detail', args=(self.issue.slug,))
@@ -48,16 +50,18 @@ class IssueDetailViewTest(TestCase):
 
 class PublisherDetailViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
 
-        self.client.login(username='brian', password='1234')
-
-        self.publisher = Publisher.objects.create(
+        cls.publisher = Publisher.objects.create(
             name='DC Comics',
             slug='dc-comics')
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_accessible_by_name(self):
         url = reverse('publisher:detail', args=(self.publisher.slug,))
@@ -80,17 +84,19 @@ class PublisherDetailViewTest(TestCase):
 
 class SeriesDetailViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
 
-        self.client.login(username='brian', password='1234')
-
         pub = Publisher.objects.create(name='DC Comics', slug='dc-comics',)
 
-        self.series = Series.objects.create(
+        cls.series = Series.objects.create(
             publisher=pub, name='Superman', slug='superman', cvid=1234,)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_accessible_by_name(self):
         url = reverse('series:detail', args=(self.series.slug,))
@@ -112,15 +118,17 @@ class SeriesDetailViewTest(TestCase):
 
 class CreatorDetailViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
 
-        self.client.login(username='brian', password='1234')
-
-        self.creator = Creator.objects.create(
+        cls.creator = Creator.objects.create(
             name='Jack Kirby', slug='jack-kirby', cvid=4321)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_accessible_by_name(self):
         url = reverse('creator:detail', args=(self.creator.slug,))
@@ -143,15 +151,17 @@ class CreatorDetailViewTest(TestCase):
 
 class CharacterDetailViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
 
-        self.client.login(username='brian', password='1234')
-
-        self.character = Character.objects.create(
+        cls.character = Character.objects.create(
             name='Captain America', slug='captain-america', cvid=1234)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_accessible_by_name(self):
         url = reverse('character:detail', args=(self.character.slug,))
@@ -174,15 +184,17 @@ class CharacterDetailViewTest(TestCase):
 
 class TeamDetailViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
 
-        self.client.login(username='brian', password='1234')
-
-        self.team = Team.objects.create(
+        cls.team = Team.objects.create(
             name='The Fantastic Four', slug='the-fantastic-four', cvid=4444)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_accessible_by_name(self):
         url = reverse('team:detail', args=(self.team.slug,))
@@ -204,15 +216,17 @@ class TeamDetailViewTest(TestCase):
 
 class ArcDetailViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
 
-        self.client.login(username='brian', password='1234')
-
-        self.arc = Arc.objects.create(
+        cls.arc = Arc.objects.create(
             name='Death of Superman', slug='death-of-superman', cvid=4444)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_accessible_by_name(self):
         url = reverse('arc:detail', args=(self.arc.slug,))

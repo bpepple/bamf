@@ -15,18 +15,20 @@ PAGINATE_DIFF_VAL = (PAGINATE_TEST_VAL - PAGINATE_DEFAULT_VAL)
 
 class PublisherListViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
-
-        self.client.login(username='brian', password='1234')
 
         for pub_num in range(PAGINATE_TEST_VAL):
             Publisher.objects.create(
                 name='Publisher %s' % pub_num,
                 slug='publisher-%s' % pub_num,
                 logo='images/1.jpg')
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/publisher/page1/')
@@ -41,7 +43,7 @@ class PublisherListViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/publisher_list.html')
 
-    def test_pagination_is_twenty_eight(self):
+    def test_pagination_is_thirty(self):
         resp = self.client.get(reverse('publisher:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -66,12 +68,11 @@ class PublisherListViewTest(TestCase):
 
 class SeriesListViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
-
-        self.client.login(username='brian', password='1234')
 
         pub = Publisher.objects.create(name='Marvel', slug='marvel')
 
@@ -81,6 +82,9 @@ class SeriesListViewTest(TestCase):
                 slug='series-%s' % ser_num,
                 publisher=pub,
                 cvid=ser_num)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_redirect(self):
         resp = self.client.get('/')
@@ -99,7 +103,7 @@ class SeriesListViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/series_list.html')
 
-    def test_pagination_is_twenty_eight(self):
+    def test_pagination_is_thirty(self):
         resp = self.client.get(reverse('series:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -122,18 +126,20 @@ class SeriesListViewTest(TestCase):
 
 class CreatorListViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
-
-        self.client.login(username='brian', password='1234')
 
         for creator in range(PAGINATE_TEST_VAL):
             Creator.objects.create(
                 name='Creator %s' % creator,
                 slug='creator-%s' % creator,
                 cvid=creator)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/creator/page1/')
@@ -148,7 +154,7 @@ class CreatorListViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/creator_list.html')
 
-    def test_pagination_is_twenty_eight(self):
+    def test_pagination_is_thirty(self):
         resp = self.client.get(reverse('creator:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -172,18 +178,20 @@ class CreatorListViewTest(TestCase):
 
 class CharacterListViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
-
-        self.client.login(username='brian', password='1234')
 
         for character in range(PAGINATE_TEST_VAL):
             Character.objects.create(
                 name='Character %s' % character,
                 slug='character-%s' % character,
                 cvid=character)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/character/page1/')
@@ -198,7 +206,7 @@ class CharacterListViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/character_list.html')
 
-    def test_pagination_is_twenty_eight(self):
+    def test_pagination_is_thirty(self):
         resp = self.client.get(reverse('character:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -222,18 +230,20 @@ class CharacterListViewTest(TestCase):
 
 class TeamListViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
-
-        self.client.login(username='brian', password='1234')
 
         for team in range(PAGINATE_TEST_VAL):
             Team.objects.create(
                 name='Team %s' % team,
                 slug='team-%s' % team,
                 cvid=team)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/team/page1/')
@@ -248,7 +258,7 @@ class TeamListViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/team_list.html')
 
-    def test_pagination_is_twenty_eight(self):
+    def test_pagination_is_thirty(self):
         resp = self.client.get(reverse('team:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -271,18 +281,20 @@ class TeamListViewTest(TestCase):
 
 class ArcListViewTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
-
-        self.client.login(username='brian', password='1234')
 
         for arc in range(PAGINATE_TEST_VAL):
             Arc.objects.create(
                 name='Arc %s' % arc,
                 slug='arc-%s' % arc,
                 cvid=arc)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/arc/page1/')
@@ -297,7 +309,7 @@ class ArcListViewTest(TestCase):
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTemplateUsed(resp, 'comics/arc_list.html')
 
-    def test_pagination_is_twenty_eight(self):
+    def test_pagination_is_thirty(self):
         resp = self.client.get(reverse('arc:list', args=(1,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)

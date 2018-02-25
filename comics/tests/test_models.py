@@ -8,15 +8,16 @@ from comics.models import (Publisher, Arc, Team, Character,
 
 class IssueTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         issue_date = timezone.now().date()
         mod_time = timezone.now()
         publisher = Publisher.objects.create(
             name='DC Comics', slug='dc-comics')
         series = Series.objects.create(
             cvid='1234', name='Batman', slug='batman', publisher=publisher)
-        self.issue = Issue.objects.create(cvid='4321', cvurl='http://2.com', slug='batman-1',
-                                          file='/home/b.cbz', mod_ts=mod_time, date=issue_date, number='1', series=series)
+        cls.issue = Issue.objects.create(cvid='4321', cvurl='http://2.com', slug='batman-1',
+                                         file='/home/b.cbz', mod_ts=mod_time, date=issue_date, number='1', series=series)
 
     def test_issue_creation(self):
         self.assertTrue(isinstance(self.issue, Issue))
@@ -29,14 +30,15 @@ class IssueTest(TestCase):
 
 class PublisherTest(TestCase):
 
-    def setUp(self):
-        self.name = 'DC Comics'
-        self.slug = slugify(self.name)
-        self.cvid = 1234
-        self.desc = 'Home of Superman'
+    @classmethod
+    def setUpTestData(cls):
+        cls.name = 'DC Comics'
+        cls.slug = slugify(cls.name)
+        cls.cvid = 1234
+        cls.desc = 'Home of Superman'
 
-        self.publisher = Publisher.objects.create(
-            name=self.name, slug=self.slug, cvid=self.cvid, desc=self.desc)
+        cls.publisher = Publisher.objects.create(
+            name=cls.name, slug=cls.slug, cvid=cls.cvid, desc=cls.desc)
 
     def test_publisher_creation(self):
         self.assertTrue(isinstance(self.publisher, Publisher))
@@ -49,13 +51,14 @@ class PublisherTest(TestCase):
 
 class ArcTest(TestCase):
 
-    def setUp(self):
-        self.name = 'World without Superman'
-        self.slug = slugify(self.name)
-        self.cvid = 1234
+    @classmethod
+    def setUpTestData(cls):
+        cls.name = 'World without Superman'
+        cls.slug = slugify(cls.name)
+        cls.cvid = 1234
 
-        self.arc = Arc.objects.create(
-            name=self.name, slug=self.slug, cvid=self.cvid)
+        cls.arc = Arc.objects.create(
+            name=cls.name, slug=cls.slug, cvid=cls.cvid)
 
     def test_arc_creation(self):
         self.assertTrue(isinstance(self.arc, Arc))
@@ -67,13 +70,14 @@ class ArcTest(TestCase):
 
 class TeamTest(TestCase):
 
-    def setUp(self):
-        self.name = 'Justice League'
-        self.slug = slugify(self.name)
-        self.cvid = 1234
+    @classmethod
+    def setUpTestData(cls):
+        cls.name = 'Justice League'
+        cls.slug = slugify(cls.name)
+        cls.cvid = 1234
 
-        self.team = Team.objects.create(
-            name=self.name, slug=self.slug, cvid=self.cvid)
+        cls.team = Team.objects.create(
+            name=cls.name, slug=cls.slug, cvid=cls.cvid)
 
     def test_team_creation(self):
         self.assertTrue(isinstance(self.team, Team))
@@ -85,13 +89,14 @@ class TeamTest(TestCase):
 
 class CharacterTest(TestCase):
 
-    def setUp(self):
-        self.name = 'Superman'
-        self.slug = slugify(self.name)
-        self.cvid = 1234
+    @classmethod
+    def setUpTestData(cls):
+        cls.name = 'Superman'
+        cls.slug = slugify(cls.name)
+        cls.cvid = 1234
 
-        self.character = Character.objects.create(
-            name=self.name, slug=self.slug, cvid=self.cvid)
+        cls.character = Character.objects.create(
+            name=cls.name, slug=cls.slug, cvid=cls.cvid)
 
     def test_character_creation(self):
         self.assertTrue(isinstance(self.character, Character))
@@ -104,13 +109,14 @@ class CharacterTest(TestCase):
 
 class CreatorTest(TestCase):
 
-    def setUp(self):
-        self.name = 'Jason Aaron'
-        self.slug = slugify(self.name)
-        self.cvid = 1234
+    @classmethod
+    def setUpTestData(cls):
+        cls.name = 'Jason Aaron'
+        cls.slug = slugify(cls.name)
+        cls.cvid = 1234
 
-        self.creator = Creator.objects.create(
-            name=self.name, slug=self.slug, cvid=self.cvid)
+        cls.creator = Creator.objects.create(
+            name=cls.name, slug=cls.slug, cvid=cls.cvid)
 
     def test_creator_creation(self):
         self.assertTrue(isinstance(self.creator, Creator))
@@ -123,15 +129,16 @@ class CreatorTest(TestCase):
 
 class SeriesTest(TestCase):
 
-    def setUp(self):
-        self.name = 'The Avengers'
-        self.sort = 'Avengers, The'
-        self.slug = slugify(self.name)
-        self.cvid = 1234
+    @classmethod
+    def setUpTestData(cls):
+        cls.name = 'The Avengers'
+        cls.sort = 'Avengers, The'
+        cls.slug = slugify(cls.name)
+        cls.cvid = 1234
 
         pub = Publisher.objects.create(name='DC Comics', slug='dc-comics')
-        self.series = Series.objects.create(
-            name=self.name, slug=self.slug, cvid=self.cvid, sort_title=self.sort, publisher=pub)
+        cls.series = Series.objects.create(
+            name=cls.name, slug=cls.slug, cvid=cls.cvid, sort_title=cls.sort, publisher=pub)
 
     def test_series_creation(self):
         self.assertTrue(isinstance(self.series, Series))
