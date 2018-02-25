@@ -143,18 +143,17 @@ class SeriesTest(TestCase):
         cls.series = Series.objects.create(
             name=cls.name, slug=cls.slug, cvid=cls.cvid, sort_title=cls.sort, publisher=pub)
 
-        # Create 10 issues to test unread counts.
-        for i in range(10):
+        # Create 9 issues to test unread counts.
+        for i in range(9):
             slug = slugify(cls.name + ' ' + str(i))
             tst_file = '/home/b-' + str(i) + '.cbz'
             Issue.objects.create(cvid=str(i), cvurl='http://2.com', slug=slug,
                                  file=tst_file, mod_ts=mod_time, date=issue_date,
                                  number=str(i), series=cls.series)
 
-        # Mark one of the issues as Read.
-        iss = Issue.objects.get(id=1)
-        iss.status = 2
-        iss.save()
+        # Create the 10th issue as read.
+        Issue.objects.create(cvid='1234', cvurl='http://2.com', slug='test', file='/home/test.cbz',
+                             mod_ts=mod_time, date=issue_date, number='50', status=2, series=cls.series)
 
     def test_series_creation(self):
         self.assertTrue(isinstance(self.series, Series))
