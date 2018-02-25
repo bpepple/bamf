@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.request import Request
@@ -10,8 +10,8 @@ from comics.serializers import SeriesSerializer
 
 class GetAllSeriesTest(TestCase):
 
-    def setUp(self):
-        self.client = Client()
+    @classmethod
+    def setUpTestData(cls):
         publisher_obj = Publisher.objects.create(
             name='DC Comics', slug='dc-comics')
         Series.objects.create(cvid='1234', cvurl='http://1.com',
@@ -26,19 +26,19 @@ class GetAllSeriesTest(TestCase):
 
 class GetSingleSeriesTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         factory = APIRequestFactory()
         request = factory.get('/')
 
-        self.serializer_context = {
+        cls.serializer_context = {
             'request': Request(request),
         }
 
-        self.client = Client()
         publisher_obj = Publisher.objects.create(name='Marvel', slug='marvel')
-        self.thor = Series.objects.create(cvid='1234', cvurl='https://comicvine.com',
-                                          name='The Mighty Thor', slug='the-mighty-thor',
-                                          publisher=publisher_obj)
+        cls.thor = Series.objects.create(cvid='1234', cvurl='https://comicvine.com',
+                                         name='The Mighty Thor', slug='the-mighty-thor',
+                                         publisher=publisher_obj)
 
     def test_get_valid_single_issue(self):
         resp = self.client.get(
