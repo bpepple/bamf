@@ -34,6 +34,7 @@ urlpatterns = [
     path('series/', include(series_urls)),
     path('server-settings/', include(settings_urls)),
     path('team/', include(team_urls)),
+    path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
 
 if settings.DEBUG:

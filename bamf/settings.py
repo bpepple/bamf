@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'huey.contrib.djhuey',
     'rest_framework',
+    'star_ratings',
 ]
 
 MIDDLEWARE = [

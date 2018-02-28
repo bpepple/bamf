@@ -1,0 +1,59 @@
+{% load i18n %}
+{% block rating_style %}
+<style>
+    #{{ id }} .star-ratings-rating-full, #{{ id }} .star-ratings-rating-empty {
+        width: {{ icon_width }}px;
+        height: {{ icon_height }}px;
+        background: url({{ sprite_image }}) no-repeat;
+        background-size: {{ sprite_width }}px;
+    }
+
+    #{{ id }} .star-ratings-rating-empty {
+        background-position: -{{ icon_width }}px 0;
+    }
+
+    {% if user.is_authenticated and editable %}
+    #{{ id }} .star-ratings-rating-full:hover, #{{ id }} .star-ratings-rating-empty:hover {
+        background-position: -{{ icon_width|add:icon_width }}px 0;
+    }
+    {% endif %}
+</style>
+{% endblock rating_style %}
+
+{% block rating_container %}
+<div id="{{ id }}" class="star-ratings" data-max-rating="{{ star_count }}" data-avg-rating="{{ rating.average }}">
+    {% block rating_stars %}
+        <div class="star-ratings-rating-stars-container">
+            <ul class="star-ratings-rating-background">
+                {% for star in stars %}
+                    <li>
+                        {% if editable %}
+                        <a href="{% url 'ratings:rate' rating.content_type_id rating.object_id %}?return={{ request.path }}" data-score="{{ star }}" class="star-ratings-rate-action">
+                            <span class="star-ratings-rating-empty"></span>
+                        </a>
+                        {% elif user.is_authenticated %}
+                            <span class="star-ratings-rating-empty"></span>
+                        {% else %}
+                            <span class="star-ratings-rating-empty" title="{% trans 'Log in to rate' as title_login %}{{ title_login|escape }}"></span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <ul class="star-ratings-rating-foreground" style="width: {{ percentage|floatformat }}%">
+                {% for star in stars %}
+                    <li>
+                    {% if editable %}
+                    <a href="{% url 'ratings:rate' rating.content_type_id rating.object_id %}?return={{ request.path }}" data-score="{{ star }}" class="star-ratings-rate-action">
+                        <span class="star-ratings-rating-full"></span>
+                    </a>
+                    {% else %}
+                        <span class="star-ratings-rating-full" title="Log in to rate"></span>
+                    {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endblock %}
+</div>
+{% endblock rating_container %}

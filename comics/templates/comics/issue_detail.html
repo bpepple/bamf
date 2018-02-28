@@ -1,6 +1,7 @@
 {% extends parent_template|default:"base.html" %}
 
 {% load staticfiles %}
+{% load ratings %}
 
 {% block content %}
 
@@ -39,6 +40,8 @@
         </div>
 
         {% include "comics/related_arcs.html" with arc_list=issue.arcs.all %}
+
+        {% ratings issue %}
 
         {% if issue.desc %}
         <div class="issue-description">
