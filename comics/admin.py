@@ -26,8 +26,14 @@ def create_msg(rows_updated):
 @admin.register(Arc)
 class ArcAdmin(admin.ModelAdmin):
     search_fields = ('name',)
+    readonly_fields = ('cvid', 'cvurl')
     prepopulated_fields = {'slug': ('name',)}
     actions = ['refresh_arc_metadata']
+    fieldsets = (
+        (None, {
+            'fields': ('cvid', 'cvurl', 'name', 'slug', 'desc', 'image')
+        }),
+    )
 
     def refresh_arc_metadata(self, request, queryset):
         rows_updated = 0
@@ -45,6 +51,7 @@ class ArcAdmin(admin.ModelAdmin):
 class CharacterAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ('cvid', 'cvurl')
     actions = ['refresh_character_metadata']
     # form view
     fieldsets = (
@@ -70,7 +77,13 @@ class CharacterAdmin(admin.ModelAdmin):
 class CreatorAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ('cvid', 'cvurl')
     actions = ['refresh_creator_metadata']
+    fieldsets = (
+        (None, {
+            'fields': ('cvid', 'cvurl', 'name', 'slug', 'desc', 'image')
+        }),
+    )
 
     def refresh_creator_metadata(self, request, queryset):
         rows_updated = 0
@@ -132,7 +145,13 @@ class IssueAdmin(admin.ModelAdmin):
 class PublisherAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = ('name', 'series_count',)
+    readonly_fields = ('cvid', 'cvurl')
     actions = ['refresh_publisher_metadata']
+    fieldsets = (
+        (None, {
+            'fields': ('cvid', 'cvurl', 'name', 'slug', 'desc', 'logo')
+        }),
+    )
 
     def refresh_publisher_metadata(self, request, queryset):
         rows_updated = 0
@@ -151,10 +170,16 @@ class SeriesAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_display = ('name', 'year', 'issue_count')
     list_filter = ('publisher',)
+    readonly_fields = ('cvid', 'cvurl')
     actions = ['mark_as_read', 'mark_as_unread',
                'refresh_series_metadata',
                'refresh_series_issues_metadata']
     prepopulated_fields = {'slug': ('name',)}
+    fieldsets = (
+        (None, {
+            'fields': ('cvid', 'cvurl', 'name', 'slug', 'desc')
+        }),
+    )
 
     def mark_as_read(self, request, queryset):
         issues_count = 0
@@ -207,7 +232,13 @@ class SeriesAdmin(admin.ModelAdmin):
 class TeamAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ('cvid', 'cvurl')
     actions = ['refresh_team_metadata']
+    fieldsets = (
+        (None, {
+            'fields': ('cvid', 'cvurl', 'name', 'slug', 'desc', 'image')
+        }),
+    )
 
     def refresh_team_metadata(self, request, queryset):
         rows_updated = 0
@@ -228,3 +259,8 @@ class RolesAdmin(admin.ModelAdmin):
     list_display = ('issue', 'creator')
     ordering = ('issue', 'creator')
     filter_horizontal = ['role']
+    # form view
+    fieldsets = (
+        (None, {'fields': ('issue', 'creator')}),
+        ('Related', {'fields': ('role',)}),
+    )
