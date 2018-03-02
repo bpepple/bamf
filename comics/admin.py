@@ -259,6 +259,7 @@ class RolesAdmin(admin.ModelAdmin):
     list_display = ('issue', 'creator')
     ordering = ('issue', 'creator')
     filter_horizontal = ['role']
+    autocomplete_fields = ['issue', 'creator']
     # form view
     fieldsets = (
         (None, {'fields': ('issue', 'creator')}),
