@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import (Arc, Character, Creator,
                      Issue, Publisher, Series,
-                     Team)
+                     Team, Roles)
 
 from comics.tasks import (refresh_issue_task, refresh_series_task,
                           refresh_publisher_task, refresh_character_task,
@@ -219,3 +219,12 @@ class TeamAdmin(admin.ModelAdmin):
         message_bit = create_msg(rows_updated)
         self.message_user(request, "%s successfully refreshed." % message_bit)
     refresh_team_metadata.short_description = 'Refresh selected Teams metadata'
+
+
+@admin.register(Roles)
+class RolesAdmin(admin.ModelAdmin):
+    search_fields = ('issue__series__name', 'issue__number')
+    list_filter = ('issue__import_date', 'role')
+    list_display = ('issue', 'creator')
+    ordering = ('issue', 'creator')
+    filter_horizontal = ['role']
