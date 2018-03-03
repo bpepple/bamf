@@ -97,11 +97,6 @@ class CreatorAdmin(admin.ModelAdmin):
     refresh_creator_metadata.short_description = 'Refresh selected Creators metadata'
 
 
-class RolesInline(admin.TabularInline):
-    model = Roles
-    extra = 0
-
-
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
     search_fields = ('series__name',)
@@ -118,7 +113,6 @@ class IssueAdmin(admin.ModelAdmin):
         ('Related', {'fields': ('arcs', 'characters', 'teams')}),
     )
     filter_horizontal = ('arcs', 'characters', 'teams')
-    inlines = [RolesInline]
 
     def mark_as_read(self, request, queryset):
         rows_updated = queryset.update(status=READ)
@@ -256,3 +250,18 @@ class TeamAdmin(admin.ModelAdmin):
         message_bit = create_msg(rows_updated)
         self.message_user(request, "%s successfully refreshed." % message_bit)
     refresh_team_metadata.short_description = 'Refresh selected Teams metadata'
+
+
+@admin.register(Roles)
+class RolesAdmin(admin.ModelAdmin):
+    search_fields = ('issue__series__name', 'issue__number')
+    list_filter = ('issue__import_date', 'role')
+    list_display = ('issue', 'creator')
+    ordering = ('issue', 'creator')
+    filter_horizontal = ['role']
+    autocomplete_fields = ['issue', 'creator']
+    # form view
+    fieldsets = (
+        (None, {'fields': ('issue', 'creator')}),
+        ('Related', {'fields': ('role',)}),
+    )
