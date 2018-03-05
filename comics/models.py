@@ -155,9 +155,6 @@ class Series(models.Model):
     def __str__(self):
         return self.name
 
-    def issue_numerical_order_set(self):
-        return self.issue_set.all().order_by('date', 'number')
-
     @property
     def issue_count(self):
         return self.issue_set.all().count()
