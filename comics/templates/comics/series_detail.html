@@ -6,11 +6,13 @@
 
 <div class="series-info-wrapper">
     <div class="series-cover-image">
-	{% if series.issue_numerical_order_set.first.cover %}
-		<img src="{{ series.issue_numerical_order_set.first.cover.url }}" alt="{{ series.name }}" >
-    {% else %}
-        <img src="{% static 'site/img/image-not-found.png' %}" alt="Image not found" >
-	{% endif %}
+    {% with issue_cover=series.issue_set.first.cover %}
+        {% if issue_cover %}
+            <img src="{{ issue_cover.url }}" alt="{{ series.name }}" >
+        {% else %}
+            <img src="{% static 'site/img/image-not-found.png' %}" alt="Image not found" >
+    	{% endif %}
+    {% endwith %}
 	</div>
 	<div class="series-info">
 		<div class="series-title">
@@ -32,6 +34,6 @@
 
 {% include "comics/related_publisher.html" with publisher=series.publisher %}
 
-{% include "comics/related_issues.html" with issue_list=series.issue_numerical_order_set %}
+{% include "comics/related_issues.html" with issue_list=series.issue_set.all %}
 
 {% endblock content %}
