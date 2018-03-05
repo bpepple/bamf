@@ -7,7 +7,7 @@
 <div class="creator-info-wrapper">
     <div class="creator-image">
 	{% if creator.image %}
-		<img src="{{ creator.image.url }}" alt="{{ createor.name }}" >
+		<img src="{{ creator.image.url }}" alt="{{ creator.name }}" >
     {% else %}
        <img src="{% static 'site/img/image-not-found.png' %}" alt="Image not found" >
 	{% endif %}
