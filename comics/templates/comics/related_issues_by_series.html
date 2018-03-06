@@ -19,9 +19,9 @@
 					<a href="{% url 'issue:detail' issue.slug %}">
 						<div class="image">
 							{% if issue.cover %}
-								<img src="{{ issue.cover.url }}" alt="{{ series.name }}" >
+								<img src="{{ issue.cover.url }}" alt="{{ issue }}" >
 							{% else %}
-						        <img src="{% static 'site/img/image-not-found.png' %}" alt="{{ series.name }}" >
+						        <img src="{% static 'site/img/image-not-found.png' %}" alt="Image not found" >
 							{% endif %}
 							{% if issue.status == 0 %}
 							    <i class="fa fa-circle fa-2x"></i>
