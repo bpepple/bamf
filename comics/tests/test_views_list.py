@@ -14,13 +14,24 @@ PAGINATE_DEFAULT_VAL = 30
 PAGINATE_DIFF_VAL = (PAGINATE_TEST_VAL - PAGINATE_DEFAULT_VAL)
 
 
-class PublisherListViewTest(TestCase):
+class TestCaseBase(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
+    def _create_user(self):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
+
+        return user
+
+    def _client_login(self):
+        self.client.login(username='brian', password='1234')
+
+
+class PublisherListViewTest(TestCaseBase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls._create_user(cls)
 
         for pub_num in range(PAGINATE_TEST_VAL):
             Publisher.objects.create(
@@ -29,7 +40,7 @@ class PublisherListViewTest(TestCase):
                 logo='images/1.jpg')
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/publisher/page1/')
@@ -67,13 +78,11 @@ class PublisherListViewTest(TestCase):
         self.assertRedirects(resp, '/accounts/login/?next=/publisher/page1/')
 
 
-class SeriesListViewTest(TestCase):
+class SeriesListViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         pub = Publisher.objects.create(name='Marvel', slug='marvel')
 
@@ -85,7 +94,7 @@ class SeriesListViewTest(TestCase):
                 cvid=ser_num)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_redirect(self):
         resp = self.client.get('/')
@@ -125,13 +134,11 @@ class SeriesListViewTest(TestCase):
         self.assertRedirects(resp, '/accounts/login/?next=/series/page1/')
 
 
-class CreatorListViewTest(TestCase):
+class CreatorListViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         for creator in range(PAGINATE_TEST_VAL):
             Creator.objects.create(
@@ -140,7 +147,7 @@ class CreatorListViewTest(TestCase):
                 cvid=creator)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/creator/page1/')
@@ -177,13 +184,11 @@ class CreatorListViewTest(TestCase):
         self.assertRedirects(resp, '/accounts/login/?next=/creator/page1/')
 
 
-class CharacterListViewTest(TestCase):
+class CharacterListViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         for character in range(PAGINATE_TEST_VAL):
             Character.objects.create(
@@ -192,7 +197,7 @@ class CharacterListViewTest(TestCase):
                 cvid=character)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/character/page1/')
@@ -229,13 +234,11 @@ class CharacterListViewTest(TestCase):
         self.assertRedirects(resp, '/accounts/login/?next=/character/page1/')
 
 
-class TeamListViewTest(TestCase):
+class TeamListViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         for team in range(PAGINATE_TEST_VAL):
             Team.objects.create(
@@ -244,7 +247,7 @@ class TeamListViewTest(TestCase):
                 cvid=team)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/team/page1/')
@@ -280,13 +283,11 @@ class TeamListViewTest(TestCase):
         self.assertRedirects(resp, '/accounts/login/?next=/team/page1/')
 
 
-class ArcListViewTest(TestCase):
+class ArcListViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         for arc in range(PAGINATE_TEST_VAL):
             Arc.objects.create(
@@ -295,7 +296,7 @@ class ArcListViewTest(TestCase):
                 cvid=arc)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/arc/page1/')
@@ -331,13 +332,11 @@ class ArcListViewTest(TestCase):
         self.assertRedirects(resp, '/accounts/login/?next=/arc/page1/')
 
 
-class IssueListViewTest(TestCase):
+class IssueListViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         dc = Publisher.objects.create(name='DC Comics', slug='dc-comics')
         batman = Series.objects.create(
@@ -358,7 +357,7 @@ class IssueListViewTest(TestCase):
                 series=batman)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/issue/page1/')

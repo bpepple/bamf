@@ -12,13 +12,24 @@ PAGINATE_DEFAULT_VAL = 30
 PAGINATE_DIFF_VAL = (PAGINATE_TEST_VAL - PAGINATE_DEFAULT_VAL)
 
 
-class PublisherSearchViewTest(TestCase):
+class TestCaseBase(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
+    def _create_user(self):
         user = User.objects.create(username='brian')
         user.set_password('1234')
         user.save()
+
+        return user
+
+    def _client_login(self):
+        self.client.login(username='brian', password='1234')
+
+
+class PublisherSearchViewTest(TestCaseBase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls._create_user(cls)
 
         for pub_num in range(PAGINATE_TEST_VAL):
             Publisher.objects.create(
@@ -27,7 +38,7 @@ class PublisherSearchViewTest(TestCase):
                 logo='images/1.jpg')
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/publisher/search/page1/')
@@ -60,13 +71,11 @@ class PublisherSearchViewTest(TestCase):
             len(resp.context['publisher_list']) == PAGINATE_DIFF_VAL)
 
 
-class SeriesSearchViewTest(TestCase):
+class SeriesSearchViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         pub = Publisher.objects.create(name='Marvel', slug='marvel')
 
@@ -78,7 +87,7 @@ class SeriesSearchViewTest(TestCase):
                 cvid=ser_num)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/series/search/page1/')
@@ -109,13 +118,11 @@ class SeriesSearchViewTest(TestCase):
         self.assertTrue(len(resp.context['series_list']) == PAGINATE_DIFF_VAL)
 
 
-class CreatorSearchViewTest(TestCase):
+class CreatorSearchViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         for creator in range(PAGINATE_TEST_VAL):
             Creator.objects.create(
@@ -124,7 +131,7 @@ class CreatorSearchViewTest(TestCase):
                 cvid=creator)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/creator/search/page1/')
@@ -156,13 +163,11 @@ class CreatorSearchViewTest(TestCase):
             len(resp.context['creator_list']) == PAGINATE_DIFF_VAL)
 
 
-class CharacterSearchViewTest(TestCase):
+class CharacterSearchViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         for character in range(PAGINATE_TEST_VAL):
             Character.objects.create(
@@ -171,7 +176,7 @@ class CharacterSearchViewTest(TestCase):
                 cvid=character)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/character/search/page1/')
@@ -203,13 +208,11 @@ class CharacterSearchViewTest(TestCase):
             len(resp.context['character_list']) == PAGINATE_DIFF_VAL)
 
 
-class TeamSearchViewTest(TestCase):
+class TeamSearchViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         for team in range(PAGINATE_TEST_VAL):
             Team.objects.create(
@@ -218,7 +221,7 @@ class TeamSearchViewTest(TestCase):
                 cvid=team)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/team/search/page1/')
@@ -249,13 +252,11 @@ class TeamSearchViewTest(TestCase):
             len(resp.context['team_list']) == PAGINATE_DIFF_VAL)
 
 
-class ArcSearchViewTest(TestCase):
+class ArcSearchViewTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
-        user = User.objects.create(username='brian')
-        user.set_password('1234')
-        user.save()
+        cls._create_user(cls)
 
         for arc in range(PAGINATE_TEST_VAL):
             Arc.objects.create(
@@ -264,7 +265,7 @@ class ArcSearchViewTest(TestCase):
                 cvid=arc)
 
     def setUp(self):
-        self.client.login(username='brian', password='1234')
+        self._client_login()
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/arc/search/page1/')
