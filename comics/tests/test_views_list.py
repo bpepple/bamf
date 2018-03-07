@@ -1,9 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from comics.models import (Publisher, Series, Creator,
-                           Character, Team, Arc)
+                           Character, Team, Arc, Issue)
 
 
 HTML_OK_CODE = 200
@@ -51,7 +52,7 @@ class PublisherListViewTest(TestCase):
         self.assertTrue(
             len(resp.context['publisher_list']) == PAGINATE_DEFAULT_VAL)
 
-    def test_lists_all_publishers(self):
+    def test_lists_second_page(self):
         # Get second page and confirm it has (exactly) remaining 7 items
         resp = self.client.get(reverse('publisher:list', args=(2,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
@@ -111,7 +112,7 @@ class SeriesListViewTest(TestCase):
         self.assertTrue(
             len(resp.context['series_list']) == PAGINATE_DEFAULT_VAL)
 
-    def test_lists_all_series(self):
+    def test_lists_second_page(self):
         resp = self.client.get(reverse('series:list', args=(2,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -162,7 +163,7 @@ class CreatorListViewTest(TestCase):
         self.assertTrue(
             len(resp.context['creator_list']) == PAGINATE_DEFAULT_VAL)
 
-    def test_lists_all_creators(self):
+    def test_lists_second_page(self):
         resp = self.client.get(reverse('creator:list', args=(2,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -214,7 +215,7 @@ class CharacterListViewTest(TestCase):
         self.assertTrue(
             len(resp.context['character_list']) == PAGINATE_DEFAULT_VAL)
 
-    def test_lists_all_characters(self):
+    def test_lists_second_page(self):
         resp = self.client.get(reverse('character:list', args=(2,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -265,7 +266,7 @@ class TeamListViewTest(TestCase):
         self.assertTrue(resp.context['is_paginated'] == True)
         self.assertTrue(len(resp.context['team_list']) == PAGINATE_DEFAULT_VAL)
 
-    def test_lists_all_teams(self):
+    def test_lists_second_page(self):
         resp = self.client.get(reverse('team:list', args=(2,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -316,7 +317,7 @@ class ArcListViewTest(TestCase):
         self.assertTrue(resp.context['is_paginated'] == True)
         self.assertTrue(len(resp.context['arc_list']) == PAGINATE_DEFAULT_VAL)
 
-    def test_lists_all_teams(self):
+    def test_lists_second_page(self):
         resp = self.client.get(reverse('arc:list', args=(2,)))
         self.assertEqual(resp.status_code, HTML_OK_CODE)
         self.assertTrue('is_paginated' in resp.context)
@@ -328,3 +329,67 @@ class ArcListViewTest(TestCase):
         self.client.logout()
         resp = self.client.get(reverse('arc:list', args=(1,)))
         self.assertRedirects(resp, '/accounts/login/?next=/arc/page1/')
+
+
+class IssueListViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        dc = Publisher.objects.create(name='DC Comics', slug='dc-comics')
+        batman = Series.objects.create(
+            name='Batman', slug='batman', publisher=dc, cvid='1234')
+
+        issue_date = timezone.now().date()
+        mod_time = timezone.now()
+
+        for issue in range(PAGINATE_TEST_VAL):
+            Issue.objects.create(
+                cvid=issue,
+                cvurl='http://2.com',
+                slug='batman-' + str(issue),
+                file='/home/b.cbz',
+                mod_ts=mod_time,
+                date=issue_date,
+                number=issue,
+                series=batman)
+
+    def setUp(self):
+        self.client.login(username='brian', password='1234')
+
+    def test_view_url_exists_at_desired_location(self):
+        resp = self.client.get('/issue/page1/')
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_url_accessible_by_name(self):
+        resp = self.client.get(reverse('issue:list', args=(1,)))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+
+    def test_view_uses_correct_template(self):
+        resp = self.client.get(reverse('issue:list', args=(1,)))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTemplateUsed(resp, 'comics/issue_list.html')
+
+    def test_pagination_is_thirty(self):
+        resp = self.client.get(reverse('issue:list', args=(1,)))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTrue('is_paginated' in resp.context)
+        self.assertTrue(resp.context['is_paginated'] == True)
+        self.assertTrue(
+            len(resp.context['issue_list']) == PAGINATE_DEFAULT_VAL)
+
+    def test_lists_second_page(self):
+        resp = self.client.get(reverse('issue:list', args=(2,)))
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
+        self.assertTrue('is_paginated' in resp.context)
+        self.assertTrue(resp.context['is_paginated'] == True)
+        self.assertTrue(
+            len(resp.context['issue_list']) == PAGINATE_DIFF_VAL)
+
+    def test_redirects_to_login_page_on_not_loggedin(self):
+        self.client.logout()
+        resp = self.client.get(reverse('issue:list', args=(1,)))
+        self.assertRedirects(resp, '/accounts/login/?next=/issue/page1/')
