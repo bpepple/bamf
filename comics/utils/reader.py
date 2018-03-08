@@ -4,8 +4,6 @@ import io
 
 from PIL import Image
 
-from comics.models import Issue
-
 from .comicapi.comicarchive import ComicArchive
 
 
@@ -19,14 +17,9 @@ class ImageAPIHandler(object):
 
         return img
 
-    def getImageData(self, slug, pagenum):
-        image_data = None
-        obj = Issue.objects.get(slug=slug)
-
-        if obj is not None:
-            if int(pagenum) < obj.page_count:
-                ca = ComicArchive(obj.file)
-                image_data = ca.getPage(int(pagenum))
+    def getImageData(self, issue_file, page_num):
+        ca = ComicArchive(issue_file)
+        image_data = ca.getPage(int(page_num))
         # TODO: Set a default image if no image if found.
 
         return image_data
@@ -42,8 +35,8 @@ class ImageAPIHandler(object):
         else:
             return image_data
 
-    def get_uri(self, slug, pagenum):
-        image_data = self.getImageData(slug, pagenum)
+    def get_uri(self, issue_file, page_num):
+        image_data = self.getImageData(issue_file, page_num)
         image_type = self.getContentType(image_data)
         base64_data = base64.b64encode(image_data).decode('ascii')
         uri = 'data:%s;base64,%s' % (image_type, base64_data)

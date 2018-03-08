@@ -1,10 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
-from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, ListView
 
 from comics.models import Issue, Roles
+from comics.utils.comicapi.comicarchive import ComicArchive
 from comics.utils.reader import ImageAPIHandler
 
 
@@ -46,10 +47,16 @@ class IssueDetail(LoginRequiredMixin, DetailView):
 def reader(request, slug):
     issue = get_object_or_404(Issue, slug=slug)
 
+    # Let's get the total number pages from the comic archive
+    # instead of from the db in case the file has been modified.
+    # If I ever implement a file monitor function this can be removed.
+    ca = ComicArchive(issue.file)
+    page_count = ca.getNumberOfPages()
+
     uri_list = []
-    for page in range(issue.page_count):
+    for page in range(page_count):
         i = ImageAPIHandler()
-        data_uri = i.get_uri(slug, page)
+        data_uri = i.get_uri(issue.file, page)
         uri_list.append(data_uri)
 
     return render(request, 'comics/reader.html', {'issue': issue, 'data_uri': uri_list})
