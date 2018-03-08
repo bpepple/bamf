@@ -17,13 +17,6 @@ class ImageAPIHandler(object):
 
         return img
 
-    def getImageData(self, issue_file, page_num):
-        ca = ComicArchive(issue_file)
-        image_data = ca.getPage(int(page_num))
-        # TODO: Set a default image if no image if found.
-
-        return image_data
-
     def resizeImage(self, max_height, image_data):
         i = Image.open(io.BytesIO(image_data))
         w, h = i.size
@@ -36,7 +29,8 @@ class ImageAPIHandler(object):
             return image_data
 
     def get_uri(self, issue_file, page_num):
-        image_data = self.getImageData(issue_file, page_num)
+        ca = ComicArchive(issue_file)
+        image_data = ca.getPage(int(page_num))
         image_type = self.getContentType(image_data)
         base64_data = base64.b64encode(image_data).decode('ascii')
         uri = 'data:%s;base64,%s' % (image_type, base64_data)
