@@ -17,7 +17,7 @@ class IssueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Issue
         fields = ('slug', 'cvurl', 'series', 'name', 'number', 'date',
-                  'page_count', 'status', 'desc', 'characters', 'teams', 'arcs')
+                  'page_count', 'status', 'desc', 'characters', 'teams', 'arcs', 'cover')
         lookup_field = 'slug'
 
 
@@ -25,7 +25,7 @@ class PublisherSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Publisher
-        fields = ('slug', 'cvurl', 'name', 'desc')
+        fields = ('slug', 'cvurl', 'name', 'desc', 'logo')
         lookup_field = 'slug'
 
 
@@ -44,7 +44,7 @@ class CreatorSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Creator
-        fields = ('slug', 'cvurl', 'name', 'desc')
+        fields = ('slug', 'cvurl', 'name', 'desc', 'image')
         lookup_field = 'slug'
 
 
@@ -54,7 +54,7 @@ class CharacterSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Character
-        fields = ('slug', 'cvurl', 'name', 'teams', 'desc')
+        fields = ('slug', 'cvurl', 'name', 'teams', 'desc', 'image')
         lookup_field = 'slug'
 
 
@@ -62,7 +62,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Team
-        fields = ('slug', 'cvurl', 'name', 'desc')
+        fields = ('slug', 'cvurl', 'name', 'desc', 'image')
         lookup_field = 'slug'
 
 
@@ -70,5 +70,5 @@ class ArcSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Arc
-        fields = ('slug', 'cvurl', 'name', 'desc')
+        fields = ('slug', 'cvurl', 'name', 'desc', 'image')
         lookup_field = 'slug'
