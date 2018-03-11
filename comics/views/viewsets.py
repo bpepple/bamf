@@ -29,7 +29,10 @@ class CharacterViewSet(viewsets.ReadOnlyModelViewSet):
     read:
     Returns the information for an individual character.
     """
-    queryset = Character.objects.all()
+    queryset = (
+        Character.objects
+        .prefetch_related('teams')
+    )
     serializer_class = CharacterSerializer
     lookup_field = 'slug'
 
