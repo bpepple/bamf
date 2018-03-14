@@ -687,6 +687,21 @@ a.button.import-comics {
     padding: 0 30px;
 }
 
+.issue-navigation a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+}
+
+.issue-navigation a:hover {
+    background-color: #6bc0fc;
+    color: black;
+}
+
+.round {
+    border-radius: 8px;
+}
+
 /*
  *  Related Publisher
  */

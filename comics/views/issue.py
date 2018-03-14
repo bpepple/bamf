@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
@@ -35,11 +36,26 @@ class IssueDetail(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(IssueDetail, self).get_context_data(**kwargs)
         issue = self.get_object()
+        try:
+            next_issue = Issue.get_next_by_date(issue, series=issue.series)
+        except ObjectDoesNotExist:
+            next_issue = None
+
+        try:
+            previous_issue = Issue.get_previous_by_date(
+                issue, series=issue.series)
+        except ObjectDoesNotExist:
+            previous_issue = None
+
         context['roles_list'] = (
             Roles.objects.filter(issue=issue)
             .prefetch_related('role')
             .select_related('creator')
         )
+        context['navigation'] = {
+            'next_issue': next_issue,
+            'previous_issue': previous_issue,
+        }
         return context
 
 
