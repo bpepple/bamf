@@ -484,6 +484,19 @@ a.button.import-comics {
 }
 
 /*
+ * Related arcs link
+ */
+
+.story-arcs a {
+    padding: 8px 4px;
+}
+
+.story-arcs a:hover {
+    background-color: #6bc0fc;
+    color: black;
+}
+
+/*
  *  Characters
  */
 

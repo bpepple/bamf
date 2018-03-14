@@ -1,17 +1,17 @@
 {% if arc_list %}
 <div class="story-arcs">
-	{% for arc in arc_list %}
+    {% for arc in arc_list %}
 
-		{% if forloop.first %}
-			<p>Story arc{{ arc_list|pluralize }}: 
-		{% endif %}
+        {% if forloop.first %}
+            <p>Story arc{{ arc_list|pluralize }}:
+        {% endif %}
 
-		<a href="{% url 'arc:detail' arc.slug %}"><i>{{ arc.name }}</i></a>
+        <a href="{% url 'arc:detail' arc.slug %}" class="round">{{ arc.name }}</a>
 
-		{% if not forloop.last %},{% endif %}
+        {% if not forloop.last %},{% endif %}
 
-		{% if forloop.last %}</p>{% endif %}
+        {% if forloop.last %}</p>{% endif %}
 
-	{% endfor %}
+    {% endfor %}
 </div>
 {% endif %}
