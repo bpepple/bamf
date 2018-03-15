@@ -10,10 +10,8 @@ class GetAllPublisherTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        Publisher.objects.create(
-            name='DC Comics', slug='dc-comics', logo='images/1.jpg')
-        Publisher.objects.create(
-            name='Marvel', slug='marvel', logo='images/2.jpg')
+        Publisher.objects.create(name='DC Comics', slug='dc-comics')
+        Publisher.objects.create(name='Marvel', slug='marvel')
 
     def test_view_url_accessible_by_name(self):
         resp = self.client.get(reverse('api:publisher-list'))
@@ -24,10 +22,8 @@ class GetSinglePublisherTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.dc = Publisher.objects.create(
-            name='DC Comics', slug='dc-comics', logo='images/1.jpg')
-        cls.marvel = Publisher.objects.create(
-            name='Marvel', slug='marvel', logo='images/2.jpg')
+        cls.dc = Publisher.objects.create(name='DC Comics', slug='dc-comics')
+        cls.marvel = Publisher.objects.create(name='Marvel', slug='marvel')
 
     def test_get_valid_single_publisher(self):
         response = self.client.get(
