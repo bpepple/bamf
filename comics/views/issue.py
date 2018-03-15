@@ -37,13 +37,12 @@ class IssueDetail(LoginRequiredMixin, DetailView):
         context = super(IssueDetail, self).get_context_data(**kwargs)
         issue = self.get_object()
         try:
-            next_issue = Issue.get_next_by_date(issue, series=issue.series)
+            next_issue = issue.get_next_by_date(series=issue.series)
         except ObjectDoesNotExist:
             next_issue = None
 
         try:
-            previous_issue = Issue.get_previous_by_date(
-                issue, series=issue.series)
+            previous_issue = issue.get_previous_by_date(series=issue.series)
         except ObjectDoesNotExist:
             previous_issue = None
 
