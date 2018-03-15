@@ -1,5 +1,5 @@
 Your issue may already be reported!
-Please search on the [issue track](../) before creating one.
+Please search on the [issue track](https://github.com/bpepple/bamf/issues) before creating one.
 
 ## Expected Behavior
 <!--- If you're describing a bug, tell us what should happen -->
