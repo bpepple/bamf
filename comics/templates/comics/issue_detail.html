@@ -31,7 +31,9 @@
     </div>
     <div class="issue-info">
         <div class="issue-title">
-            <h1><a href="{% url 'series:detail' issue.series.slug %}">{{ issue.series.name }}</a></h1>
+            <div class="issue-navigation">
+                <h1><a href="{% url 'series:detail' issue.series.slug %}" class="round">{{ issue.series.name }}</a></h1>
+            </div>
             <h3>Issue #{{ issue.number }}{% if issue.name != 'None' %} - <i>{{ issue.name }}</i>{% endif %}</h3>
             {% if issue.date %}
                 <p>Released: {{ issue.date }}</p>
