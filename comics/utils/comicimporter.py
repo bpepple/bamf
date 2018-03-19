@@ -232,7 +232,7 @@ class ComicImporter(object):
         creator = Creator.objects.get(cvid=cvid)
         creator.desc = data['desc']
         creator.save()
-        self.logger.inf('Refresh metadata for: %s' % creator)
+        self.logger.info('Refresh metadata for: %s' % creator)
 
         return True
 
