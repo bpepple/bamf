@@ -36,6 +36,7 @@ class SettingsTest(TestCase):
 
     def test_settings_creation(self):
         self.assertTrue(isinstance(self.settings, Settings))
+        self.assertTrue(str(self.settings), 'Settings')
 
     def test_verbose_name_plural(self):
         self.assertEqual(
@@ -84,11 +85,17 @@ class PublisherTest(TestCaseBase):
         cls.cvid = 1234
         cls.desc = 'Home of Superman'
 
-        cls.publisher = Publisher.objects.create(
-            name=cls.name, slug=cls.slug, cvid=cls.cvid, desc=cls.desc)
+        cls.publisher = Publisher.objects.create(name=cls.name, slug=cls.slug,
+                                                 cvid=cls.cvid, desc=cls.desc)
+
+        Series.objects.create(name='Batman', slug='batman', cvid='1234',
+                              sort_title='Batman', publisher=cls.publisher)
 
     def setUp(self):
         self._client_login()
+
+    def test_series_count(self):
+        self.assertEqual(self.publisher.series_count(), 1)
 
     def test_publisher_creation(self):
         self.assertTrue(isinstance(self.publisher, Publisher))
@@ -232,8 +239,9 @@ class SeriesTest(TestCaseBase):
         mod_time = timezone.now()
 
         pub = Publisher.objects.create(name='DC Comics', slug='dc-comics')
-        cls.series = Series.objects.create(
-            name=cls.name, slug=cls.slug, cvid=cls.cvid, sort_title=cls.sort, publisher=pub)
+        cls.series = Series.objects.create(name=cls.name, slug=cls.slug,
+                                           cvid=cls.cvid, sort_title=cls.sort,
+                                           publisher=pub)
 
         # Create 9 issues to test unread counts.
         for i in range(9):
