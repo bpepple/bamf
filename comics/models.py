@@ -34,6 +34,9 @@ class Settings(SingletonModel):
     def __str__(self):
         return "Settings"
 
+    class Meta:
+        verbose_name_plural = "Settings"
+
 
 class Arc(models.Model):
     cvid = models.PositiveIntegerField('Comic Vine ID', unique=True)
