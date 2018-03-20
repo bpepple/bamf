@@ -1,10 +1,15 @@
+import os
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
 from comics.models import (Publisher, Series, Creator,
-                           Character, Team, Arc, Issue)
+                           Character, Team, Arc, Issue,
+                           Settings)
+from comics.utils.comicimporter import ComicImporter
 
 
 HTML_OK_CODE = 200
@@ -60,6 +65,38 @@ class IssueDetailViewTest(TestCaseBase):
         resp = self.client.get(
             reverse('issue:detail', args=(self.issue.slug,)))
         self.assertRedirects(resp, '/accounts/login/?next=/issue/batman-1/')
+
+
+class IssueReaderViewTest(TestCaseBase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls._create_user(cls)
+
+        test_data_dir = settings.BASE_DIR + os.sep + 'comics/fixtures'
+        Settings.objects.create(comics_directory=test_data_dir,
+                                api_key='27431e6787042105bd3e47e169a624521f89f3a4')
+
+    def tearDown(self):
+        # Clean up all the images that were downloaded.
+        for publisher in Publisher.objects.all():
+            publisher.delete()
+
+        for creator in Creator.objects.all():
+            creator.delete()
+
+    def setUp(self):
+        self._client_login()
+
+    def test_issue_reader_view(self):
+        ci = ComicImporter()
+        ci.import_comic_files()
+
+        issue = Issue.objects.get(cvid=8192)
+
+        url = reverse('issue:reader', args=(issue.slug,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, HTML_OK_CODE)
 
 
 class PublisherDetailViewTest(TestCaseBase):
