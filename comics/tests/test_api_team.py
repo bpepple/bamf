@@ -38,6 +38,11 @@ class GetAllTeamsTest(TestCaseBase):
         resp = self.client.get(reverse('api:team-list'))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        resp = self.client.get(reverse('api:team-list'))
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class GetSingleTeamTest(TestCaseBase):
 
@@ -65,3 +70,9 @@ class GetSingleTeamTest(TestCaseBase):
         response = self.client.get(
             reverse('api:team-detail', kwargs={'slug': 'justice-league'}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse('api:team-detail', kwargs={'slug': self.avengers.slug}))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

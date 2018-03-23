@@ -38,6 +38,11 @@ class GetAllCreatorsTest(TestCaseBase):
         resp = self.client.get(reverse('api:creator-list'))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        resp = self.client.get(reverse('api:creator-list'))
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class GetSingleCreatorTest(TestCaseBase):
 
@@ -65,3 +70,9 @@ class GetSingleCreatorTest(TestCaseBase):
         response = self.client.get(
             reverse('api:creator-detail', kwargs={'slug': 'art-adams'}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse('api:creator-detail', kwargs={'slug': self.walter.slug}))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

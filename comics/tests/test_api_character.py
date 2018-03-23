@@ -39,6 +39,11 @@ class GetAllCharactersTest(TestCaseBase):
         resp = self.client.get(reverse('api:character-list'))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        resp = self.client.get(reverse('api:character-list'))
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class GetSingleCharacterTest(TestCaseBase):
 
@@ -66,3 +71,9 @@ class GetSingleCharacterTest(TestCaseBase):
         response = self.client.get(
             reverse('api:character-detail', kwargs={'slug': 'wonder-woman'}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse('api:character-detail', kwargs={'slug': self.batman.slug}))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

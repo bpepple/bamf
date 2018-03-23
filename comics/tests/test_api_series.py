@@ -42,6 +42,11 @@ class GetAllSeriesTest(TestCaseBase):
         resp = self.client.get(reverse('api:series-list'))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        resp = self.client.get(reverse('api:series-list'))
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class GetSingleSeriesTest(TestCaseBase):
 
@@ -71,3 +76,9 @@ class GetSingleSeriesTest(TestCaseBase):
         serializer = SeriesSerializer(series, context=self.serializer_context)
         self.assertEqual(resp.data, serializer.data)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse('api:series-detail', kwargs={'slug': self.thor.slug}))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

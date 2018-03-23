@@ -49,6 +49,11 @@ class GetAllIssueTest(TestCaseBase):
         resp = self.client.get(reverse('api:issue-list'))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        resp = self.client.get(reverse('api:issue-list'))
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class GetSingleIssueTest(TestCaseBase):
 
@@ -80,3 +85,9 @@ class GetSingleIssueTest(TestCaseBase):
         serializer = IssueSerializer(issue, context=self.serializer_context)
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse('api:issue-detail', kwargs={'slug': self.superman.slug}))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

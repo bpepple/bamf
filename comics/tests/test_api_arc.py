@@ -38,6 +38,11 @@ class GetAllArcsTest(TestCaseBase):
         resp = self.client.get(reverse('api:arc-list'))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        resp = self.client.get(reverse('api:arc-list'))
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class GetSingleArcTest(TestCaseBase):
 
@@ -65,3 +70,9 @@ class GetSingleArcTest(TestCaseBase):
         response = self.client.get(
             reverse('api:arc-detail', kwargs={'slug': 'civil-war'}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_unauthorized_view_url(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse('api:arc-detail', kwargs={'slug': self.hulk.slug}))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
