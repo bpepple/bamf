@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -6,24 +7,47 @@ from comics.models import Publisher
 from comics.serializers import PublisherSerializer
 
 
-class GetAllPublisherTest(TestCase):
+class TestCaseBase(TestCase):
+
+    def _create_user(self):
+        user = User.objects.create(username='brian')
+        user.set_password('1234')
+        user.save()
+
+        return user
+
+    def _client_login(self):
+        self.client.login(username='brian', password='1234')
+
+
+class GetAllPublisherTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
+        cls._create_user(cls)
+
         Publisher.objects.create(name='DC Comics', slug='dc-comics')
         Publisher.objects.create(name='Marvel', slug='marvel')
+
+    def setUp(self):
+        self._client_login()
 
     def test_view_url_accessible_by_name(self):
         resp = self.client.get(reverse('api:publisher-list'))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
 
-class GetSinglePublisherTest(TestCase):
+class GetSinglePublisherTest(TestCaseBase):
 
     @classmethod
     def setUpTestData(cls):
+        cls._create_user(cls)
+
         cls.dc = Publisher.objects.create(name='DC Comics', slug='dc-comics')
         cls.marvel = Publisher.objects.create(name='Marvel', slug='marvel')
+
+    def setUp(self):
+        self._client_login()
 
     def test_get_valid_single_publisher(self):
         response = self.client.get(
