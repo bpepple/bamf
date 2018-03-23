@@ -31,6 +31,7 @@ urlpatterns = [
     path('', include(issue_urls)),
     path('publisher/', include(publisher_urls)),
     path('api/', include(router_urls)),
+    path('api-auth/', include('rest_framework.urls')),
     path('series/', include(series_urls)),
     path('server-settings/', include(settings_urls)),
     path('team/', include(team_urls)),
