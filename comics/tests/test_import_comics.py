@@ -6,7 +6,8 @@ from django.test import TestCase
 from django.utils import timezone
 
 from comics.models import (Settings, Issue, Publisher,
-                           Creator, Series, Team, Arc)
+                           Creator, Series, Team, Arc,
+                           Character)
 from comics.utils.comicimporter import ComicImporter
 
 
@@ -23,6 +24,7 @@ class TestImportComics(TestCase):
         cls.arc_cvid = 56504
         cls.creator_cvid = 41468
         cls.issue_cvid = 286879
+        cls.character_cvid = 2357
 
         cls.dc = Publisher.objects.create(
             cvid=cls.pub_cvid, name='DC Comics', slug='dc-comics')
@@ -37,6 +39,8 @@ class TestImportComics(TestCase):
         cls.issue = Issue.objects.create(series=cls.bat, cvid=cls.issue_cvid,
                                          slug='batman-713', mod_ts=mod_time, date=issue_date,
                                          number='713')
+        cls.aquaman = Character.objects.create(cvid=cls.character_cvid, name='Aquaman',
+                                               slug='aquaman')
 
         test_data_dir = settings.BASE_DIR + os.sep + 'comics/fixtures'
         Settings.objects.create(comics_directory=test_data_dir,
@@ -49,6 +53,13 @@ class TestImportComics(TestCase):
 
         for creator in Creator.objects.all():
             creator.delete()
+
+    def test_refresh_character(self):
+        ci = ComicImporter()
+        ci.refreshCharacterData(self.character_cvid)
+        self.aquaman.refresh_from_db()
+
+        self.assertTrue(self.aquaman.desc)
 
     def test_refresh_publisher(self):
         ci = ComicImporter()
