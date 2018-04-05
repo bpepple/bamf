@@ -3,89 +3,74 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Bamf</title>
         <link rel="shortcut icon" type="image/png" href="{% static 'site/img/logo.png' %}"/>
-        <link rel="stylesheet" href="{% static 'site/flexslider/flexslider.css' %}" type="text/css">
-        <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+        <link rel="stylesheet" href="{% static 'site/bootstrap/css/bootstrap.min.css' %}" type="text/css">
         <link rel="stylesheet" type="text/css" href="{% static 'site/css/style.css' %}" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://malsup.github.io/jquery.form.js"></script>
-        <script src="https://use.fontawesome.com/d3455c4c52.js"></script>
-        <script src="{% static 'site/bootstrap/bootstrap.min.js' %}"></script>
-        <script src="{% static 'site/flexslider/jquery.flexslider-min.js' %}"></script>
-        <script src="{% static 'site/js/script.js' %}"></script>
-        <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
     </head>
 
     <body class="{% block page-type %}{% endblock %}">
         <header>
             {% block menu %}
-            <ul>
-                {% if user.is_authenticated %}
-                <li><a class="active" href="{% url 'series:list' page=1 %}">Series</a></li>
-                <li><a href="{% url 'publisher:list' page=1 %}">Publishers</a></li>
-                <li><a href="{% url 'creator:list' page=1 %}">Creators</a></li>
-                <li><a href="{% url 'character:list' page=1 %}">Characters</a></li>
-                <li><a href="{% url 'team:list' page=1 %}">Teams</a></li>
-                <li><a href="{% url 'arc:list' page=1 %}">Story Arcs</a></li>
-                <li><a href="{% url 'issue:list' page=1 %}">Latest Added</a></li>
-                <li style="float:right" class="dropdown">
-                    {% if user.first_name|length %}
-                        <a href="javascript:void(0)" class="dropbtn">{{ user.first_name }}</a>
-                    {% else %}
-                        <a href="javascript:void(0)" class="dropbtn">Admin</a>
+            <nav class="navbar navbar-expand-sm bg-light">
+                <div class="container-fluid">
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'series:list' page=1 %}">Series</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'publisher:list' page=1 %}">Publishers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'creator:list' page=1 %}">Creators</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'character:list' page=1 %}">Characters</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'team:list' page=1 %}">Teams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'arc:list' page=1 %}">Story Arcs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'issue:list' page=1 %}">Latest Added</a></li>
+                    <li class="nav-item dropdown">
+                        {% if user.first_name|length %}
+                            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ user.first_name }}</a>
+                        {% else %}
+                            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Admin</a>
+                        {% endif %}
+                        <div class="dropdown-menu">
+                        {% if user.is_superuser %}
+                            <a class="dropdown-item" href="{% url 'admin:index' %}">Admin</a>
+                        {% endif %}
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                    </li>
                     {% endif %}
-                    <div class="dropdown-content">
-                    {% if user.is_superuser %}
-                        <a href="{% url 'admin:index' %}">Admin</a>
-                    {% endif %}
-                        <a href="{% url 'logout' %}">Logout</a>
-                    </div>
-                </li>
-                <li style="float:right">
-                    <a data-toggle="modal" data-target="#modal">
-                        <i class="settings-button fa fa-cog fa-lg"></i>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
+                </ul>
+                </div>
+            </nav>
             {% endblock %}
         </header>
 
         <div id="content">
+            <div class="container-fluid">
             {% block content %}{% endblock %}
+            </div>
         </div>
 
         {% if is_paginated %}
-            <div class="center">
-                <div class="pagination">
-                    {% block pagination %}{% endblock %}
-                </div>
+            <div class="container-fluid">
+                {% block pagination %}{% endblock %}
             </div>
         {% endif %}
 
         <footer>
             <div class="metadata-disclaimer">
+                <div class="container-fluid">
                 <div class="text">
                     <p>Metadata on this page is retrieved from </p>
                 </div>
                 <div class="logo">
                     <a target="_blank" href="http://comicvine.gamespot.com"><img src ="{% static 'site/img/comicvine_logo.png' %}" alt="Comic Vine"></a>
                 </div>
+                </div>
             </div>
         </footer>
-        <div class="modal" id="modal"></div>
-        <script>
-            $('.settings-button').on('click', function (event) {
-                var modal = $('#modal')
-                $.ajax({
-                    url: "{% url 'comics:server-settings' %}",
-                    context: document.body
-                }).done(function(response) {
-                    modal.html(response);
-                });
-            })
-        </script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src={% static 'site/bootstrap/js/bootstrap.min.js' %}></script>
     </body>
 </html>
