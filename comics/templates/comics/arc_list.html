@@ -6,14 +6,13 @@
 
 {% block content %}
 
-<div class="searchbox-wrapper">
+<div class="search-box form-inline justify-content-center">
     <form id="searchform" action="{% url 'arc:search' page=1 %}" method="get" accept-charset="utf-8">
-        <i class="fa fa-search"></i>
-        <input id="searchbox" name="q" type="search" placeholder="Story Arc Search">
+        <input class="form-control" id="searchbox" name="q" type="search" placeholder="Story Arc Search">
     </form>
 </div>
 
-<div class="all-series">
+<div class="list-views">
 {% if arc_list %}
     <ul>
         {% for arc in arc_list %}
@@ -21,9 +20,9 @@
                 <a href="{% url 'arc:detail' arc.slug %}">
                     <div class="image">
                     {% if arc.image %}
-                        <img src="{{ arc.image.url }}" alt="{{ arc.name }}" >
+                        <img class="rounded" src="{{ arc.image.url }}" alt="{{ arc.name }}" >
                     {% else %}
-                        <img src="{% static 'site/img/image-not-found.png' %}" alt="Image not found" >
+                        <img class="rounded" src="{% static 'site/img/image-not-found.png' %}" alt="Image not found" >
                     {% endif %}
                     </div>
                 </a>
@@ -45,50 +44,50 @@
 
 {% block pagination %}
     {% if is_paginated %}
-        <span class="page-link">
+    <nav aria-label="Series List Page navigation">
+        <ul class="pagination justify-content-center">
             {% if page_obj.number > 1 %}
                 {% if request.GET.q %}
-                    <a href="{% url 'arc:search' page=1 %}?{{ request.GET.urlencode }}">&lArr;</a>
+                    <li class="page-item"><a class="page-link" href="{% url 'arc:search' page=1 %}?{{ request.GET.urlencode }}">&lArr;</a></li>
                 {% else %}
-                    <a href="{% url 'arc:list' page=1 %}">&lArr;</a>
+                    <li class="page-item"><a class="page-link" href="{% url 'arc:list' page=1 %}">&lArr;</a></li>
                 {% endif %}
             {% else %}
-                <span>&lArr;</span>
+                <li class="page-item disabled"><a class="page-link" href="#">&lArr;</a></li>
             {% endif %}
 
             {% if page_obj.has_previous %}
                 {% if request.GET.q %}
-                    <a href="{% url 'arc:search' page=page_obj.previous_page_number %}?{{ request.GET.urlencode }}">&larr;</a>
+                    <li class="page-item"><a class="page-link" href="{% url 'arc:search' page=page_obj.previous_page_number %}?{{ request.GET.urlencode }}">&larr;</a></li>
                 {% else %}
-                    <a href="{% url 'arc:list' page=page_obj.previous_page_number %}">&larr;</a>
+                    <li class="page-item"><a class="page-link" href="{% url 'arc:list' page=page_obj.previous_page_number %}">&larr;</a></li>
                 {% endif %}
             {% else %}
-                <span>&larr;</span>
+                <li class="page-item disabled"><a class="page-link" href="#">&larr;</a></li>
             {% endif %}
 
-            <span class="page-item">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-            </span>
+            <li class="page-item disabled"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
 
             {% if page_obj.has_next %}
                 {% if request.GET.q %}
-                    <a href="{% url 'arc:search' page=page_obj.next_page_number %}?{{ request.GET.urlencode }}">&rarr;</a>
+                    <li class="page-item"><a class="page-link" href="{% url 'arc:search' page=page_obj.next_page_number %}?{{ request.GET.urlencode }}">&rarr;</a></li>
                 {% else %}
-                    <a href="{% url 'arc:list' page=page_obj.next_page_number %}">&rarr;</a>
+                    <li class="page-item"><a class="page-link" href="{% url 'arc:list' page=page_obj.next_page_number %}">&rarr;</a></li>
                 {% endif %}
             {% else %}
-                <span>&rarr;</span>
+                <li class="page-item disabled"><a class="page-link" href="#">&rarr;</a></li>
             {% endif %}
 
             {% if page_obj.number < paginator.num_pages %}
                 {% if request.GET.q %}
-                    <a href="{% url 'arc:search' page=paginator.num_pages %}?{{ request.GET.urlencode }}">&rArr;</a>
+                    <li class="page-item"><a class="page-link" href="{% url 'arc:search' page=paginator.num_pages %}?{{ request.GET.urlencode }}">&rArr;</a></li>
                 {% else %}
-                    <a href="{% url 'arc:list' page=paginator.num_pages %}">&rArr;</a>
+                    <li class="page-item"><a class="page-link" href="{% url 'arc:list' page=paginator.num_pages %}">&rArr;</a></li>
                 {% endif %}
             {% else %}
-                <span>&rArr;</span>
+                <li class="page-item disabled"><a class="page-link" href="#">&rArr;</a></li>
             {% endif %}
-        </span>
+        </ul>
+    </nav>
     {% endif %}
 {% endblock %}
