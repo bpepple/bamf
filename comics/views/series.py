@@ -24,6 +24,7 @@ class SeriesDetail(LoginRequiredMixin, DetailView):
     model = Series
     queryset = (
         Series.objects
+        .prefetch_related('issue_set')
         .select_related('publisher')
     )
 

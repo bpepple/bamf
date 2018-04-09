@@ -1,10 +1,12 @@
 import datetime
+from statistics import mean, StatisticsError
 
 from django.core.validators import RegexValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from solo.models import SingletonModel
+from star_ratings.models import Rating
 
 
 class Settings(SingletonModel):
@@ -167,6 +169,28 @@ class Series(models.Model):
         if hasattr(self, '_prefetched_objects_cache') and 'issue' in self._prefetched_objects_cache:
             return len([x for x in self.issue_set.all() if x.status is not 2])
         return self.issue_set.exclude(status=2).count()
+
+    @property
+    def average_rating(self):
+        l = []
+        for issue in self.issue_set.all():
+            l.append(issue.id)
+
+        ratings = Rating.objects.filter(object_id__in=l)
+
+        l = []
+        for r in ratings:
+            # Don't include issues that haven't been rated.
+            if r.percentage != 0:
+                d = r.to_dict()
+                l.append(d.get('total'))
+
+        try:
+            res = mean(l)
+        except StatisticsError:
+            res = None
+
+        return res
 
     class Meta:
         verbose_name_plural = "Series"
