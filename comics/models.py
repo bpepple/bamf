@@ -1,8 +1,8 @@
 import datetime
-from statistics import mean, StatisticsError
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Avg
 from django.urls import reverse
 from django.utils.functional import cached_property
 from solo.models import SingletonModel
@@ -176,21 +176,10 @@ class Series(models.Model):
         for issue in self.issue_set.all():
             l.append(issue.id)
 
-        ratings = Rating.objects.filter(object_id__in=l)
+        rating = Rating.objects.filter(
+            object_id__in=l).aggregate(Avg('average'))
 
-        l = []
-        for r in ratings:
-            # Don't include issues that haven't been rated.
-            if r.percentage != 0:
-                d = r.to_dict()
-                l.append(d.get('total'))
-
-        try:
-            res = mean(l)
-        except StatisticsError:
-            res = None
-
-        return res
+        return rating['average__avg']
 
     class Meta:
         verbose_name_plural = "Series"
