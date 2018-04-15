@@ -103,6 +103,7 @@ class IssueAdmin(admin.ModelAdmin):
     readonly_fields = ('file', 'cvid', 'cvurl', 'series', 'number')
     list_display = ('__str__', 'status', 'import_date')
     list_filter = ('import_date', 'date', 'status')
+    list_select_related = ('series',)
     date_hierarchy = 'date'
     actions = ['mark_as_read', 'mark_as_unread', 'refresh_issue_metadata']
     # form view
