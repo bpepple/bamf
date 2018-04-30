@@ -113,7 +113,7 @@ class IssueAdmin(admin.ModelAdmin):
                            'desc', 'cover', 'status')}),
         ('Related', {'fields': ('arcs', 'characters', 'teams')}),
     )
-    filter_horizontal = ('arcs', 'characters', 'teams')
+    raw_id_fields = ('arcs', 'characters', 'teams')
 
     def mark_as_read(self, request, queryset):
         rows_updated = queryset.update(status=READ)
