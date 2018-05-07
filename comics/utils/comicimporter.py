@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import itertools
+import json
 import logging
 import os
 import re
@@ -165,8 +166,12 @@ class ComicImporter(object):
                     response['image']['super_url'].rsplit('/', 1)[-1]
                 image_filename = unquote_plus(image_url.split('/')[-1])
                 if image_filename != '1-male-good-large.jpg' and not re.match(".*question_mark_large.*.jpg", image_filename):
-                    image = utils.test_image(urlretrieve(
-                        image_url, 'media/images/' + image_filename)[0])
+                    try:
+                        image = utils.test_image(urlretrieve(
+                            image_url, 'media/images/' + image_filename)[0])
+                    except OSError as e:
+                        self.logger.error('%s' % e)
+                        image = None
 
         # Create data object
         data = {
@@ -381,6 +386,9 @@ class ComicImporter(object):
         except requests.exceptions.RequestException as e:
             self.logger.error('%s' % e)
             response = None
+        except json.decoder.JSONDecodeError as e:
+            self.logger.error('%s' % e)
+            response = None
 
         return response
 
@@ -403,10 +411,11 @@ class ComicImporter(object):
         data = self.getCVObjectData(response['results'])
 
         issue = Issue.objects.get(cvid=issue_cvid)
-        issue.cover = utils.resize_images(data['image'], ISSUES_FOLDER)
+        if data['image'] != None:
+            issue.cover = utils.resize_images(data['image'], ISSUES_FOLDER)
+            os.remove(data['image'])
         issue.desc = data['desc']
         issue.save()
-        os.remove(data['image'])
 
         return True
 
@@ -474,6 +483,9 @@ class ComicImporter(object):
         except requests.exceptions.RequestException as e:
             self.logger.error('%s' % e)
             return False
+        except json.decoder.JSONDecodeError as e:
+            self.logger.error('%s' % e)
+            return False
 
         data = self.getCVObjectData(response['results'])
 
@@ -498,6 +510,9 @@ class ComicImporter(object):
                 headers=self.headers,
             ).json()
         except requests.exceptions.RequestException as e:
+            self.logger.error('%s' % e)
+            response = None
+        except json.decoder.JSONDecodeError as e:
             self.logger.error('%s' % e)
             response = None
 
