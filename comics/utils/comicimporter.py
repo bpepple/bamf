@@ -383,10 +383,7 @@ class ComicImporter(object):
                 params=issue_params,
                 headers=self.headers,
             ).json()
-        except requests.exceptions.RequestException as e:
-            self.logger.error('%s' % e)
-            response = None
-        except json.decoder.JSONDecodeError as e:
+        except (requests.exceptions.RequestException, json.decoder.JSONDecodeError) as e:
             self.logger.error('%s' % e)
             response = None
 
@@ -480,10 +477,7 @@ class ComicImporter(object):
                 params=params,
                 headers=self.headers,
             ).json()
-        except requests.exceptions.RequestException as e:
-            self.logger.error('%s' % e)
-            return False
-        except json.decoder.JSONDecodeError as e:
+        except (requests.exceptions.RequestException, json.decoder.JSONDecodeError) as e:
             self.logger.error('%s' % e)
             return False
 
@@ -509,10 +503,7 @@ class ComicImporter(object):
                 params=params,
                 headers=self.headers,
             ).json()
-        except requests.exceptions.RequestException as e:
-            self.logger.error('%s' % e)
-            response = None
-        except json.decoder.JSONDecodeError as e:
+        except (requests.exceptions.RequestException, json.decoder.JSONDecodeError) as e:
             self.logger.error('%s' % e)
             response = None
 
