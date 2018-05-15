@@ -18,8 +18,8 @@ itypes==1.1.0
 Jinja2==2.10
 MarkupSafe==1.0
 natsort==5.1.1
-Pillow==5.0.0
-psycopg2==2.7.3.2
+Pillow==5.1.0
+psycopg2-binary==2.7.4
 PyPDF2==1.26.0
 pytz==2018.3
 redis==2.10.6
