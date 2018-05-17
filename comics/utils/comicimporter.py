@@ -152,7 +152,9 @@ class ComicImporter(object):
         desc = ''
         if 'deck' in response:
             if response['deck']:
-                desc = response['deck']
+                # Check to see if the deck is a space (' ').
+                if response['deck'] != ' ':
+                    desc = response['deck']
             if desc == '':
                 if 'description' in response:
                     if response['description']:
