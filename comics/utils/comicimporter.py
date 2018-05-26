@@ -523,14 +523,14 @@ class ComicImporter(object):
         # TODO: Need to clean this up a bit, but for now it works.
         cvID = None
         if md.notes is not None:
-            cvID = re.search('\d+]', md.notes)
+            cvID = re.search(r'\d+]', md.notes)
             if cvID is not None:
                 cvID = str(cvID.group(0))
                 cvID = cvID[:-1]
                 return cvID
 
         if md.webLink is not None:
-            cvID = re.search('/\d+-\d+/', md.webLink)
+            cvID = re.search(r'/\d+-\d+/', md.webLink)
             if cvID is not None:
                 cvID = str(cvID.group(0))
                 cvID = cvID.split('-')
