@@ -1,9 +1,10 @@
-from huey.contrib.djhuey import task
+from __future__ import absolute_import, unicode_literals
+from celery import shared_task
 
 from .utils.comicimporter import ComicImporter
 
 
-@task()
+@shared_task
 def import_comic_files_task():
     ci = ComicImporter()
     ci.import_comic_files()
@@ -11,7 +12,7 @@ def import_comic_files_task():
     return
 
 
-@task()
+@shared_task
 def refresh_issue_task(cvid):
     ci = ComicImporter()
     success = ci.refreshIssueData(cvid)
@@ -19,7 +20,7 @@ def refresh_issue_task(cvid):
     return success
 
 
-@task()
+@shared_task
 def refresh_series_task(cvid):
     ci = ComicImporter()
     success = ci.refreshSeriesData(cvid)
@@ -27,7 +28,7 @@ def refresh_series_task(cvid):
     return success
 
 
-@task()
+@shared_task
 def refresh_publisher_task(cvid):
     ci = ComicImporter()
     success = ci.refreshPublisherData(cvid)
@@ -35,7 +36,7 @@ def refresh_publisher_task(cvid):
     return success
 
 
-@task()
+@shared_task
 def refresh_character_task(cvid):
     ci = ComicImporter()
     success = ci.refreshCharacterData(cvid)
@@ -43,7 +44,7 @@ def refresh_character_task(cvid):
     return success
 
 
-@task()
+@shared_task
 def refresh_creator_task(cvid):
     ci = ComicImporter()
     success = ci.refreshCreatorData(cvid)
@@ -51,7 +52,7 @@ def refresh_creator_task(cvid):
     return success
 
 
-@task()
+@shared_task
 def refresh_team_task(cvid):
     ci = ComicImporter()
     success = ci.refreshTeamData(cvid)
@@ -59,7 +60,7 @@ def refresh_team_task(cvid):
     return success
 
 
-@task()
+@shared_task
 def refresh_arc_task(cvid):
     ci = ComicImporter()
     success = ci.refreshArcData(cvid)

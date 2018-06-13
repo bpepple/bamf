@@ -6,5 +6,5 @@ from comics.tasks import import_comic_files_task
 
 @login_required
 def importer(request):
-    import_comic_files_task()
+    import_comic_files_task.apply_async()
     return HttpResponseRedirect('/')

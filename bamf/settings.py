@@ -84,7 +84,6 @@ INSTALLED_APPS = [
     'solo.apps.SoloAppConfig',
     'comics',
     'widget_tweaks',
-    'huey.contrib.djhuey',
     'rest_framework',
     'star_ratings',
 ]
@@ -137,12 +136,6 @@ DATABASES = {
     }
 }
 
-HUEY = {
-    'name': 'bamf',
-    'consumer': {'workers': 4, 'worker_type': 'thread'},
-    'always_eager': False,
-}
-
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100
@@ -180,6 +173,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Celery Config
+CELERY_BROKER_URL = 'redis://localhost'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
 
 
 # Static files (CSS, JavaScript, Images)
