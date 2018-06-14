@@ -38,7 +38,7 @@ class ArcAdmin(admin.ModelAdmin):
     def refresh_arc_metadata(self, request, queryset):
         rows_updated = 0
         for arc in queryset:
-            success = refresh_arc_task(arc.cvid)
+            success = refresh_arc_task.apply_async((arc.cvid,))
             if success:
                 rows_updated += 1
 
@@ -64,7 +64,7 @@ class CharacterAdmin(admin.ModelAdmin):
     def refresh_character_metadata(self, request, queryset):
         rows_updated = 0
         for character in queryset:
-            success = refresh_character_task(character.cvid)
+            success = refresh_character_task.apply_async((character.cvid,))
             if success:
                 rows_updated += 1
 
@@ -88,7 +88,7 @@ class CreatorAdmin(admin.ModelAdmin):
     def refresh_creator_metadata(self, request, queryset):
         rows_updated = 0
         for creator in queryset:
-            success = refresh_creator_task(creator.cvid)
+            success = refresh_creator_task.apply_async((creator.cvid,))
             if success:
                 rows_updated += 1
 
@@ -132,7 +132,7 @@ class IssueAdmin(admin.ModelAdmin):
     def refresh_issue_metadata(self, request, queryset):
         rows_updated = 0
         for issue in queryset:
-            success = refresh_issue_task(issue.cvid)
+            success = refresh_issue_task.apply_async((issue.cvid,))
             if success:
                 rows_updated += 1
 
@@ -157,7 +157,7 @@ class PublisherAdmin(admin.ModelAdmin):
     def refresh_publisher_metadata(self, request, queryset):
         rows_updated = 0
         for publisher in queryset:
-            success = refresh_publisher_task(publisher.cvid)
+            success = refresh_publisher_task.apply_async((publisher.cvid,))
             if success:
                 rows_updated += 1
 
@@ -211,7 +211,7 @@ class SeriesAdmin(admin.ModelAdmin):
     def refresh_series_metadata(self, request, queryset):
         rows_updated = 0
         for series in queryset:
-            success = refresh_series_task(series.cvid)
+            success = refresh_series_task.apply_async((series.cvid,))
             if success:
                 rows_updated += 1
 
@@ -224,7 +224,7 @@ class SeriesAdmin(admin.ModelAdmin):
         for i in range(queryset.count()):
             series = Issue.objects.filter(series=queryset[i])
             for num in range(series.count()):
-                success = refresh_issue_task(series[num].cvid)
+                success = refresh_issue_task.apply_async((series[num].cvid,))
                 if success:
                     issues_count += 1
         message_bit = create_msg(issues_count)
@@ -248,7 +248,7 @@ class TeamAdmin(admin.ModelAdmin):
     def refresh_team_metadata(self, request, queryset):
         rows_updated = 0
         for team in queryset:
-            success = refresh_team_task(team.cvid)
+            success = refresh_team_task.apply_async((team.cvid,))
             if success:
                 rows_updated += 1
 
