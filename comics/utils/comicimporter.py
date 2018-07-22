@@ -56,7 +56,7 @@ class ComicImporter(object):
     def __init__(self):
         # Configure logging
         logging.getLogger("requests").setLevel(logging.WARNING)
-        self.logger = logging.getLogger('bamf')
+        self.logger = logging.getLogger('__name__')
         # Setup requests caching
         expire_after = timedelta(hours=1)
         requests_cache.install_cache('cv-cache',
@@ -391,23 +391,9 @@ class ComicImporter(object):
 
         return response
 
-    def getIssueDetail(self, issue_cvid, response_issue):
-        issue_params = self.base_params
-        issue_params['field_list'] = self.issue_fields
+    def setIssueDetail(self, issue_cvid, issue_response):
 
-        api_url = response_issue['results']['api_detail_url']
-
-        try:
-            response = requests.get(
-                api_url,
-                params=issue_params,
-                headers=self.headers,
-            ).json()
-        except requests.exceptions.RequestException as e:
-            self.logger.error('%s' % e)
-            return False
-
-        data = self.getCVObjectData(response['results'])
+        data = self.getCVObjectData(issue_response['results'])
 
         issue = Issue.objects.get(cvid=issue_cvid)
         if data['image'] != None:
@@ -589,32 +575,34 @@ class ComicImporter(object):
                     name=md.publisher,
                     slug=slugify(md.publisher),)
 
-            # Get the series info from CV.
-            series_url = issue_response['results']['volume']['api_detail_url']
-            data = self.getSeries(series_url)
-            if data is not None:
-                # Alright let's create the series object.
+            # Check the series cvid to see if we've already added
+            # the series. If not, call the detail api for it.
+            series_cvid = issue_response['results']['volume']['id']
+            if series_cvid is not None:
                 series_obj, s_create = Series.objects.get_or_create(
-                    cvid=int(data['cvid']),)
-
+                    cvid=int(series_cvid),)
                 if s_create:
-                    # Create the slug & make sure it's not a duplicate
-                    new_slug = orig = slugify(data['name'])
-                    for x in itertools.count(1):
-                        if not Series.objects.filter(slug=new_slug).exists():
-                            break
-                        new_slug = '%s-%d' % (orig, x)
+                    series_url = issue_response['results'][
+                        'volume']['api_detail_url']
+                    data = self.getSeries(series_url)
+                    if data is not None:
+                        # Create the slug & make sure it's not a duplicate
+                        new_slug = orig = slugify(data['name'])
+                        for x in itertools.count(1):
+                            if not Series.objects.filter(slug=new_slug).exists():
+                                break
+                            new_slug = '%s-%d' % (orig, x)
 
-                    sort_name = utils.create_series_sortname(data['name'])
-                    series_obj.slug = new_slug
-                    series_obj.cvurl = data['cvurl']
-                    series_obj.name = data['name']
-                    series_obj.sort_title = sort_name
-                    series_obj.publisher = publisher_obj
-                    series_obj.year = data['year']
-                    series_obj.desc = data['desc']
-                    series_obj.save()
-                    self.logger.info('Added series: %s' % series_obj)
+                        sort_name = utils.create_series_sortname(data['name'])
+                        series_obj.slug = new_slug
+                        series_obj.cvurl = data['cvurl']
+                        series_obj.name = data['name']
+                        series_obj.sort_title = sort_name
+                        series_obj.publisher = publisher_obj
+                        series_obj.year = data['year']
+                        series_obj.desc = data['desc']
+                        series_obj.save()
+                        self.logger.info('Added series: %s' % series_obj)
 
             # Ugh, deal wih the timezone
             current_timezone = timezone.get_current_timezone()
@@ -667,8 +655,8 @@ class ComicImporter(object):
                 self.logger.info('Skipping: %s' % md.path)
                 return
 
-            # Get the issue image & short description from CV.
-            res = self.getIssueDetail(cvID, issue_response)
+            # Set the issue image & short description.
+            res = self.setIssueDetail(cvID, issue_response)
             if res:
                 self.logger.info("Added: %s" % issue_obj)
             else:
