@@ -56,7 +56,7 @@ class ComicImporter(object):
     def __init__(self):
         # Configure logging
         logging.getLogger("requests").setLevel(logging.WARNING)
-        self.logger = logging.getLogger('__name__')
+        self.logger = logging.getLogger('bamf')
         # Setup requests caching
         expire_after = timedelta(hours=1)
         requests_cache.install_cache('cv-cache',
