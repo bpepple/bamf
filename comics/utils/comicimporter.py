@@ -476,7 +476,11 @@ class ComicImporter(object):
             db_obj.year = data['year']
         db_obj.cvurl = data['cvurl']
         db_obj.desc = data['desc']
-        db_obj.image = data['image']
+        # If the image name from Comic Vine is too large, don't save it since it will
+        # cause a DB error. Using 132 as the value since that will take into account the
+        # upload_to value from the longest models (Characters & Pubishers).
+        if (len(data['image']) < 132):
+            db_obj.image = data['image']
         db_obj.save()
 
         return True
