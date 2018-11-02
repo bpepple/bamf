@@ -23,7 +23,7 @@ psycopg2-binary==2.7.4
 PyPDF2==1.26.0
 pytz==2018.3
 redis==2.10.6
-requests==2.18.4
+requests==2.20.0
 requests-cache==0.4.13
 sqlparse==0.2.4
 swapper==1.1.0
